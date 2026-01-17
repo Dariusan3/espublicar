@@ -1,8 +1,12 @@
+"use client";
 import React from "react";
 import CurrencySelect from "../common/CurrencySelect";
 import LanguageSelect from "../common/LanguageSelect";
+import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
 
 export default function Topbar1({ parentClass = "tf-topbar line-bt" }) {
+  const { user, logout } = useAuth();
   return (
     <div className={parentClass}>
       <div className="container">
@@ -41,15 +45,35 @@ export default function Topbar1({ parentClass = "tf-topbar line-bt" }) {
                   />
                 </div>
               </div>
-              <a
-                href="#log"
-                data-bs-toggle="modal"
-                className="tf-cur-item link"
-              >
-                <i className="icon-user-3" />
-                <span className="body-small">My account:</span>
-                <i className="icon-arrow-down" />
-              </a>
+              {user ? (
+                <>
+                  <Link href="/my-account" className="tf-cur-item link">
+                    <i className="icon-user-3" />
+                    <span className="body-small">My Account</span>
+                  </Link>
+                  <a
+                    href="#"
+                    className="tf-cur-item link"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      await logout();
+                      window.location.href = "/";
+                    }}
+                  >
+                    <span className="body-small">Logout</span>
+                  </a>
+                </>
+              ) : (
+                <a
+                  href="#log"
+                  data-bs-toggle="modal"
+                  className="tf-cur-item link"
+                >
+                  <i className="icon-user-3" />
+                  <span className="body-small">Log In</span>
+                  <i className="icon-arrow-down" />
+                </a>
+              )}
             </div>
           </div>
         </div>

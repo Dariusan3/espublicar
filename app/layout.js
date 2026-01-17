@@ -1,5 +1,6 @@
 "use client";
 import Context from "@/context/Context";
+import { AuthProvider } from "@/context/AuthContext";
 import "../public/scss/main.scss";
 import "photoswipe/dist/photoswipe.css";
 import { useEffect } from "react";
@@ -15,6 +16,7 @@ import Toolbar from "@/components/modals/Toolbar";
 import Search from "@/components/modals/Search";
 import AddParallax from "@/utlis/AddParallax";
 import NewsLetter from "@/components/modals/NewsLetter";
+
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
@@ -129,20 +131,22 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <div id="wrapper">
-          <Context>
-            {children}
-            <Login />
-            <Register />
-            <Cart />
-            <Quickview />
-            <Compare />
-            <MobileMenu />
-            <ScrollTop />
-            <Toolbar />
-            <Search />
-            <NewsLetter />
-            <AddParallax />
-          </Context>
+          <AuthProvider>
+            <Context>
+              {children}
+              <Login />
+              <Register />
+              <Cart />
+              <Quickview />
+              <Compare />
+              <MobileMenu />
+              <ScrollTop />
+              <Toolbar />
+              <Search />
+              <NewsLetter />
+              <AddParallax />
+            </Context>
+          </AuthProvider>
         </div>
       </body>
     </html>

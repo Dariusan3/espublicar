@@ -1,6 +1,9 @@
-import React from "react";
+"use client";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+
 export default function Sidebar() {
+  const { logout } = useAuth();
   return (
     <>
       {" "}
@@ -28,9 +31,17 @@ export default function Sidebar() {
         </Link>
       </li>
       <li>
-        <Link href={`/`} className="my-account-nav-item">
+        <button 
+          onClick={async (e) => {
+            e.preventDefault();
+            await logout();
+            window.location.href = '/';
+          }} 
+          className="my-account-nav-item border-0 bg-transparent w-100 text-start"
+          style={{ cursor: "pointer" }}
+        >
           Logout
-        </Link>
+        </button>
       </li>
     </>
   );
