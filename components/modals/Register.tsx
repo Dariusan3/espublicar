@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import useUser from "@/hooks/useUser";
 
 export default function Register() {
   const { register, user } = useAuth();
@@ -10,8 +11,9 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { createUserInDB } = useUser();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError("");
 
@@ -30,7 +32,7 @@ export default function Register() {
     setLoading(true);
 
     const result = await register(email, password, name);
-    
+
     if (result.success) {
       // Close the modal on successful registration
       const modal = document.getElementById("register");
@@ -46,7 +48,7 @@ export default function Register() {
     } else {
       setError(result.error || "Registration failed. Please try again.");
     }
-    
+
     setLoading(false);
   };
 
@@ -61,11 +63,17 @@ export default function Register() {
               data-bs-dismiss="modal"
             />
             <div className="modal-log-wrap list-file-delete text-center">
-              <h5 className="title fw-semibold">You&apos;re already logged in!</h5>
+              <h5 className="title fw-semibold">
+                You&apos;re already logged in!
+              </h5>
               <p className="body-text-3 mt-3">
                 You are logged in as <strong>{user.email}</strong>
               </p>
-              <a href="/my-account" className="tf-btn w-100 text-white mt-4" data-bs-dismiss="modal">
+              <a
+                href="/my-account"
+                className="tf-btn w-100 text-white mt-4"
+                data-bs-dismiss="modal"
+              >
                 Go to My Account
               </a>
             </div>
@@ -93,11 +101,9 @@ export default function Register() {
                   </div>
                 )}
                 <fieldset>
-                  <label className="fw-semibold body-md-2">
-                    Full Name *
-                  </label>
-                  <input 
-                    type="text" 
+                  <label className="fw-semibold body-md-2">Full Name *</label>
+                  <input
+                    type="text"
                     placeholder="Your full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -108,8 +114,8 @@ export default function Register() {
                   <label className="fw-semibold body-md-2">
                     Email address *
                   </label>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     placeholder="Your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -118,8 +124,8 @@ export default function Register() {
                 </fieldset>
                 <fieldset>
                   <label className="fw-semibold body-md-2"> Password * </label>
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     placeholder="Enter your password (min 8 characters)"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -128,9 +134,12 @@ export default function Register() {
                   />
                 </fieldset>
                 <fieldset>
-                  <label className="fw-semibold body-md-2"> Confirm Password * </label>
-                  <input 
-                    type="password" 
+                  <label className="fw-semibold body-md-2">
+                    {" "}
+                    Confirm Password *{" "}
+                  </label>
+                  <input
+                    type="password"
                     placeholder="Confirm your password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -139,8 +148,8 @@ export default function Register() {
                   />
                 </fieldset>
               </div>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="tf-btn w-100 text-white"
                 disabled={loading}
               >
