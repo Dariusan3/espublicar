@@ -8,6 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -91,16 +92,32 @@ export default function Login() {
                     required
                   />
                 </fieldset>
-                <fieldset>
+                <fieldset className="position-relative">
                   <label className="fw-semibold body-md-2"> Password * </label>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={8}
                   />
+                  <span
+                    className="position-absolute text-primary"
+                    style={{
+                      right: "15px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                      marginTop: "12px",
+                      fontSize: "12px",
+                      fontWeight: "600",
+                      userSelect: "none",
+                    }}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </span>
                 </fieldset>
                 <a
                   href="/forgot-password"

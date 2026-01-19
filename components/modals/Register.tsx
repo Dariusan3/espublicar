@@ -1,19 +1,22 @@
 "use client";
 import React, { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import useAuth from "@/hooks/useAuth";
 import useUser from "@/hooks/useUser";
+import { UserDB } from "@/types/Types";
 
 export default function Register() {
-  const { register, user } = useAuth();
+  const { signUserUp, signUserIn } = useAuth();
+  const { createUserInDB } = useUser();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { createUserInDB } = useUser();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -31,57 +34,61 @@ export default function Register() {
 
     setLoading(true);
 
-    const result = await register(email, password, name);
+    try {
+      // 1. Sign up the user
+      const signUpResult = await signUserUp(email, password);
+      if (!signUpResult.success) {
+        setError(signUpResult.message);
+        setLoading(false);
+        return;
+      }
 
-    if (result.success) {
-      // Close the modal on successful registration
+      // 2. Sign in the user to create a session
+      const signInResult = await signUserIn(email, password);
+      if (!signInResult.success) {
+        setError(signInResult.message);
+        setLoading(false);
+        return;
+      }
+
+      // 3. Create user in database
+      const newUser: UserDB = {
+        name: name,
+        email: email,
+      };
+
+      const createUserResult = await createUserInDB(newUser, signUpResult.data);
+      if (!createUserResult.success) {
+        setError(
+          "Account created but failed to save profile: " +
+            createUserResult.message,
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Success! Close the modal
       const modal = document.getElementById("register");
       const bootstrap = require("bootstrap");
       const modalInstance = bootstrap.Modal.getInstance(modal);
       if (modalInstance) {
         modalInstance.hide();
       }
+
+      // Reset form
       setName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-    } else {
-      setError(result.error || "Registration failed. Please try again.");
+
+      // Redirect to account page since user is now logged in
+      window.location.href = "/my-account";
+    } catch (err: any) {
+      setError("Error: " + err.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
-
-  // If user is already logged in, show a different message
-  if (user) {
-    return (
-      <div className="modal modalCentered fade modal-log" id="register">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <span
-              className="icon icon-close btn-hide-popup"
-              data-bs-dismiss="modal"
-            />
-            <div className="modal-log-wrap list-file-delete text-center">
-              <h5 className="title fw-semibold">
-                You&apos;re already logged in!
-              </h5>
-              <p className="body-text-3 mt-3">
-                You are logged in as <strong>{user.email}</strong>
-              </p>
-              <a
-                href="/my-account"
-                className="tf-btn w-100 text-white mt-4"
-                data-bs-dismiss="modal"
-              >
-                Go to My Account
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="modal modalCentered fade modal-log" id="register">
@@ -122,30 +129,61 @@ export default function Register() {
                     required
                   />
                 </fieldset>
-                <fieldset>
+                <fieldset className="position-relative">
                   <label className="fw-semibold body-md-2"> Password * </label>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter your password (min 8 characters)"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={8}
                   />
+                  <span
+                    className="position-absolute text-primary"
+                    style={{
+                      right: "15px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                      marginTop: "12px",
+                      fontSize: "12px",
+                      fontWeight: "600",
+                      userSelect: "none",
+                    }}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </span>
                 </fieldset>
-                <fieldset>
+                <fieldset className="position-relative">
                   <label className="fw-semibold body-md-2">
-                    {" "}
-                    Confirm Password *{" "}
+                    Confirm Password *
                   </label>
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm your password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     minLength={8}
                   />
+                  <span
+                    className="position-absolute text-primary"
+                    style={{
+                      right: "15px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                      marginTop: "12px",
+                      fontSize: "12px",
+                      fontWeight: "600",
+                      userSelect: "none",
+                    }}
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? "Hide" : "Show"}
+                  </span>
                 </fieldset>
               </div>
               <button
