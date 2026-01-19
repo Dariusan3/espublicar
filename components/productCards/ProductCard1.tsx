@@ -7,7 +7,13 @@ import AddToWishlist from "../common/AddToWishlist";
 import AddToQuickview from "../common/AddToQuickview";
 import AddToCompare from "../common/AddToCompare";
 import CountdownTimer from "../common/Countdown";
-export default function ProductCard1({ product, index }: { product: any; index: number }) {
+export default function ProductCard1({
+  product,
+  index,
+}: {
+  product: any;
+  index: number;
+}) {
   const [currentImage, setCurrentImage] = useState(product.imgSrc);
   useEffect(() => {
     setCurrentImage(product.imgSrc);
@@ -89,9 +95,9 @@ export default function ProductCard1({ product, index }: { product: any; index: 
             <span className="new-price h4 fw-normal text-primary mb-0">
               {product.price.toFixed(3)}
             </span>{" "}
-            {product.oldPrice && (
+            {product.oldprice && (
               <span className="old-price price-text text-main-2">
-                {product.oldPrice.toFixed(3)}
+                {product.oldprice.toFixed(3)}
               </span>
             )}
             <span className="box-sale-tag">Save: {product.saveAmount}</span>

@@ -75,9 +75,9 @@ export default function ProductCards3({ product }) {
             <span className="new-price price-text fw-medium">
               ${product.price.toFixed(3)}
             </span>
-            {product.oldPrice && (
+            {product.oldprice && (
               <span className="old-price body-md-2 text-main-2">
-                ${product.oldPrice.toFixed(3)}
+                ${product.oldprice.toFixed(3)}
               </span>
             )}
           </p>

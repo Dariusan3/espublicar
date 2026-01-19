@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Sidebar() {
   const { logout } = useAuth();
@@ -31,12 +32,17 @@ export default function Sidebar() {
         </Link>
       </li>
       <li>
-        <button 
+        <button
           onClick={async (e) => {
             e.preventDefault();
-            await logout();
-            window.location.href = '/';
-          }} 
+            const result = await logout();
+            if (result.success) {
+              toast.success("👋 Logged out successfully!");
+              setTimeout(() => {
+                window.location.href = "/";
+              }, 1500);
+            }
+          }}
           className="my-account-nav-item border-0 bg-transparent w-100 text-start"
           style={{ cursor: "pointer" }}
         >

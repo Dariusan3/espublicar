@@ -14,7 +14,7 @@ export const products1 = [
     height: 520,
     title: '30" Antique Bronze Baldaud Roman Numeral Wall Clock',
     price: 37.5,
-    oldPrice: 49.0,
+    oldprice: 49.0,
     saveAmount: 6,
     salePercentage: "27%",
     countdownTimer: 102738,
@@ -37,7 +37,7 @@ export const products1 = [
     height: 390,
     title: "Canon PowerShot SX70 HS Digital Camerat",
     price: 62.0,
-    oldPrice: 75.0,
+    oldprice: 75.0,
     saveAmount: 13,
     countdownTimer: 22671,
     sold: 32,
@@ -59,7 +59,7 @@ export const products1 = [
     height: 390,
     title: "Net10 Alcatel TCL A3, 32GB, Black Prepaid Smartphone (Locked)",
     price: 42.5,
-    oldPrice: 50.0,
+    oldprice: 50.0,
     saveAmount: 7.5,
     salePercentage: "33%",
     countdownTimer: 5804,
@@ -82,7 +82,7 @@ export const products1 = [
     height: 390,
     title: "Microsoft Xbox One X Console w/ Accessories, 1TB HDD - White",
     price: 48.0,
-    oldPrice: 60.0,
+    oldprice: 60.0,
     saveAmount: 9,
     salePercentage: "20%",
     countdownTimer: 8738,
@@ -105,7 +105,7 @@ export const products1 = [
     height: 520,
     title: '30" Antique Bronze Baldaud Roman Numeral Wall Clock',
     price: 80.0,
-    oldPrice: 99.0,
+    oldprice: 99.0,
     saveAmount: 6,
     salePercentage: "70%",
     countdownTimer: 102738,
@@ -128,7 +128,7 @@ export const products2 = [
     title:
       "Huawei Nova 8 Pro 4G – Powerful Performance, 120Hz Display, 66W Fast Charging",
     price: 36,
-    oldPrice: 45,
+    oldprice: 45,
   },
   {
     id: 7,
@@ -140,7 +140,7 @@ export const products2 = [
     category: "Headphone",
     title: "Eskuche 33iS – Retro Design, Premium Sound, Cables",
     price: 63,
-    oldPrice: 79.99,
+    oldprice: 79.99,
   },
   {
     id: 8,
@@ -152,7 +152,7 @@ export const products2 = [
     category: "Smartwatch",
     title: "Apple Watch Series 1 Aluminum case with Sport Band",
     price: 79.999,
-    oldPrice: 99.999,
+    oldprice: 99.999,
   },
   {
     id: 9,
@@ -164,7 +164,7 @@ export const products2 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 42,
-    oldPrice: 59.999,
+    oldprice: 59.999,
   },
   {
     id: 10,
@@ -176,7 +176,7 @@ export const products2 = [
     category: "Headphone",
     title: "Audio-Technica ATH-AD700X Audiophile Open-Air",
     price: 45.5,
-    oldPrice: 79.99,
+    oldprice: 79.99,
   },
   {
     id: 11,
@@ -188,7 +188,7 @@ export const products2 = [
     category: "Smartwatch",
     title: "HAFURY Women Smart Watch, Smartwatch for Android/iOS",
     price: 51.2,
-    oldPrice: 89.9,
+    oldprice: 89.9,
   },
 ];
 export const products3 = [
@@ -218,7 +218,7 @@ export const products3 = [
       "iPhone 11 Pro Max – Super Retina XDR, A13 Bionic, Triple-Camera System",
     isTodaysDeals: true,
     price: 45.2,
-    oldPrice: 84.5,
+    oldprice: 84.5,
     inNew: true,
     filterBrands: [
       "Corsair",
@@ -243,7 +243,7 @@ export const products3 = [
       "Sony Ericsson Unveils Seventh Walkman Phone – Music & Style Combined",
     isTodaysDeals: true,
     price: 18.99,
-    oldPrice: 95.999,
+    oldprice: 95.999,
 
     filterBrands: [
       "Razer",
@@ -267,7 +267,7 @@ export const products3 = [
       "USB-C Hub & Docking Station – Multiport Adapter for Laptops & Devices",
     isTodaysDeals: true,
     price: 27.49,
-    oldPrice: 72.49,
+    oldprice: 72.49,
     inNew: true,
     filterBrands: [
       "HyperX",
@@ -290,7 +290,7 @@ export const products3 = [
     title:
       'UMIDIGI Uwatch 2S – Fitness Tracker with Heart Rate Monitor & 1.3" Touch Screen',
     price: 39.99,
-    oldPrice: 88.888,
+    oldprice: 88.888,
     inNew: true,
     filterBrands: ["Razer", "Corsair", "Logitech", "SteelSeries", "HyperX"],
     rating: 3.9,
@@ -306,7 +306,7 @@ export const products3 = [
     title: "10,000mAh PD 3.0 Power Bank – 18W Fast Charging USB-C Battery Pack",
     isTodaysDeals: true,
     price: 15.25,
-    oldPrice: 63.75,
+    oldprice: 63.75,
 
     filterBrands: [
       "Razer",
@@ -329,7 +329,7 @@ export const products3 = [
     title: "Echo Dot (3rd Gen) – Smart Speaker with Clock & Alexa",
     isTodaysDeals: true,
     price: 22.9,
-    oldPrice: 79.9,
+    oldprice: 79.9,
     inNew: true,
     filterBrands: [
       "Razer",
@@ -376,7 +376,7 @@ export const products3 = [
     title:
       "Amazfit GTS 2 Mini – GPS Smartwatch with Alexa, 14-Day Battery, 70+ Sports Modes",
     price: 36.99,
-    oldPrice: 91.499,
+    oldprice: 91.499,
     inNew: true,
     filterBrands: [
       "Razer",
@@ -399,7 +399,7 @@ export const products3 = [
     title: "Apple Magic Mouse (USB-C) – Multi-Touch Wireless Mouse",
     isTodaysDeals: true,
     price: 7.8,
-    oldPrice: 47.8,
+    oldprice: 47.8,
     inNew: true,
     filterBrands: [
       "Razer",
@@ -449,7 +449,7 @@ export const products3 = [
       "Harman Kardon Aura Studio 3 – 130W Wireless Bluetooth Speaker with Premium Sound",
     isTodaysDeals: true,
     price: 13.75,
-    oldPrice: 83.75,
+    oldprice: 83.75,
     inNew: true,
     filterBrands: [
       "SteelSeries",
@@ -476,7 +476,7 @@ export const products4 = [
     title:
       "Retroflag Case for Raspberry Pi 3 B+ – Classic Design with Game Controller Compatibility",
     price: 71.999,
-    oldPrice: 89.999,
+    oldprice: 89.999,
   },
   {
     id: 25,
@@ -489,7 +489,7 @@ export const products4 = [
     title:
       "iPhone 11 (64GB) VN/A – Powerful Performance, Dual Camera, Liquid Retina Display",
     price: 61.2,
-    oldPrice: 76.5,
+    oldprice: 76.5,
   },
   {
     id: 26,
@@ -501,7 +501,7 @@ export const products4 = [
     category: "Wireless Earbuds",
     title: "Apple AirPods – True Wireless Earbuds with Seamless Connectivity",
     price: 75.99,
-    oldPrice: 94.99,
+    oldprice: 94.99,
   },
   {
     id: 27,
@@ -513,7 +513,7 @@ export const products4 = [
     category: "Camera & Accessories",
     title: "Leica Summaron-M 28mm f/5.6 – Classic Prime Lens Boxed Edition",
     price: 66.2,
-    oldPrice: 82.75,
+    oldprice: 82.75,
   },
   {
     id: 28,
@@ -526,7 +526,7 @@ export const products4 = [
     title:
       "Beats Studio3 Wireless – Noise Cancelling Headphones with Apple W1 Chip & Class 1 Bluetooth",
     price: 79.9,
-    oldPrice: 99.9,
+    oldprice: 99.9,
   },
   {
     id: 29,
@@ -539,7 +539,7 @@ export const products4 = [
     title:
       "Fitbit Charge 2 – Lavender Rose Gold Smart Fitness Tracker (Size S/L)",
     price: 38.5,
-    oldPrice: 45.99,
+    oldprice: 45.99,
   },
 ];
 
@@ -661,7 +661,7 @@ export const products6 = [
     category: "Headphone",
     title: "Apple AirPods Max – Premium Over-Ear Wireless Headphones (Green)",
     price: 51.5,
-    oldPrice: 64.99,
+    oldprice: 64.99,
     additionalClasses: "bg-white radius-8",
   },
   {
@@ -676,7 +676,7 @@ export const products6 = [
     title:
       'Amazon Fire TV Omni (65") – 4K UHD Smart TV with Hands-Free Alexa Control',
     price: 68.499,
-    oldPrice: 85.999,
+    oldprice: 85.999,
     additionalClasses: "bg-white radius-8",
   },
 ];
@@ -695,7 +695,7 @@ export const products7 = [
     title:
       "Sony PlayStation 5 (PS5) – Next-Gen Gaming Console with Ultra-Fast SSD & 4K Graphics",
     price: 71.5,
-    oldPrice: 89.99,
+    oldprice: 89.99,
     progressWidth: "30%",
     sold: 21,
     available: 58,
@@ -712,7 +712,7 @@ export const products7 = [
     category: "Smart TVs",
     title: "TCL 32-inch 3-Series 720p Roku Smart TV - 32S335, 2021 Model",
     price: 63.07,
-    oldPrice: 92.75,
+    oldprice: 92.75,
     progressWidth: "41%",
     sold: 41,
     available: 59,
@@ -729,7 +729,7 @@ export const products7 = [
     category: "Headphone",
     title: "Logitech M510 Wireless Computer Mouse for PC with USB Unifying...",
     price: 61.86,
-    oldPrice: 75.5,
+    oldprice: 75.5,
     progressWidth: "22%",
     sold: 22,
     available: 78,
@@ -746,7 +746,7 @@ export const products7 = [
     category: "Smartphone",
     title: "SAMSUNG Galaxy Z Flip Factory Unlocked Cell Phone",
     price: 74.999,
-    oldPrice: 99.999,
+    oldprice: 99.999,
     progressWidth: "70%",
     sold: 70,
     available: 30,
@@ -765,7 +765,7 @@ export const products7 = [
     title:
       "Samsung Electronics Samsung Galaxy S21 5G Factory Unlocked Android...",
     price: 69.7,
-    oldPrice: 85,
+    oldprice: 85,
     progressWidth: "62%",
     sold: 62,
     available: 45,
@@ -782,7 +782,7 @@ export const products7 = [
     category: "Game Consoles",
     title: "Lammcou Headphone Holder for PS5 Mini Hanger...",
     price: 62.8,
-    oldPrice: 78.5,
+    oldprice: 78.5,
     progressWidth: "80%",
     sold: 70,
     available: 45,
@@ -804,7 +804,7 @@ export const products8 = [
     title:
       "Audio-Technica ATH-MSR7 – SonicPro Over-Ear Headphones (Gun-Metal Grey) with High-Resolution Audio",
     price: 72,
-    oldPrice: 92.75,
+    oldprice: 92.75,
     filterTab: ["Feature", "On sale"],
   },
   {
@@ -819,7 +819,7 @@ export const products8 = [
     title:
       "Solos Smart Eyewear – Official Sponsor of USA Cycling with Advanced Performance Features",
     price: 36.5,
-    oldPrice: 45.9,
+    oldprice: 45.9,
     filterTab: ["Feature", "Toprate"],
   },
   {
@@ -834,7 +834,7 @@ export const products8 = [
     title:
       "SteelSeries Aerox 9 Wireless – Ultra-Lightweight Gaming Mouse with 12 Programmable Buttons",
     price: 87.5,
-    oldPrice: 92.75,
+    oldprice: 92.75,
     filterTab: ["Feature", "On sale"],
   },
   {
@@ -849,7 +849,7 @@ export const products8 = [
     title:
       "Turtle Beach Stream Mic – High-Quality Audio Performance for Streaming & Recording",
     price: 42.7,
-    oldPrice: 53.99,
+    oldprice: 53.99,
     filterTab: ["Feature", "Toprate"],
   },
   {
@@ -864,7 +864,7 @@ export const products8 = [
     title:
       "IPEGA PG-9021 Wireless Bluetooth Gamepad – Game Controller for Android & iOS Devices",
     price: 45.5,
-    oldPrice: 56.8,
+    oldprice: 56.8,
     filterTab: ["Feature", "Toprate", "On sale"],
   },
 ];
@@ -882,7 +882,7 @@ export const products9 = [
     title:
       "Klim Blaze Rechargeable Wireless Gaming Mouse – RGB Lighting, High-Precision Sensor & Long-Lasting Battery",
     price: 15.4,
-    oldPrice: 19.8,
+    oldprice: 19.8,
   },
   {
     id: 51,
@@ -895,7 +895,7 @@ export const products9 = [
     category: "Game Consoles",
     title: "IINE PS5 Controller Case Cover Silicone Case Protective ...",
     price: 35.2,
-    oldPrice: 28,
+    oldprice: 28,
   },
   {
     id: 52,
@@ -909,7 +909,7 @@ export const products9 = [
     title:
       "AutoFull C3 Pro Gaming Chair – Enhanced Cushion for Comfort & Support",
     price: 38.4,
-    oldPrice: 48.99,
+    oldprice: 48.99,
   },
   {
     id: 53,
@@ -923,7 +923,7 @@ export const products9 = [
     title:
       "Beats Solo3 Wireless – On-Ear Headphones with Apple W1 Chip and 40-Hour Battery Life",
     price: 26.9,
-    oldPrice: 33.8,
+    oldprice: 33.8,
   },
   {
     id: 54,
@@ -936,7 +936,7 @@ export const products9 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 64.999,
-    oldPrice: 79.999,
+    oldprice: 79.999,
   },
   {
     id: 55,
@@ -950,7 +950,7 @@ export const products9 = [
     title:
       "Klim Blaze Rechargeable Wireless Gaming Mouse – RGB Lighting, High-Precision Sensor & Long-Lasting Battery",
     price: 15.4,
-    oldPrice: 19.8,
+    oldprice: 19.8,
   },
 ];
 
@@ -967,7 +967,7 @@ export const products10 = [
     title:
       "B&O Beoplay A1 – Premium Portable Bluetooth Speaker with Superior Sound Quality",
     price: 43.5,
-    oldPrice: 54.6,
+    oldprice: 54.6,
   },
   {
     id: 57,
@@ -981,7 +981,7 @@ export const products10 = [
     title:
       "Sony WF-SP700N – Bluetooth Noise-Canceling Earbuds with Secure Fit for Sports",
     price: 24.4,
-    oldPrice: 30.999,
+    oldprice: 30.999,
   },
   {
     id: 58,
@@ -994,7 +994,7 @@ export const products10 = [
     category: "Smart TVs",
     title: "TCL 32-inch 3-Series 720p Roku Smart TV - 32S335, 2021 Model",
     price: 71,
-    oldPrice: 88.75,
+    oldprice: 88.75,
   },
   {
     id: 59,
@@ -1008,7 +1008,7 @@ export const products10 = [
     title:
       "B&O Beoplay A1 – Premium Portable Bluetooth Speaker with Superior Sound Quality",
     price: 43.5,
-    oldPrice: 54.6,
+    oldprice: 54.6,
   },
 ];
 
@@ -1025,7 +1025,7 @@ export const products11 = [
     title:
       "TOKERSE Firestick Remote Cover Case 3rd Gen – Anti-Slip Protection for Alexa Voice Remote FireTV Stick 3rd Gen",
     price: 14.5,
-    oldPrice: 18.6,
+    oldprice: 18.6,
     filterTab: ["Feature", "On sale"],
   },
   {
@@ -1039,7 +1039,7 @@ export const products11 = [
     category: "Smartphone",
     title: "HTC Desire 20+ – Mid-Range Chipset with Long-Lasting Battery Life",
     price: 49.9,
-    oldPrice: 62.3,
+    oldprice: 62.3,
     filterTab: ["Feature", "Toprate"],
   },
   {
@@ -1054,7 +1054,7 @@ export const products11 = [
     title:
       'ASUS ZenBook Flip 13 – Ultra-Slim Convertible Laptop with 13.3" OLED FHD Touch Display & Intel Core i7-1165G7 Processor',
     price: 60.2,
-    oldPrice: 76.9,
+    oldprice: 76.9,
     filterTab: ["Feature", "On sale"],
   },
   {
@@ -1069,7 +1069,7 @@ export const products11 = [
     title:
       "Apple AirPods Pro (1st Gen) – Select Right, Left, or Both AirPods Pro for Optimal Sound Quality",
     price: 33.0,
-    oldPrice: 41.6,
+    oldprice: 41.6,
     filterTab: ["Feature", "Toprate"],
   },
   {
@@ -1083,7 +1083,7 @@ export const products11 = [
     category: "Smartphone",
     title: "SAMSUNG Galaxy Z Flip Factory Unlocked Cell Phone",
     price: 73.2,
-    oldPrice: 91.45,
+    oldprice: 91.45,
     filterTab: ["Feature", "On sale"],
   },
   {
@@ -1098,7 +1098,7 @@ export const products11 = [
     title:
       "Beats Studio3 Wireless On-Ear Headphones – Apple W1 Chip, Class 1 Bluetooth, Noise Cancelling",
     price: 47.5,
-    oldPrice: 59.3,
+    oldprice: 59.3,
     filterTab: ["Feature", "Toprate", "On sale"],
   },
   {
@@ -1112,7 +1112,7 @@ export const products11 = [
     category: "Laptop & Computer",
     title: "Acer Chromebook Spin 713 CP713-3W-72KV- 13.5 Inches...",
     price: 65.8,
-    oldPrice: 82.6,
+    oldprice: 82.6,
     filterTab: ["Feature", "Toprate", "On sale"],
   },
   {
@@ -1126,7 +1126,7 @@ export const products11 = [
     category: "Smartphone",
     title: "Apple iPhone 11 Pro Max, 256GB, Space Gray",
     price: 29.1,
-    oldPrice: 36.45,
+    oldprice: 36.45,
     filterTab: ["Feature", "Toprate", "On sale"],
   },
   {
@@ -1141,7 +1141,7 @@ export const products11 = [
     title:
       "TOKERSE Firestick Remote Cover Case 3rd Gen – Anti-Slip Protection for Alexa Voice Remote FireTV Stick 3rd Gen",
     price: 14.5,
-    oldPrice: 18.6,
+    oldprice: 18.6,
     filterTab: ["Feature", "Toprate", "On sale"],
   },
   {
@@ -1155,7 +1155,7 @@ export const products11 = [
     category: "Smartphone",
     title: "HTC Desire 20+ – Mid-Range Chipset with Long-Lasting Battery Life",
     price: 49.9,
-    oldPrice: 62.3,
+    oldprice: 62.3,
     filterTab: ["Feature", "Toprate", "On sale"],
   },
 ];
@@ -1170,7 +1170,7 @@ export const featuredProducts = [
     category: "Smartphone",
     title: "Samsung Galaxy Note 10+, 256GB, Aura Black - Fully Unlocked",
     price: 62.7,
-    oldPrice: 79.2,
+    oldprice: 79.2,
     salePercentage: 22,
     available: 5,
     sold: 14,
@@ -1186,7 +1186,7 @@ export const featuredProducts = [
     category: "Game Controllers",
     title: "PowerA Enhanced Wired Controller for Xbox Series X|S - white",
     price: 56.6,
-    oldPrice: 70.75,
+    oldprice: 70.75,
     salePercentage: 10,
     available: 5,
     sold: 14,
@@ -1202,7 +1202,7 @@ export const featuredProducts = [
     category: "Headphone",
     title: "Samsung Galaxy Note 10+, 256GB, Aura Black - Fully Unlocked",
     price: 80,
-    oldPrice: 100,
+    oldprice: 100,
     salePercentage: 70,
     available: 5,
     sold: 14,
@@ -1223,7 +1223,7 @@ export const products12 = [
     category: "Smartphone",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 49.6,
-    oldPrice: 60.8,
+    oldprice: 60.8,
   },
   {
     id: 74,
@@ -1236,7 +1236,7 @@ export const products12 = [
     category: "Smartwatch",
     title: "Apple Watch Band - Sport Band (45mm) Starlight - Regular",
     price: 35.8,
-    oldPrice: 45.1,
+    oldprice: 45.1,
   },
   {
     id: 75,
@@ -1250,7 +1250,7 @@ export const products12 = [
     title:
       "Tech21 Essentials for iPhone 12/12 Pro – Clear Protective Case with 5ft Drop Protection",
     price: 76,
-    oldPrice: 95.3,
+    oldprice: 95.3,
   },
   {
     id: 76,
@@ -1264,7 +1264,7 @@ export const products12 = [
     title:
       "Apple MacBook Pro (13-Inch) – 8GB RAM, 512GB Storage, Silver Finish",
     price: 15.3,
-    oldPrice: 19.2,
+    oldprice: 19.2,
   },
   {
     id: 77,
@@ -1277,7 +1277,7 @@ export const products12 = [
     category: "Game Controller",
     title: "Playstation DualSense Wireless Controller",
     price: 57.5,
-    oldPrice: 71.8,
+    oldprice: 71.8,
   },
   {
     id: 78,
@@ -1290,7 +1290,7 @@ export const products12 = [
     category: "Tablets",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 55.1,
-    oldPrice: 68.4,
+    oldprice: 68.4,
   },
 ];
 
@@ -1348,7 +1348,7 @@ export const products13 = [
     category: "Electronics",
     title: "AeroCool Cylon RGB Mid Tower with Acrylic Side window, Black",
     price: 55.1,
-    oldPrice: 68.4,
+    oldprice: 68.4,
   },
   {
     id: 83,
@@ -1361,7 +1361,7 @@ export const products13 = [
     category: "Game Controllers",
     title: "PowerA Enhanced Wired Controller for Xbox Series X|S - white",
     price: 31.8,
-    oldPrice: 39.75,
+    oldprice: 39.75,
   },
   {
     id: 84,
@@ -1375,7 +1375,7 @@ export const products13 = [
     title:
       "Corsair 5000D Airflow – Tempered Glass Mid-Tower ATX PC Case, Black with Enhanced Cooling Performance",
     price: 66.8,
-    oldPrice: 83.6,
+    oldprice: 83.6,
   },
   {
     id: 85,
@@ -1389,7 +1389,7 @@ export const products13 = [
     title:
       "Corsair iCUE 4000X RGB – Mid-Tower ATX PC Case with Tempered Glass and RGB Lighting, White",
     price: 17.2,
-    oldPrice: 21.7,
+    oldprice: 21.7,
   },
   {
     id: 86,
@@ -1403,7 +1403,7 @@ export const products13 = [
     title:
       "PlayStation DualSense Wireless Controller – Next-Gen Controller with Haptic Feedback and Adaptive Triggers",
     price: 63.2,
-    oldPrice: 78.9,
+    oldprice: 78.9,
   },
   {
     id: 87,
@@ -1416,7 +1416,7 @@ export const products13 = [
     category: "Tablets",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 50.6,
-    oldPrice: 63.4,
+    oldprice: 63.4,
   },
 ];
 export const gridProducts = [
@@ -1430,7 +1430,7 @@ export const gridProducts = [
     category: "Smartphone",
     title: "Samsung Galaxy S10+, 128GB, Ceramic Black - Unlocked",
     price: 32.2,
-    oldPrice: 40.3,
+    oldprice: 40.3,
   },
   {
     id: 89,
@@ -1443,7 +1443,7 @@ export const gridProducts = [
     title:
       "PowerA Enhanced Wired Controller for Xbox Series X|S – White with Precision Controls and Comfortable Grip",
     price: 14.7,
-    oldPrice: 18.5,
+    oldprice: 18.5,
   },
   {
     id: 90,
@@ -1456,7 +1456,7 @@ export const gridProducts = [
     title:
       "Baseus D02 Pro Bluetooth Earphones – Stereo Wireless 5.0, HIFI Sound, Foldable Design for Sports",
     price: 44.7,
-    oldPrice: 55.9,
+    oldprice: 55.9,
   },
   {
     id: 91,
@@ -1469,7 +1469,7 @@ export const gridProducts = [
     title:
       "TCL 32-Inch 3-Series 720p Roku Smart TV – Model 32S335, 2021 Edition with Built-in Streaming Features",
     price: 68.3,
-    oldPrice: 85.4,
+    oldprice: 85.4,
   },
 ];
 export const smallProducts = [
@@ -1484,7 +1484,7 @@ export const smallProducts = [
     category: "Headphone",
     title: "Audio-Technica ATH-AD700X Audiophile Open-Air",
     price: 33.8,
-    oldPrice: 42.6,
+    oldprice: 42.6,
     compareClass: "d-none d-sm-block d-xl-none d-xxl-block",
   },
   {
@@ -1499,7 +1499,7 @@ export const smallProducts = [
     title:
       "Destiny Special Edition Game Console – Limited Edition with Exclusive Features",
     price: 61.6,
-    oldPrice: 77.2,
+    oldprice: 77.2,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1514,7 +1514,7 @@ export const smallProducts = [
     title:
       "Corsair 5000D Airflow – Tempered Glass Mid-Tower ATX Case with Enhanced Cooling Performance",
     price: 16.5,
-    oldPrice: 20.9,
+    oldprice: 20.9,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1528,7 +1528,7 @@ export const smallProducts = [
     category: "Smartphone",
     title: "Apple iPhone 12 Pro Max, 128GB, Graphite - Unlocked",
     price: 55.4,
-    oldPrice: 69.5,
+    oldprice: 69.5,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1543,7 +1543,7 @@ export const smallProducts = [
     title:
       "AeroCool Cylon RGB Mid Tower – Acrylic Side Window, Black with LED Lighting for Enhanced Cooling",
     price: 64.3,
-    oldPrice: 80.5,
+    oldprice: 80.5,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1557,7 +1557,7 @@ export const smallProducts = [
     category: "Smartphone",
     title: "Apple iPhone 11 Pro Max, 256GB, Space Gray",
     price: 30.2,
-    oldPrice: 37.8,
+    oldprice: 37.8,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1572,7 +1572,7 @@ export const smallProducts = [
     title:
       "Audio-Technica ATH-AD700X – Audiophile Open-Air Headphones with Superior Sound Quality and Comfort",
     price: 72.8,
-    oldPrice: 91,
+    oldprice: 91,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1587,7 +1587,7 @@ export const smallProducts = [
     title:
       "Destiny Special Edition Game Console – Limited Edition Console with Exclusive Features and Design",
     price: 14.6,
-    oldPrice: 18.3,
+    oldprice: 18.3,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1602,7 +1602,7 @@ export const smallProducts = [
     title:
       "Baseus D02 Pro Bluetooth Earphones – Stereo Wireless 5.0, HIFI Sound, Foldable Design for Sports and Active Use",
     price: 51.9,
-    oldPrice: 64.9,
+    oldprice: 64.9,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1617,7 +1617,7 @@ export const smallProducts = [
     title:
       "Lifely Laptop Stand – Adjustable Ergonomic Stand, Ships from Woodlands, Real Wood Design for Comfortable Viewing",
     price: 67.9,
-    oldPrice: 84.7,
+    oldprice: 84.7,
     compareClass: "d-none d-sm-block",
   },
 ];
@@ -1631,7 +1631,7 @@ export const rowProducts = [
     category: "Headphone",
     title: "Apple AirPods Max – Premium Over-Ear Wireless Headphones (Green)",
     price: 51.5,
-    oldPrice: 64.99,
+    oldprice: 64.99,
   },
   {
     id: 103,
@@ -1643,7 +1643,7 @@ export const rowProducts = [
     title:
       'Amazon Fire TV Omni (65") – 4K UHD Smart TV with Hands-Free Alexa Control',
     price: 68.499,
-    oldPrice: 85.999,
+    oldprice: 85.999,
   },
 ];
 
@@ -1830,7 +1830,7 @@ export const products15 = [
     category: "Smartwatch",
     title: "Garmin fenix 7, adventure smartwatch, rugged outdoor",
     price: 16.8,
-    oldPrice: 20.7,
+    oldprice: 20.7,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1844,7 +1844,7 @@ export const products15 = [
     category: "Headphone",
     title: "Sony ZX Series Wired On-Ear Headphones, Black MDR-ZX110",
     price: 51,
-    oldPrice: 63.8,
+    oldprice: 63.8,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1859,7 +1859,7 @@ export const products15 = [
     title:
       "Samsung Galaxy S21 5G – Factory Unlocked, Android Smartphone with 5G Connectivity and High-Performance Features",
     price: 62.3,
-    oldPrice: 77.9,
+    oldprice: 77.9,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1874,7 +1874,7 @@ export const products15 = [
     title:
       "Baseus D02 Pro Bluetooth Earphones – Stereo Wireless 5.0, HIFI Sound, Foldable Design for Sports and Active Use.",
     price: 33.4,
-    oldPrice: 41.5,
+    oldprice: 41.5,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1888,7 +1888,7 @@ export const products15 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 63.1,
-    oldPrice: 79.6,
+    oldprice: 79.6,
     compareClass: "d-none d-sm-block",
   },
   {
@@ -1903,7 +1903,7 @@ export const products15 = [
     title:
       "3Dconnexion 3DX-700040 SpaceMouse Pro – Professional 3D Mouse for Precision Modeling and CAD Applications",
     price: 23.5,
-    oldPrice: 29.7,
+    oldprice: 29.7,
     compareClass: "d-none d-sm-block",
   },
 ];
@@ -1920,7 +1920,7 @@ export const products16 = [
     title:
       "Apple MacBook Pro (13-Inch, 8GB RAM, 512GB Storage) – Silver, High-Performance Laptop with Retina Display and Long Battery Life",
     price: 45.2,
-    oldPrice: 56.4,
+    oldprice: 56.4,
     compareClass: "d-none d-sm-block",
     filterTab: ["Feature", "On sale"],
   },
@@ -1936,7 +1936,7 @@ export const products16 = [
     title:
       "All-new Fire 7 Tablet (2022 Release) – 7” Display, 16GB Storage, Latest Model, Black with Enhanced Performance and Features",
     price: 59.6,
-    oldPrice: 74.5,
+    oldprice: 74.5,
     compareClass: "d-none d-sm-block",
     filterTab: ["Feature", "Toprate"],
   },
@@ -1952,7 +1952,7 @@ export const products16 = [
     title:
       "PlayStation DualSense Wireless Controller – Adaptive Triggers & Haptic Feedback",
     price: 31.3,
-    oldPrice: 39,
+    oldprice: 39,
     compareClass: "d-none d-sm-block",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -1968,7 +1968,7 @@ export const products16 = [
     title:
       "Baseus D02 Pro Bluetooth Earphones Stereo Wireless 5.0 HIFI Foldable Spor...",
     price: 70.7,
-    oldPrice: 88.4,
+    oldprice: 88.4,
     compareClass: "d-none d-sm-block",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -1983,7 +1983,7 @@ export const products16 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 18.2,
-    oldPrice: 22.5,
+    oldprice: 22.5,
     compareClass: "d-none d-sm-block",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -1998,7 +1998,7 @@ export const products16 = [
     category: "Gaming Mice",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D Mouse",
     price: 52.1,
-    oldPrice: 65.2,
+    oldprice: 65.2,
     compareClass: "d-none d-sm-block",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -2085,7 +2085,7 @@ export const products19 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 42,
-    oldPrice: 59.999,
+    oldprice: 59.999,
   },
   {
     id: 136,
@@ -2096,7 +2096,7 @@ export const products19 = [
     category: "Headphone",
     title: "Audio-Technica ATH-AD700X Audiophile Open-Air",
     price: 45.5,
-    oldPrice: 79.99,
+    oldprice: 79.99,
   },
   {
     id: 137,
@@ -2107,7 +2107,7 @@ export const products19 = [
     category: "Smartwatch",
     title: "HAFURY Women Smart Watch, Smartwatch for Android/iOS",
     price: 51.2,
-    oldPrice: 89.9,
+    oldprice: 89.9,
   },
 ];
 export const products20 = [
@@ -2121,7 +2121,7 @@ export const products20 = [
     title:
       "SUUNTO 9 Non-Baro GPS Sports Watch – Long Battery Life and Durable Design for Outdoor Adventures",
     price: 65.1,
-    oldPrice: 81.4,
+    oldprice: 81.4,
     delay: "0s",
     filterTab: ["Feature", "On sale"],
   },
@@ -2134,7 +2134,7 @@ export const products20 = [
     category: "Smartphone",
     title: "Samsung Galaxy S10+, 128GB, Ceramic Black - Unlocked",
     price: 30.5,
-    oldPrice: 38.2,
+    oldprice: 38.2,
     delay: "0.1s",
     filterTab: ["Feature", "Toprate"],
   },
@@ -2147,7 +2147,7 @@ export const products20 = [
     category: "Smart TVs",
     title: "TCL 32-inch 3-Series 720p Roku Smart TV - 32S335, 2021 Model",
     price: 67.8,
-    oldPrice: 84.3,
+    oldprice: 84.3,
     delay: "0.2s",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -2161,7 +2161,7 @@ export const products20 = [
     title:
       "Apple EarPods with Lightning Connector – White, Comfortable Fit and High-Quality Audio for iPhone and iPad",
     price: 18.9,
-    oldPrice: 23.4,
+    oldprice: 23.4,
     delay: "0.3s",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -2175,7 +2175,7 @@ export const products20 = [
     title:
       "PlayStation DualSense Wireless Controller – Adaptive Triggers, Haptic Feedback, and Built-In Microphone",
     price: 53.7,
-    oldPrice: 66.9,
+    oldprice: 66.9,
     delay: "0.4s",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -2189,7 +2189,7 @@ export const products20 = [
     title:
       "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) – Silver, Powerful Performance with Retina Display and A13 Bionic Chip",
     price: 63,
-    oldPrice: 79.5,
+    oldprice: 79.5,
     filterTab: ["Feature", "Toprate", "On sale"],
   },
 ];
@@ -2204,7 +2204,7 @@ export const products21 = [
     title:
       'Fire 7 Tablet (2019 Release) – 7" Display, 16GB Storage, Plum Color with Enhanced Performance and Features',
     price: 34.8,
-    oldPrice: 43.6,
+    oldprice: 43.6,
     delay: "0s",
   },
   {
@@ -2217,7 +2217,7 @@ export const products21 = [
     title:
       'All-new Fire 7 Tablet (2022 Release) – 7" Display, 16GB Storage, Black with Improved Performance and Features',
     price: 60.0,
-    oldPrice: 75.3,
+    oldprice: 75.3,
     delay: "0.1s",
   },
   {
@@ -2229,7 +2229,7 @@ export const products21 = [
     category: "Electronics",
     title: "AeroCool Cylon RGB Mid Tower with Acrylic Side window, Black",
     price: 80.0,
-    oldPrice: 100.0,
+    oldprice: 100.0,
     delay: "0.2s",
   },
   {
@@ -2241,7 +2241,7 @@ export const products21 = [
     category: "Smartphone",
     title: "Samsung Galaxy Note 10+, 256GB, Aura Black - Fully Unlocked",
     price: 22.0,
-    oldPrice: 27.6,
+    oldprice: 27.6,
     delay: "0.3s",
   },
   {
@@ -2253,7 +2253,7 @@ export const products21 = [
     category: "Laptop & Computers",
     title: 'Fire 7 tablet, 7" display, 16 GB, (2019 release), Plum',
     price: 46.4,
-    oldPrice: 58.2,
+    oldprice: 58.2,
   },
   {
     id: 149,
@@ -2265,7 +2265,7 @@ export const products21 = [
     title:
       'All-new Fire 7 tablet, 7" display, 16 GB, latest model (2022 release), Black',
     price: 63.5,
-    oldPrice: 79.8,
+    oldprice: 79.8,
   },
 ];
 
@@ -2280,7 +2280,7 @@ export const products22 = [
     title:
       'ASUS Vivobook Go 15 L510 Thin & Light Laptop – 15.6" Display, Intel Celeron Processor, and 128GB Storage',
     price: 34.1,
-    oldPrice: 42.7,
+    oldprice: 42.7,
     delay: "0s",
   },
   {
@@ -2292,7 +2292,7 @@ export const products22 = [
     category: "Smartphone",
     title: "Redmi Note 11 6GB+128G Global Version",
     price: 16.7,
-    oldPrice: 21.3,
+    oldprice: 21.3,
     delay: "0s",
   },
   {
@@ -2304,7 +2304,7 @@ export const products22 = [
     category: "Smartphone",
     title: "Redmi Note 11 6GB+128G Global Version",
     price: 51.5,
-    oldPrice: 64.1,
+    oldprice: 64.1,
     delay: "0.1s",
   },
   {
@@ -2317,7 +2317,7 @@ export const products22 = [
     title:
       "Nintendo Switch Hard Shell Travel Carrying Case Cover – Durable Protection for Console and Accessories",
     price: 62.2,
-    oldPrice: 78.2,
+    oldprice: 78.2,
     delay: "0.1s",
   },
   {
@@ -2329,7 +2329,7 @@ export const products22 = [
     category: "Smartphone",
     title: "POCO M3 Pro 5G 4GB+64GB Global Version",
     price: 32.5,
-    oldPrice: 40.8,
+    oldprice: 40.8,
     delay: "0.2s",
   },
   {
@@ -2341,7 +2341,7 @@ export const products22 = [
     category: "Game Console",
     title: "GameConsole Destiny Special Edition",
     price: 59.3,
-    oldPrice: 74.0,
+    oldprice: 74.0,
     delay: "0.2s",
   },
   {
@@ -2354,7 +2354,7 @@ export const products22 = [
     title:
       'Acer Chromebook Spin 713 CP713-3W-72KV – 13.5" 2-in-1 Touchscreen, Intel Core i7, and Long Battery Life',
     price: 24.0,
-    oldPrice: 30.1,
+    oldprice: 30.1,
     delay: "0.3s",
   },
   {
@@ -2366,7 +2366,7 @@ export const products22 = [
     category: "Smartphone",
     title: "Apple iPhone 11 Pro Max, 256GB, Space Gray",
     price: 45.0,
-    oldPrice: 56.8,
+    oldprice: 56.8,
     delay: "0.3s",
   },
   {
@@ -2379,7 +2379,7 @@ export const products22 = [
     title:
       "IINE PS5 Controller Case Cover – Silicone Protective Case for Enhanced Grip and Durability",
     price: 57.2,
-    oldPrice: 71.6,
+    oldprice: 71.6,
   },
   {
     id: 159,
@@ -2390,7 +2390,7 @@ export const products22 = [
     category: "Smartphone",
     title: "Redmi Note 11 6GB+128G Global Version",
     price: 31.6,
-    oldPrice: 39.5,
+    oldprice: 39.5,
   },
 ];
 export const products23 = [
@@ -2403,7 +2403,7 @@ export const products23 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 66.6,
-    oldPrice: 83.2,
+    oldprice: 83.2,
     delay: "0s",
     styleClass: "",
   },
@@ -2417,7 +2417,7 @@ export const products23 = [
     title:
       "Nintendo Switch Hard Shell Travel Carrying Case Cover – Protective Storage for Console and Accessories",
     price: 15.8,
-    oldPrice: 19.9,
+    oldprice: 19.9,
     delay: "0.1s",
     styleClass: "",
   },
@@ -2431,7 +2431,7 @@ export const products23 = [
     title:
       "OLYMPUS OM-D E-M5 Mark III Body – Silver, Compact Design with 4K Video and High-Speed Autofocus",
     price: 49.8,
-    oldPrice: 62.3,
+    oldprice: 62.3,
     delay: "0.2s",
     styleClass: "",
   },
@@ -2444,7 +2444,7 @@ export const products23 = [
     category: "Smartphone",
     title: "Samsung Galaxy Note 10+, 256GB, Aura Black - Fully Unlocked",
     price: 61.2,
-    oldPrice: 76.5,
+    oldprice: 76.5,
     delay: "0.3s",
     styleClass: "",
   },
@@ -2457,7 +2457,7 @@ export const products23 = [
     category: "Game Controllers",
     title: "Playstation DualSense Wireless Controller",
     price: 35.2,
-    oldPrice: 44.1,
+    oldprice: 44.1,
     delay: "",
     styleClass: "style-img-border",
   },
@@ -2470,7 +2470,7 @@ export const products23 = [
     category: "Tablets",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 66.2,
-    oldPrice: 82.8,
+    oldprice: 82.8,
     delay: "",
     styleClass: "",
   },
@@ -2485,7 +2485,7 @@ export const products24 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 24.6,
-    oldPrice: 31.1,
+    oldprice: 31.1,
   },
   {
     id: 167,
@@ -2497,7 +2497,7 @@ export const products24 = [
     title:
       "Sony PlayStation 5 (PS5) – Next-Gen Gaming Console with Ultra-Fast SSD & 4K Graphics",
     price: 43.4,
-    oldPrice: 55.5,
+    oldprice: 55.5,
   },
   {
     id: 168,
@@ -2508,7 +2508,7 @@ export const products24 = [
     category: "Smartwatch",
     title: "GameConsole Destiny Special Edition",
     price: 63.5,
-    oldPrice: 79.2,
+    oldprice: 79.2,
   },
 ];
 export const products25 = [
@@ -2522,7 +2522,7 @@ export const products25 = [
     title:
       "AeroCool Cylon RGB Mid Tower Case with Acrylic Side Window – Black, Stylish Design with RGB Lighting for Gaming PCs",
     price: 23.6,
-    oldPrice: 29.8,
+    oldprice: 29.8,
     delay: "0s",
     animation: "fadeInLeft",
   },
@@ -2536,7 +2536,7 @@ export const products25 = [
     title:
       "PlayStation DualSense Wireless Controller – Galactic Purple, Adaptive Triggers and Haptic Feedback for Immersive Gaming",
     price: 43.3,
-    oldPrice: 55.4,
+    oldprice: 55.4,
     delay: "0.1s",
     animation: "fadeInLeft",
   },
@@ -2550,7 +2550,7 @@ export const products25 = [
     title:
       "PowerA Enhanced Wired Controller for Xbox Series X|S – White, Ergonomic Design with Dual Rumble Motors",
     price: 64.4,
-    oldPrice: 80.7,
+    oldprice: 80.7,
     delay: "0.2s",
     animation: "fadeInLeft",
   },
@@ -2564,7 +2564,7 @@ export const products25 = [
     title:
       "Baseus D02 Pro Bluetooth Earphones – Stereo Wireless 5.0, HIFI Sound, Foldable Design for Sports and Travel",
     price: 34.6,
-    oldPrice: 43.2,
+    oldprice: 43.2,
     delay: "",
     animation: "",
   },
@@ -2577,7 +2577,7 @@ export const products25 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 68.1,
-    oldPrice: 85.1,
+    oldprice: 85.1,
     delay: "",
     animation: "",
   },
@@ -2590,7 +2590,7 @@ export const products25 = [
     category: "Gaming Mice",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D Mouse",
     price: 19,
-    oldPrice: 24.2,
+    oldprice: 24.2,
     delay: "",
     animation: "",
   },
@@ -2606,7 +2606,7 @@ export const products26 = [
     title:
       "NEW Microsoft Surface Mobile Mouse – Ice Blue, Compact and Portable with Precise Tracking for Laptops and Tablets",
     price: 50.9,
-    oldPrice: 63.7,
+    oldprice: 63.7,
     delay: "0s",
     animation: "fadeInUp",
   },
@@ -2619,7 +2619,7 @@ export const products26 = [
     category: "Smartphone",
     title: "Samsung Galaxy S10+, 128GB, Ceramic Black - Unlocked",
     price: 61.7,
-    oldPrice: 77.4,
+    oldprice: 77.4,
     delay: "0.1s",
     animation: "fadeInUp",
   },
@@ -2632,7 +2632,7 @@ export const products26 = [
     category: "Smartwatch",
     title: "HD 1080P Smart Watch Video Recorder Mini Camera",
     price: 32.3,
-    oldPrice: 41,
+    oldprice: 41,
     delay: "0.2s",
     animation: "fadeInUp",
   },
@@ -2645,7 +2645,7 @@ export const products26 = [
     category: "Headphones",
     title: "Apple MacBook Pro (13-Inch, 8GB RAM, 512GB Storage) - Silver",
     price: 59.8,
-    oldPrice: 74.6,
+    oldprice: 74.6,
     delay: "0.3s",
     animation: "fadeInUp",
   },
@@ -2658,7 +2658,7 @@ export const products26 = [
     category: "Smartwatch",
     title: "Garmin fenix 7, adventure smartwatch, rugged outdoor",
     price: 24.7,
-    oldPrice: 31.2,
+    oldprice: 31.2,
     delay: "0.4s",
     animation: "fadeInUp",
   },
@@ -2671,7 +2671,7 @@ export const products26 = [
     category: "Laptop & Ipad",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 46.2,
-    oldPrice: 58,
+    oldprice: 58,
     delay: "",
     animation: "",
   },
@@ -2687,7 +2687,7 @@ export const products27 = [
     title:
       "GameConsole Destiny Special Edition – Limited Edition Console with Exclusive Designs and Features",
     price: 59.1,
-    oldPrice: 73.8,
+    oldprice: 73.8,
     delay: "0s",
     animation: "fadeInUp",
     styleClass: "style-small style-img-border",
@@ -2702,7 +2702,7 @@ export const products27 = [
     category: "Smart Speakers",
     title: "Apple TV 4K TV 4K (32GB, Previous Model)",
     price: 32.8,
-    oldPrice: 40.4,
+    oldprice: 40.4,
     delay: "0.1s",
     animation: "fadeInUp",
     styleClass: "style-small style-img-border",
@@ -2718,7 +2718,7 @@ export const products27 = [
     title:
       "Garmin fenix 7 Adventure Smartwatch – Rugged Outdoor Design with Advanced GPS and Fitness Tracking Features",
     price: 69.5,
-    oldPrice: 86.9,
+    oldprice: 86.9,
     delay: "0.2s",
     animation: "fadeInUp",
     styleClass: "style-small style-img-border",
@@ -2734,7 +2734,7 @@ export const products27 = [
     title:
       "Google 4-Pack WiFi AC1200 Dual-Band Home WiFi System – Fast and Reliable Coverage for Your Entire Home",
     price: 16.2,
-    oldPrice: 20.8,
+    oldprice: 20.8,
     delay: "0.3s",
     animation: "fadeInUp",
     styleClass: "style-small style-img-border",
@@ -2750,7 +2750,7 @@ export const products27 = [
     title:
       "Mr. Coffee 2134286 5-Cup Mini Brew Coffee Maker – Compact Design for Small Households or Offices",
     price: 49.6,
-    oldPrice: 62.1,
+    oldprice: 62.1,
     delay: "0s",
     animation: "fadeInUp",
     styleClass: "style-small style-img-border",
@@ -2765,7 +2765,7 @@ export const products27 = [
     category: "Laptop & Computers",
     title: "ASUS Vivobook Go 15 L510 Thin & Light Laptop Computer",
     price: 60.4,
-    oldPrice: 75.5,
+    oldprice: 75.5,
     delay: "0.1s",
     animation: "fadeInUp",
     styleClass: "style-small style-img-border",
@@ -2781,7 +2781,7 @@ export const products27 = [
     title:
       "Apple EarPods with Lightning Connector – White, High-Quality Sound and Convenient In-Line Controls for iPhone and iPad",
     price: 33.8,
-    oldPrice: 42.3,
+    oldprice: 42.3,
     delay: "0.2s",
     animation: "fadeInUp",
     styleClass: "style-small style-img-border",
@@ -2797,7 +2797,7 @@ export const products27 = [
     title:
       "GameConsole Destiny Special Edition – Limited Edition Console with Exclusive Destiny-themed Designs and Features",
     price: 57.5,
-    oldPrice: 72.2,
+    oldprice: 72.2,
     delay: "0.3s",
     animation: "fadeInUp",
     styleClass: "style-small style-img-border",
@@ -2812,7 +2812,7 @@ export const products27 = [
     category: "Gaming Mice",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D Mouse",
     price: 23.2,
-    oldPrice: 29.4,
+    oldprice: 29.4,
     delay: "",
     animation: "",
     styleClass: "style-small style-img-border",
@@ -2827,7 +2827,7 @@ export const products27 = [
     category: "Headphone",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D Mouse",
     price: 57.6,
-    oldPrice: 45.8,
+    oldprice: 45.8,
     delay: "",
     animation: "",
     styleClass: "style-small style-img-border",
@@ -3089,7 +3089,7 @@ export const products30 = [
     title:
       'LG Gram 16Z90P Laptop 16" Ultra-Lightweight – High-Performance Thin & Light Laptop with Long Battery Life',
     price: 63.5,
-    oldPrice: 79.2,
+    oldprice: 79.2,
     discount: "-15%",
     delay: "0s",
     animation: "fadeInLeft",
@@ -3104,7 +3104,7 @@ export const products30 = [
     title:
       "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0 – Over-Ear Wireless Headphones",
     price: 34.8,
-    oldPrice: 42.6,
+    oldprice: 42.6,
     discount: "-20%",
     delay: "0.1s",
     animation: "fadeInLeft",
@@ -3118,7 +3118,7 @@ export const products30 = [
     category: "Electronics",
     title: "Samsung Flip 2 WM65R 65 Inch Digital Flipchart for Business 4K UHD",
     price: 70.9,
-    oldPrice: 88.7,
+    oldprice: 88.7,
     discount: "-18%",
     delay: "0.2s",
     animation: "fadeInLeft",
@@ -3132,7 +3132,7 @@ export const products30 = [
     category: "Smartphone",
     title: "Samsung Flip 2 WM65R 65 Inch Digital Flipchart for Business 4K UHD",
     price: 19.3,
-    oldPrice: 24.8,
+    oldprice: 24.8,
     discount: "-25%",
     delay: "0.3s",
     animation: "fadeInLeft",
@@ -3146,7 +3146,7 @@ export const products30 = [
     category: "Laptop & Computers",
     title: "Acer Aspire 5 A515-56-32DK Slim Laptop",
     price: 51.0,
-    oldPrice: 64.5,
+    oldprice: 64.5,
     discount: "-20%",
     delay: "0.4s",
     animation: "fadeInLeft",
@@ -3160,7 +3160,7 @@ export const products30 = [
     category: "Laptop & Computers",
     title: 'LG Gram 16Z90P Laptop 16" Ultra-Lightweight',
     price: 62.1,
-    oldPrice: 77.9,
+    oldprice: 77.9,
     discount: "-30%",
     delay: "0s",
     animation: "",
@@ -3176,7 +3176,7 @@ export const products31 = [
     category: "Smartphone",
     title: "Samsung Galaxy S10+, 128GB, Ceramic Black - Unlocked",
     price: 34.7,
-    oldPrice: 43.4,
+    oldprice: 43.4,
     delay: "0s",
     animation: "fadeInLeft",
   },
@@ -3190,7 +3190,7 @@ export const products31 = [
     title:
       "Mr. Coffee 2134286 ® 5-Cup Mini Coffee Maker – Compact and Easy-to-Use Coffee Brewing Machine",
     price: 57.1,
-    oldPrice: 71.8,
+    oldprice: 71.8,
     delay: "0.1s",
     animation: "fadeInLeft",
   },
@@ -3204,7 +3204,7 @@ export const products31 = [
     title:
       "Bose SoundLink Around-Ear Wireless Headphones II – Black – High-Quality Sound and Comfortable Fit",
     price: 23.7,
-    oldPrice: 29.9,
+    oldprice: 29.9,
     delay: "0.2s",
     animation: "fadeInLeft",
   },
@@ -3218,7 +3218,7 @@ export const products31 = [
     title:
       "3Dconnexion 3DX-700040 SpaceMouse Pro 3D – Advanced 3D Navigation Tool for Professionals",
     price: 45,
-    oldPrice: 56.7,
+    oldprice: 56.7,
     delay: "0.3s",
     animation: "fadeInLeft",
   },
@@ -3232,7 +3232,7 @@ export const products31 = [
     title:
       "GameConsole Destiny Special Edition - Limited Edition Console Bundle with Exclusive Design and Content",
     price: 45,
-    oldPrice: 56.7,
+    oldprice: 56.7,
     delay: "0.4s",
     animation: "fadeInLeft",
   },
@@ -3246,7 +3246,7 @@ export const products31 = [
     title:
       "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver - Latest Model with A13 Bionic Chip",
     price: 63.5,
-    oldPrice: 79.2,
+    oldprice: 79.2,
     delay: "0s",
     animation: "",
   },
@@ -3262,7 +3262,7 @@ export const products32 = [
     category: "Tablet",
     title: "All-new Fire 7 tablet, 7” display, 16 GB, latest model",
     price: 34.8,
-    oldPrice: 42.6,
+    oldprice: 42.6,
     delay: "0s",
     animation: "fadeInUp",
   },
@@ -3277,7 +3277,7 @@ export const products32 = [
     title:
       "Nikon D3500 DSLR Camera with AF-P DX NIKKOR 18-55mm f/3.5-5.6G Lens",
     price: 51,
-    oldPrice: 64.5,
+    oldprice: 64.5,
     delay: "0s",
     animation: "fadeInUp",
   },
@@ -3292,7 +3292,7 @@ export const products32 = [
     title:
       "Baseus D02 Pro Bluetooth Earphones Stereo Wireless 5.0 HIFI Foldable Sports",
     price: 19.3,
-    oldPrice: 24.8,
+    oldprice: 24.8,
     delay: "0s",
     animation: "fadeInUp",
     overflow: true,
@@ -3307,7 +3307,7 @@ export const products32 = [
     category: "Game Accessories",
     title: "PowerA Enhanced Wired Controller for Xbox Series X|S",
     price: 51,
-    oldPrice: 64.5,
+    oldprice: 64.5,
     delay: "0s",
     animation: "fadeInUp",
   },
@@ -3322,7 +3322,7 @@ export const products32 = [
     title:
       "Apple Watch Series 6 (GPS + Cellular, 40mm) - Aluminum Case, Rubber Strap, Cellular Connectivity",
     price: 62.1,
-    oldPrice: 77.9,
+    oldprice: 77.9,
     delay: "0s",
     animation: "fadeInUp",
   },
@@ -3337,7 +3337,7 @@ export const products32 = [
     title:
       "Redmi Note 11 Global Version - 6GB RAM + 128GB Storage, 6.43-inch AMOLED Display, Qualcomm Snapdragon 680",
     price: 34.7,
-    oldPrice: 43.4,
+    oldprice: 43.4,
     delay: "0s",
     animation: "fadeInUp",
   },
@@ -3354,7 +3354,7 @@ export const products33 = [
     category: "Headphone",
     title: "Apple AirPods Max – Premium Over-Ear Wireless Headphones (Green)",
     price: 51.5,
-    oldPrice: 64.99,
+    oldprice: 64.99,
   },
   {
     id: 229,
@@ -3368,7 +3368,7 @@ export const products33 = [
     title:
       'Amazon Fire TV Omni (65") – 4K UHD Smart TV with Hands-Free Alexa Control',
     price: 68.499,
-    oldPrice: 85.999,
+    oldprice: 85.999,
   },
 ];
 export const products34 = [
@@ -3382,7 +3382,7 @@ export const products34 = [
     title:
       "3Dconnexion 3DX-700040 SpaceMouse Pro 3D – Professional 3D Navigation Tool for CAD and Design",
     price: 64.5,
-    oldPrice: 80.4,
+    oldprice: 80.4,
     delay: "0s",
     animation: "fadeInUp",
     compareClass: "d-none d-sm-block d-xl-none d-xxl-block",
@@ -3396,7 +3396,7 @@ export const products34 = [
     category: "Smartphone",
     title: "Apple iPhone 11 Pro Max, 256GB, Space Gray",
     price: 34.7,
-    oldPrice: 42.8,
+    oldprice: 42.8,
     delay: "0.1s",
     animation: "fadeInUp",
     compareClass: "d-none d-sm-block",
@@ -3411,7 +3411,7 @@ export const products34 = [
     title:
       "GameConsole Destiny Special Edition – Limited Edition Console Bundle for Destiny Fans",
     price: 68.2,
-    oldPrice: 85.5,
+    oldprice: 85.5,
     delay: "0.2s",
     animation: "fadeInUp",
     compareClass: "d-none d-sm-block",
@@ -3426,7 +3426,7 @@ export const products34 = [
     title:
       "Garmin fenix 7 Adventure Smartwatch – Rugged Outdoor GPS Watch with Health & Fitness Tracking",
     price: 17.1,
-    oldPrice: 21.7,
+    oldprice: 21.7,
     delay: "0.3s",
     animation: "fadeInUp",
     compareClass: "d-none d-sm-block",
@@ -3441,7 +3441,7 @@ export const products34 = [
     title:
       "Bose SoundLink Around-Ear Wireless Headphones II – Bluetooth Headphones with Deep Bass and Clear Sound",
     price: 50.3,
-    oldPrice: 62.6,
+    oldprice: 62.6,
     delay: "0s",
     animation: "fadeInUp",
     compareClass: "d-none d-sm-block",
@@ -3456,7 +3456,7 @@ export const products34 = [
     title:
       "Skytech Shadow Gaming PC Desktop – INTEL Core i5, 16GB RAM, 1TB HDD, 500GB SSD, GTX 1660 Super",
     price: 61,
-    oldPrice: 76.8,
+    oldprice: 76.8,
     delay: "0.1s",
     animation: "fadeInUp",
     compareClass: "d-none d-sm-block",
@@ -3471,7 +3471,7 @@ export const products34 = [
     title:
       "Apple Watch Series 6 (GPS + Cellular, 40mm) – Space Gray Aluminum Case with Black Sport Band",
     price: 35.4,
-    oldPrice: 43.9,
+    oldprice: 43.9,
     delay: "0.2s",
     animation: "fadeInUp",
     compareClass: "d-none d-sm-block",
@@ -3486,7 +3486,7 @@ export const products34 = [
     title:
       "3Dconnexion 3DX-700040 SpaceMouse Pro 3D – Professional 3D Navigation Controller for CAD Applications",
     price: 57.6,
-    oldPrice: 72.4,
+    oldprice: 72.4,
     delay: "0.3s",
     animation: "fadeInUp",
     compareClass: "d-none d-sm-block",
@@ -3501,7 +3501,7 @@ export const products34 = [
     title:
       "All-new Fire 7 tablet, 7” display, 16 GB, latest model (2022 release), Black",
     price: 24.9,
-    oldPrice: 30.8,
+    oldprice: 30.8,
     delay: "0s",
     animation: "",
     compareClass: "d-none d-sm-block",
@@ -3515,7 +3515,7 @@ export const products34 = [
     category: "Headphone",
     title: "Bose SoundLink Around Ear Wireless Headphones II - Black",
     price: 46.5,
-    oldPrice: 58.9,
+    oldprice: 58.9,
     delay: "0s",
     animation: "",
     compareClass: "d-none d-sm-block",
@@ -3529,7 +3529,7 @@ export const products35 = [
     category: "Smart TVs",
     title: "TCL 32-inch 3-Series 720p Roku Smart TV - 32S335, 2021 Model",
     price: 31600,
-    oldPrice: 39200,
+    oldprice: 39200,
     delay: "0s",
   },
   {
@@ -3539,7 +3539,7 @@ export const products35 = [
     category: "Headphone",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 67800,
-    oldPrice: 84700,
+    oldprice: 84700,
     delay: "0.1s",
   },
   {
@@ -3549,7 +3549,7 @@ export const products35 = [
     category: "Tablets",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 20500,
-    oldPrice: 48800,
+    oldprice: 48800,
     delay: "0.2s",
   },
   {
@@ -3559,7 +3559,7 @@ export const products35 = [
     category: "Game Controllers",
     title: "PowerA Enhanced Wired Controller for Xbox Series X|S - white",
     price: 60200,
-    oldPrice: 75100,
+    oldprice: 75100,
     delay: "0.3s",
   },
   {
@@ -3569,7 +3569,7 @@ export const products35 = [
     category: "Headphone",
     title: "Bose SoundLink Around Ear Wireless Headphones II - Black",
     price: 34700,
-    oldPrice: 43300,
+    oldprice: 43300,
     delay: "0.4s",
   },
   {
@@ -3579,7 +3579,7 @@ export const products35 = [
     category: "Tablet",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 57000,
-    oldPrice: 71700,
+    oldprice: 71700,
     delay: "0s",
   },
 ];
@@ -3591,7 +3591,7 @@ export const products36 = [
     category: "Headphone",
     title: "YSSOA FNGAMECHAIR01 Gaming Office High Back...",
     price: 69.0,
-    oldPrice: 100000,
+    oldprice: 100000,
   },
   {
     id: 247,
@@ -3601,7 +3601,7 @@ export const products36 = [
     title:
       "Playstation DualSense Wireless Controller DualSense Wireless Controller",
     price: 63600,
-    oldPrice: 79500,
+    oldprice: 79500,
   },
   {
     id: 248,
@@ -3610,7 +3610,7 @@ export const products36 = [
     category: "Smartphone",
     title: '75" Amazon Omni Series Amazon Omni Series 4K HDR Smart Fire TV',
     price: 33200,
-    oldPrice: 41500,
+    oldprice: 41500,
   },
   {
     id: 249,
@@ -3619,7 +3619,7 @@ export const products36 = [
     category: "Smartphone",
     title: "YSSOA FNGAMECHAIR01 Gaming Office High Back...",
     price: 68400,
-    oldPrice: 85800,
+    oldprice: 85800,
   },
 ];
 export const products37 = [
@@ -3630,7 +3630,7 @@ export const products37 = [
     category: "Headphone",
     title: "GameConsole Destiny Special Edition Special Edition",
     price: 17500,
-    oldPrice: 22100,
+    oldprice: 22100,
     delay: "0s",
   },
   {
@@ -3640,7 +3640,7 @@ export const products37 = [
     category: "Game Consoles",
     title: "PowerA Enhanced Wired Controller for Xbox Series X|S - white",
     price: 50600,
-    oldPrice: 62900,
+    oldprice: 62900,
     delay: "0.1s",
   },
   {
@@ -3650,7 +3650,7 @@ export const products37 = [
     category: "Headphone",
     title: "Bose SoundLink Around Ear Wireless Headphones II - Black",
     price: 60500,
-    oldPrice: 76000,
+    oldprice: 76000,
     delay: "0.2s",
   },
   {
@@ -3660,7 +3660,7 @@ export const products37 = [
     category: "Smartwatch",
     title: "SUUNTO 9 Non-Baro, GPS Sports Watch Sports Watch",
     price: 35600,
-    oldPrice: 44200,
+    oldprice: 44200,
     delay: "0.3s",
   },
   {
@@ -3670,7 +3670,7 @@ export const products37 = [
     category: "Smart Speaker",
     title: "Mr. Coffee 2134286 ® 5-Cup Mini 5-Cup Mini",
     price: 57300,
-    oldPrice: 72000,
+    oldprice: 72000,
     delay: "0.4s",
   },
   {
@@ -3680,7 +3680,7 @@ export const products37 = [
     category: "Tablet",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 24700,
-    oldPrice: 30400,
+    oldprice: 30400,
     delay: "0s",
   },
 ];
@@ -3693,7 +3693,7 @@ export const products38 = [
     title:
       "Playstation DualSense Wireless Controller DualSense Wireless Controller",
     price: 46100,
-    oldPrice: 58300,
+    oldprice: 58300,
     delay: "0s",
   },
   {
@@ -3703,7 +3703,7 @@ export const products38 = [
     category: "laptop & Accessories",
     title: "Acer Aspire 5 A515-56-32DK Slim Laptop",
     price: 65200,
-    oldPrice: 81600,
+    oldprice: 81600,
     delay: "0.1s",
   },
   {
@@ -3713,7 +3713,7 @@ export const products38 = [
     category: "Computer Accessories",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D Professional USB Mouse",
     price: 33100,
-    oldPrice: 40900,
+    oldprice: 40900,
     delay: "0.2s",
   },
   {
@@ -3723,7 +3723,7 @@ export const products38 = [
     category: "Game Controllers",
     title: "Logitech F310 Wired Gamepad Controller Console Like Layout 4...",
     price: 67000,
-    oldPrice: 83600,
+    oldprice: 83600,
     delay: "0.3s",
   },
   {
@@ -3733,7 +3733,7 @@ export const products38 = [
     category: "Headphones",
     title: "Mr. Coffee 2134286 ® 5-Cup Mini 5-Cup Mini",
     price: 17000,
-    oldPrice: 21400,
+    oldprice: 21400,
     delay: "0.4s",
   },
   {
@@ -3743,7 +3743,7 @@ export const products38 = [
     category: "Tablet",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 63300,
-    oldPrice: 50500,
+    oldprice: 50500,
     delay: "0s",
   },
 ];
@@ -3755,7 +3755,7 @@ export const products39 = [
     category: "Headphone",
     title: "Bose SoundLink Around Ear Wireless Headphones II - Black",
     price: 60.1,
-    oldPrice: 74.9,
+    oldprice: 74.9,
     delay: "0s",
     filterTab: ["Feature", "On sale"],
   },
@@ -3766,7 +3766,7 @@ export const products39 = [
     category: "Game Controllers",
     title: "PowerA Enhanced Wired Controller for Xbox Series X|S - white",
     price: 35.1,
-    oldPrice: 43.7,
+    oldprice: 43.7,
     delay: "0.2s",
     filterTab: ["Feature", "Toprate"],
   },
@@ -3777,7 +3777,7 @@ export const products39 = [
     category: "Smartphone",
     title: "Samsung Galaxy S10+, 128GB, Ceramic Black - Unlocked",
     price: 62.4,
-    oldPrice: 71.5,
+    oldprice: 71.5,
     delay: "0.2s",
     filterTab: ["Feature", "On sale"],
   },
@@ -3788,7 +3788,7 @@ export const products39 = [
     category: "Gaming Chairs",
     title: "X Rocker Falcon Pedestal PC Office Gaming Chair",
     price: 23.4,
-    oldPrice: 29.6,
+    oldprice: 29.6,
     delay: "0.3s",
     filterTab: ["Feature", "Toprate"],
   },
@@ -3799,7 +3799,7 @@ export const products39 = [
     category: "Laptop & Computers",
     title: 'LG Gram 16Z90P Laptop 16" Ultra-Lightweight',
     price: 45.6,
-    oldPrice: 57.8,
+    oldprice: 57.8,
     delay: "0.4s",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -3810,7 +3810,7 @@ export const products39 = [
     category: "Headphone",
     title: "Bose SoundLink Around Ear Wireless Headphones II - Black",
     price: 62.5,
-    oldPrice: 78.2,
+    oldprice: 78.2,
     delay: "0s",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -3823,7 +3823,7 @@ export const products40 = [
     category: "Headphone",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 17.3,
-    oldPrice: 21.9,
+    oldprice: 21.9,
     delay: "0s",
   },
   {
@@ -3833,7 +3833,7 @@ export const products40 = [
     category: "Electronics",
     title: "Samsung Flip 2 WM65R 65 Inch Digital Flipchart for Business 4K UHD",
     price: 50.8,
-    oldPrice: 63.5,
+    oldprice: 63.5,
     delay: "0.1s",
   },
   {
@@ -3844,7 +3844,7 @@ export const products40 = [
     title:
       "Tech21 Essentials for iPhone 12/12 Pro – Clear Protective Phone Case with 5ft...",
     price: 60.1,
-    oldPrice: 75.4,
+    oldprice: 75.4,
     delay: "0.2s",
   },
   {
@@ -3854,7 +3854,7 @@ export const products40 = [
     category: "Smartphone",
     title: "Sony Xperia 1 IV 512GB Factory Unlocked Smartphone",
     price: 35,
-    oldPrice: 44.3,
+    oldprice: 44.3,
     delay: "0.3s",
   },
   {
@@ -3864,7 +3864,7 @@ export const products40 = [
     category: "Game Consoles",
     title: "Lammcou Headphone Holder for PS5 Mini Hanger...",
     price: 56.4,
-    oldPrice: 71.1,
+    oldprice: 71.1,
     delay: "0.4s",
   },
   {
@@ -3874,7 +3874,7 @@ export const products40 = [
     category: "Headphone",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 30.2,
-    oldPrice: 24.5,
+    oldprice: 24.5,
     delay: "0s",
   },
 ];
@@ -3886,7 +3886,7 @@ export const products41 = [
     category: "Laptop",
     title: "Acer Aspire 5 A515-56-32DK Slim Laptop",
     price: 46,
-    oldPrice: 58.1,
+    oldprice: 58.1,
     delay: "0s",
   },
   {
@@ -3896,7 +3896,7 @@ export const products41 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 63.2,
-    oldPrice: 79,
+    oldprice: 79,
     delay: "0.1s",
   },
   {
@@ -3906,7 +3906,7 @@ export const products41 = [
     category: "Headphone",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D",
     price: 33.8,
-    oldPrice: 42.4,
+    oldprice: 42.4,
     delay: "0.2s",
   },
   {
@@ -3916,7 +3916,7 @@ export const products41 = [
     category: "Smart Speakers",
     title: "Echo Dot (3rd Gen, 2018 release) - Smart speaker...",
     price: 68.3,
-    oldPrice: 85.7,
+    oldprice: 85.7,
     delay: "0.3s",
   },
   {
@@ -3926,7 +3926,7 @@ export const products41 = [
     category: "Headphone",
     title: "Bose SoundLink Around Ear Wireless Headphones II - Black",
     price: 17.5,
-    oldPrice: 22.2,
+    oldprice: 22.2,
     delay: "0.4s",
   },
   {
@@ -3936,7 +3936,7 @@ export const products41 = [
     category: "Tablet",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 50.9,
-    oldPrice: 64.1,
+    oldprice: 64.1,
     delay: "0s",
   },
 ];
@@ -3948,7 +3948,7 @@ export const products42 = [
     category: "Headphone",
     title: "Sony ZX Series Wired On-Ear Headphones, Black MDR-ZX110",
     price: 60.4,
-    oldPrice: 75.6,
+    oldprice: 75.6,
     delay: "0s",
   },
   {
@@ -3958,7 +3958,7 @@ export const products42 = [
     category: "Smartphone",
     title: "Net10 Alcatel TCL A3, 32GB, Black Prepaid Smartphone (Locked)",
     price: 35.2,
-    oldPrice: 43.8,
+    oldprice: 43.8,
     delay: "0.1s",
   },
   {
@@ -3968,7 +3968,7 @@ export const products42 = [
     category: "Smartwatch",
     title: "Garmin fenix 7, adventure smartwatch, rugged outdoor",
     price: 56.2,
-    oldPrice: 70.9,
+    oldprice: 70.9,
     delay: "0.2s",
   },
   {
@@ -3979,7 +3979,7 @@ export const products42 = [
     title:
       "Baseus D02 Pro Bluetooth Earphones Stereo Wireless 5.0 HIFI Foldable Spor...",
     price: 23.3,
-    oldPrice: 29.4,
+    oldprice: 29.4,
     delay: "0.3s",
   },
   {
@@ -3989,7 +3989,7 @@ export const products42 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 45.7,
-    oldPrice: 57.9,
+    oldprice: 57.9,
     delay: "0.4s",
   },
   {
@@ -3999,7 +3999,7 @@ export const products42 = [
     category: "Headphone",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D Mouse",
     price: 63,
-    oldPrice: 78.6,
+    oldprice: 78.6,
     delay: "0s",
   },
 ];
@@ -4068,7 +4068,7 @@ export const products44 = [
     title:
       "Acer Aspire 5 A515-56-32DK Slim Laptop, 15.6” Full HD, Intel Core i3-1115G4, 4GB RAM, 128GB SSD, Windows 10",
     price: 56.7,
-    oldPrice: 71.5,
+    oldprice: 71.5,
     delay: "0s",
   },
   {
@@ -4078,7 +4078,7 @@ export const products44 = [
     category: "Laptop & Accessories",
     title: "Apple MacBook Pro (13-Inch, 8GB RAM, 512GB Storage) - Silver",
     price: 24.6,
-    oldPrice: 30.1,
+    oldprice: 30.1,
     delay: "0.1s",
   },
   {
@@ -4088,7 +4088,7 @@ export const products44 = [
     category: "Laptop & Computers",
     title: "SkyTech Chronos Mini Gaming Computer PC Desktop - Intel Core-i3",
     price: 46.2,
-    oldPrice: 58.4,
+    oldprice: 58.4,
     delay: "0.2s",
   },
   {
@@ -4099,7 +4099,7 @@ export const products44 = [
     title:
       "Baseus D02 Pro Bluetooth Earphones Stereo Wireless 5.0 HIFI Foldable Spor...",
     price: 62.4,
-    oldPrice: 77.8,
+    oldprice: 77.8,
     delay: "0s",
   },
   {
@@ -4109,7 +4109,7 @@ export const products44 = [
     category: "Camera & Accessories",
     title: "Nikon D3500 W/ AF-P DX NIKKOR 18-55mm f/3.5-5.6G",
     price: 32.6,
-    oldPrice: 40.8,
+    oldprice: 40.8,
     delay: "0s",
   },
   {
@@ -4119,7 +4119,7 @@ export const products44 = [
     category: "Headphone",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D Mouse",
     price: 67.2,
-    oldPrice: 84.2,
+    oldprice: 84.2,
     delay: "0s",
   },
 ];
@@ -4131,7 +4131,7 @@ export const products45 = [
     category: "Wireless Earbuds",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 60.3,
-    oldPrice: 75.8,
+    oldprice: 75.8,
     delay: "0s",
     filterTab: ["Feature", "On sale"],
   },
@@ -4142,7 +4142,7 @@ export const products45 = [
     category: "Watch",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 35,
-    oldPrice: 43.5,
+    oldprice: 43.5,
     delay: "0.1s",
     filterTab: ["Feature", "Toprate"],
   },
@@ -4154,7 +4154,7 @@ export const products45 = [
     title:
       "Skullcandy Crusher Evo Wireless Over-Ear Headphone - Dark Blue/Green",
     price: 56.5,
-    oldPrice: 71.2,
+    oldprice: 71.2,
     delay: "0.2s",
     filterTab: ["Feature", "On sale"],
   },
@@ -4165,7 +4165,7 @@ export const products45 = [
     category: "Headphone",
     title: "Panasonic Headphones, On-Ear Lightweight Earphones with XBS for...",
     price: 24.9,
-    oldPrice: 30.3,
+    oldprice: 30.3,
     delay: "0.3s",
     filterTab: ["Feature", "Toprate"],
   },
@@ -4176,7 +4176,7 @@ export const products45 = [
     category: "Smartwatch",
     title: "Apple Watch Series 6 (GPS + Cellular, 40mm)",
     price: 45.4,
-    oldPrice: 57.5,
+    oldprice: 57.5,
     delay: "0.4s",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -4187,7 +4187,7 @@ export const products45 = [
     category: "Headphone",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 61.8,
-    oldPrice: 76.9,
+    oldprice: 76.9,
     delay: "0s",
     filterTab: ["Feature", "Toprate", "On sale"],
   },
@@ -4200,7 +4200,7 @@ export const products46 = [
     category: "Laptop & Computers",
     title: '2022 Acer 15.6" FHD IPS Touchscreen Chromebook',
     price: 80.0,
-    oldPrice: 66.8,
+    oldprice: 66.8,
     delay: "0s",
   },
   {
@@ -4210,7 +4210,7 @@ export const products46 = [
     category: "Laptop & Computers",
     title: "Samsung Chromebook Plus V2, 2-in-1, 4GB RAM, 32GB eMMC",
     price: 16.6,
-    oldPrice: 21.3,
+    oldprice: 21.3,
     delay: "0.1s",
   },
   {
@@ -4221,7 +4221,7 @@ export const products46 = [
     title:
       'Lenovo - 2022 - IdeaPad 3i - Essential Laptop Computer - Intel Core i5 - 15.6"',
     price: 50.4,
-    oldPrice: 63.7,
+    oldprice: 63.7,
     delay: "0.2s",
   },
   {
@@ -4231,7 +4231,7 @@ export const products46 = [
     category: "Laptop & Computers",
     title: "ASUS Vivobook Go 15 L510 Thin & Light Laptop Computer, 15.6”",
     price: 59.8,
-    oldPrice: 74.5,
+    oldprice: 74.5,
     delay: "0.3s",
   },
   {
@@ -4241,7 +4241,7 @@ export const products46 = [
     category: "Smartphone",
     title: "Sony Xperia 1 IV 512GB Factory Unlocked Smartphone",
     price: 34.7,
-    oldPrice: 42.8,
+    oldprice: 42.8,
     delay: "0.4s",
   },
   {
@@ -4251,7 +4251,7 @@ export const products46 = [
     category: "Wireless Earbuds",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 56.1,
-    oldPrice: 70.5,
+    oldprice: 70.5,
     delay: "0s",
   },
 ];
@@ -4263,7 +4263,7 @@ export const products47 = [
     category: "Smartwatch",
     title: "Amazfit Band 5 Activity Fitness Tracker with Alexa Built-in",
     price: 24.7,
-    oldPrice: 30.2,
+    oldprice: 30.2,
     delay: "0s",
   },
   {
@@ -4273,7 +4273,7 @@ export const products47 = [
     category: "Smartphone",
     title: 'Fire 7 tablet, 7" display, 16 GB, (2019 release)',
     price: 44.8,
-    oldPrice: 56.9,
+    oldprice: 56.9,
     delay: "0.1s",
   },
   {
@@ -4283,7 +4283,7 @@ export const products47 = [
     category: "Wireless Earbuds",
     title: "Bose SoundLink Around Ear Wireless Headphones II...",
     price: 59.3,
-    oldPrice: 74.0,
+    oldprice: 74.0,
     delay: "0.2s",
   },
   {
@@ -4293,7 +4293,7 @@ export const products47 = [
     category: "Headphone",
     title: "Sony ZX Series Wired On-Ear Headphones",
     price: 31.1,
-    oldPrice: 39.6,
+    oldprice: 39.6,
     delay: "0.3s",
   },
   {
@@ -4303,7 +4303,7 @@ export const products47 = [
     category: "Headphone",
     title: "Sony ZX Series Wired On-Ear Headphones, Black MDR-ZX110",
     price: 66.0,
-    oldPrice: 82.3,
+    oldprice: 82.3,
     delay: "0s",
   },
   {
@@ -4313,7 +4313,7 @@ export const products47 = [
     category: "Laptop & Computers",
     title: "Acer Chromebook Spin 713 CP713-3W-72KV- 13.5 Inches...",
     price: 16.2,
-    oldPrice: 20.9,
+    oldprice: 20.9,
     delay: "0.1s",
   },
   {
@@ -4323,7 +4323,7 @@ export const products47 = [
     category: "Microphone",
     title: "Skullcandy Riff Wireless On-Ear Headphones - Grey/Miami",
     price: 50.0,
-    oldPrice: 63.3,
+    oldprice: 63.3,
     delay: "0.2s",
   },
   {
@@ -4333,7 +4333,7 @@ export const products47 = [
     category: "Camera & Accessories",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D",
     price: 59.5,
-    oldPrice: 74.2,
+    oldprice: 74.2,
     delay: "0.3s",
   },
   {
@@ -4343,7 +4343,7 @@ export const products47 = [
     category: "Smartwatch",
     title: "Garmin fenix 7, adventure smartwatch",
     price: 34.5,
-    oldPrice: 42.4,
+    oldprice: 42.4,
     delay: "0.4s",
   },
   {
@@ -4353,7 +4353,7 @@ export const products47 = [
     category: "Smartphone",
     title: "Net10 Alcatel TCL A3, 32GB, Black Prepaid Smartphone (Locked)",
     price: 55.8,
-    oldPrice: 70.0,
+    oldprice: 70.0,
     delay: "0s",
   },
 ];
@@ -4365,7 +4365,7 @@ export const products48 = [
     category: "Headphone",
     title: "SonicGear Xenon 2 Stereo Headphones with Mic...",
     price: 24.9,
-    oldPrice: 30.7,
+    oldprice: 30.7,
     delay: "0s",
   },
   {
@@ -4375,7 +4375,7 @@ export const products48 = [
     category: "Laptop & Accessories",
     title: "Acer Chromebook Spin 713 CP713-3W-72KV- 13.5 Inches...",
     price: 44.5,
-    oldPrice: 56.4,
+    oldprice: 56.4,
     delay: "0.1s",
   },
   {
@@ -4385,7 +4385,7 @@ export const products48 = [
     category: "Gaming Mice",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D",
     price: 58.8,
-    oldPrice: 73.5,
+    oldprice: 73.5,
     delay: "0.2s",
   },
   {
@@ -4395,7 +4395,7 @@ export const products48 = [
     category: "Smartwatch",
     title: "HUAWEI Band 7 Smartwatch 9.9 mm Ultra-thin Design...",
     price: 30.7,
-    oldPrice: 39,
+    oldprice: 39,
     delay: "0.3s",
   },
   {
@@ -4405,7 +4405,7 @@ export const products48 = [
     category: "Smartwatch",
     title: "Garmin fenix 7, adventure smartwatch",
     price: 65.5,
-    oldPrice: 81.6,
+    oldprice: 81.6,
     delay: "0s",
   },
   {
@@ -4415,7 +4415,7 @@ export const products48 = [
     category: "Smart TVs",
     title: "TCL 32-inch 3-Series 720p Roku Smart TV - 32S335, 2021 Model",
     price: 15.9,
-    oldPrice: 20.4,
+    oldprice: 20.4,
     delay: "0.1s",
   },
   {
@@ -4425,7 +4425,7 @@ export const products48 = [
     category: "Headphones",
     title: "Apple Watch Series 6 (GPS + Cellular, 40mm)",
     price: 49.8,
-    oldPrice: 62.9,
+    oldprice: 62.9,
     delay: "0.2s",
   },
   {
@@ -4435,7 +4435,7 @@ export const products48 = [
     category: "Smartphone",
     title: "Bose SoundLink Around Ear Wireless Headphones II - Black",
     price: 59.2,
-    oldPrice: 73,
+    oldprice: 73,
     delay: "0.3s",
   },
   {
@@ -4445,7 +4445,7 @@ export const products48 = [
     category: "Headphone",
     title: "GameConsole Destiny Special Edition Special Edition",
     price: 34.3,
-    oldPrice: 42,
+    oldprice: 42,
     delay: "0.4s",
   },
   {
@@ -4455,7 +4455,7 @@ export const products48 = [
     category: "Headphone",
     title: "GameConsole Destiny Special Edition",
     price: 55.5,
-    oldPrice: 69.7,
+    oldprice: 69.7,
     delay: "0s",
   },
 ];
@@ -4468,7 +4468,7 @@ export const products49 = [
     title:
       "NEW Microsoft Surface Mobile Mouse – Ice Blue, Compact and Portable with Precise Tracking for Laptops and Tablets",
     price: 50.9,
-    oldPrice: 63.7,
+    oldprice: 63.7,
     delay: "0s",
   },
   {
@@ -4478,7 +4478,7 @@ export const products49 = [
     category: "Smartphone",
     title: "Samsung Galaxy S10+, 128GB, Ceramic Black - Unlocked",
     price: 61.7,
-    oldPrice: 77.4,
+    oldprice: 77.4,
     delay: "0.1s",
   },
   {
@@ -4488,7 +4488,7 @@ export const products49 = [
     category: "Smartwatch",
     title: "HD 1080P Smart Watch Video Recorder Mini Camera",
     price: 32.3,
-    oldPrice: 41,
+    oldprice: 41,
     delay: "0.2s",
   },
   {
@@ -4498,7 +4498,7 @@ export const products49 = [
     category: "Headphone",
     title: "Apple MacBook Pro (13-Inch, 8GB RAM, 512GB Storage) - Silver",
     price: 59.8,
-    oldPrice: 74.6,
+    oldprice: 74.6,
     delay: "0.3s",
   },
   {
@@ -4508,7 +4508,7 @@ export const products49 = [
     category: "Smartwatch",
     title: "Garmin fenix 7, adventure smartwatch, rugged outdoor",
     price: 24.7,
-    oldPrice: 31.2,
+    oldprice: 31.2,
     delay: "0.4s",
   },
   {
@@ -4518,7 +4518,7 @@ export const products49 = [
     category: "Laptop & Ipad",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 46.2,
-    oldPrice: 58,
+    oldprice: 58,
     delay: "0s",
   },
 ];
@@ -4530,7 +4530,7 @@ export const products50 = [
     category: "Headphone",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 17.3,
-    oldPrice: 21.9,
+    oldprice: 21.9,
     delay: "0s",
   },
   {
@@ -4540,7 +4540,7 @@ export const products50 = [
     category: "Computer & Accessories",
     title: "Samsung Flip 2 WM65R 65 Inch Digital Flipchart for Business 4K UHD",
     price: 50.8,
-    oldPrice: 63.5,
+    oldprice: 63.5,
     delay: "0.1s",
   },
   {
@@ -4551,7 +4551,7 @@ export const products50 = [
     title:
       "Tech21 Essentials for iPhone 12/12 Pro – Clear Protective Phone Case with 5ft...",
     price: 60.1,
-    oldPrice: 75.4,
+    oldprice: 75.4,
     delay: "0.2s",
   },
   {
@@ -4561,7 +4561,7 @@ export const products50 = [
     category: "Smartphone",
     title: "Sony Xperia 1 IV 512GB Factory Unlocked Smartphone",
     price: 35,
-    oldPrice: 44.3,
+    oldprice: 44.3,
     delay: "0.3s",
   },
   {
@@ -4571,7 +4571,7 @@ export const products50 = [
     category: "Game Consoles",
     title: "Lammcou Headphone Holder for PS5 Mini Hanger...",
     price: 56.4,
-    oldPrice: 71.1,
+    oldprice: 71.1,
     delay: "0.4s",
   },
   {
@@ -4581,7 +4581,7 @@ export const products50 = [
     category: "Headphone",
     title: "Srhythm NC25 Active Noise Cancelling Headphones Bluetooth 5.0",
     price: 30.2,
-    oldPrice: 24.5,
+    oldprice: 24.5,
     delay: "0s",
   },
 ];
@@ -4594,7 +4594,7 @@ export const products51 = [
     title:
       "Playstation DualSense Wireless Controller DualSense Wireless Controller",
     price: 46.1,
-    oldPrice: 58.3,
+    oldprice: 58.3,
     delay: "0s",
   },
   {
@@ -4604,7 +4604,7 @@ export const products51 = [
     category: "laptop & Accessories",
     title: "Acer Aspire 5 A515-56-32DK Slim Laptop",
     price: 65.2,
-    oldPrice: 81.6,
+    oldprice: 81.6,
     delay: "0.1s",
   },
   {
@@ -4614,7 +4614,7 @@ export const products51 = [
     category: "Computer Accessories",
     title: "3Dconnexion 3DX-700040 SpaceMouse Pro 3D Professional USB Mouse",
     price: 33.1,
-    oldPrice: 40.9,
+    oldprice: 40.9,
     delay: "0.2s",
   },
   {
@@ -4624,7 +4624,7 @@ export const products51 = [
     category: "Game Controllers",
     title: "Logitech F310 Wired Gamepad Controller Console Like Layout 4...",
     price: 67,
-    oldPrice: 83.6,
+    oldprice: 83.6,
     delay: "0.3s",
   },
   {
@@ -4634,7 +4634,7 @@ export const products51 = [
     category: "Home Application",
     title: "Mr. Coffee 2134286 ® 5-Cup Mini 5-Cup Mini",
     price: 17,
-    oldPrice: 21.4,
+    oldprice: 21.4,
     delay: "0.4s",
   },
   {
@@ -4644,7 +4644,7 @@ export const products51 = [
     category: "Tablet",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 63.3,
-    oldPrice: 50.5,
+    oldprice: 50.5,
     delay: "0s",
   },
 ];
@@ -4657,7 +4657,7 @@ export const products52 = [
     category: "Camera & Accessories",
     title: "GameConsole Destiny Special Edition Special Edition",
     price: 17.5,
-    oldPrice: 22.1,
+    oldprice: 22.1,
     delay: "0s",
   },
   {
@@ -4667,7 +4667,7 @@ export const products52 = [
     category: "Game Consoles",
     title: "PowerA Enhanced Wired Controller for Xbox Series X|S - white",
     price: 50.6,
-    oldPrice: 62.9,
+    oldprice: 62.9,
     delay: "0.1s",
   },
   {
@@ -4677,7 +4677,7 @@ export const products52 = [
     category: "Headphone",
     title: "Bose SoundLink Around Ear Wireless Headphones II - Black",
     price: 60.5,
-    oldPrice: 76,
+    oldprice: 76,
     delay: "0.2s",
   },
   {
@@ -4687,7 +4687,7 @@ export const products52 = [
     category: "Smartwatch",
     title: "SUUNTO 9 Non-Baro, GPS Sports Watch Sports Watch",
     price: 35.6,
-    oldPrice: 44.2,
+    oldprice: 44.2,
     delay: "0.3s",
   },
   {
@@ -4697,7 +4697,7 @@ export const products52 = [
     category: "Smart Speakers",
     title: "Mr. Coffee 2134286 ® 5-Cup Mini 5-Cup Mini",
     price: 57.3,
-    oldPrice: 72,
+    oldprice: 72,
     delay: "0.4s",
   },
   {
@@ -4707,7 +4707,7 @@ export const products52 = [
     category: "Tablet",
     title: "2021 Apple 10.2-inch iPad (Wi-Fi, 64GB) - Silver",
     price: 24.7,
-    oldPrice: 30.4,
+    oldprice: 30.4,
     delay: "0s",
   },
 ];
@@ -4720,7 +4720,7 @@ export const products53 = [
     category: "Smartphone",
     title: "Samsung Galaxy Note 10+, 256GB, Aura Black - Fully Unlocked",
     price: 24.5,
-    oldPrice: 31,
+    oldprice: 31,
   },
   {
     id: 355,
@@ -4729,7 +4729,7 @@ export const products53 = [
     category: "Smart TVs",
     title: "TCL 32-inch 3-Series 720p Roku Smart TV - 32S335, 2021 Model",
     price: 44.2,
-    oldPrice: 56,
+    oldprice: 56,
   },
   {
     id: 356,
@@ -4738,7 +4738,7 @@ export const products53 = [
     category: "Smartwatch",
     title: "Garmin fenix 7, adventure smartwatch, rugged outdoor",
     price: 58.2,
-    oldPrice: 72.8,
+    oldprice: 72.8,
   },
   {
     id: 357,
@@ -4747,7 +4747,7 @@ export const products53 = [
     category: "Smartphone",
     title: "Tracfone Alcatel TCL A3X, 32GB, Prime Black",
     price: 30.3,
-    oldPrice: 38.5,
+    oldprice: 38.5,
   },
   {
     id: 358,
@@ -4756,7 +4756,7 @@ export const products53 = [
     category: "Wireless Earbuds",
     title: "Skullcandy 2XL Spoke 2.0 In-Ear Earbuds - Black",
     price: 65,
-    oldPrice: 81,
+    oldprice: 81,
   },
   {
     id: 359,
@@ -4765,7 +4765,7 @@ export const products53 = [
     category: "Smartphone",
     title: "Samsung Galaxy Note 10+, 256GB, Aura Black - Fully Unlocked",
     price: 15.6,
-    oldPrice: 20.1,
+    oldprice: 20.1,
   },
 ];
 
@@ -4777,7 +4777,7 @@ export const products54 = [
     category: "Game Controller",
     title: "PowerA Enhanced Wired Controller for Xbox Series X|S - white",
     price: 49.5,
-    oldPrice: 62.5,
+    oldprice: 62.5,
   },
   {
     id: 361,
@@ -4786,7 +4786,7 @@ export const products54 = [
     category: "Headphone",
     title: "TCL 32-inch 3-Series 720p Roku Smart TV - 32S335, 2021 Model",
     price: 58.0,
-    oldPrice: 72.3,
+    oldprice: 72.3,
   },
   {
     id: 362,
@@ -4796,7 +4796,7 @@ export const products54 = [
     title:
       '2022 MSI GE76 Raider 17.3" 144 Hz FHD Gaming Laptop 8-Core Intel i7-11800H',
     price: 34.1,
-    oldPrice: 41.7,
+    oldprice: 41.7,
   },
   {
     id: 363,
@@ -4805,7 +4805,7 @@ export const products54 = [
     category: "Smartphone",
     title: "GameConsole Destiny Special Edition",
     price: 55.2,
-    oldPrice: 69.2,
+    oldprice: 69.2,
   },
   {
     id: 364,
@@ -4814,7 +4814,7 @@ export const products54 = [
     category: "Laptop & Computer",
     title: 'Newest HP 14" HD Laptop, Windows 11',
     price: 31.2,
-    oldPrice: 24.4,
+    oldprice: 24.4,
   },
   {
     id: 365,
@@ -4823,7 +4823,7 @@ export const products54 = [
     category: "Smartphone",
     title: "Samsung Galaxy Note 10+, 256GB, Aura Black - Fully Unlocked",
     price: 43.9,
-    oldPrice: 55.7,
+    oldprice: 55.7,
   },
 ];
 
@@ -4840,7 +4840,7 @@ export const products55 = [
     ],
     imgSrc: "/images/product/product-thumb/product-5.jpg",
     price: 103.999,
-    oldPrice: 129.999,
+    oldprice: 129.999,
     discount: 26.0,
     countdown: 102738,
   },
@@ -4855,7 +4855,7 @@ export const products55 = [
     ],
     imgSrc: "/images/product/product-thumb/product-6.jpg",
     price: 72.6,
-    oldPrice: 90.8,
+    oldprice: 90.8,
   },
   {
     id: 5,
@@ -4869,7 +4869,7 @@ export const products55 = [
 
     imgSrc: "/images/product/product-thumb/product-7.jpg",
     price: 70.9,
-    oldPrice: 88.7,
+    oldprice: 88.7,
   },
 ];
 export const allProducts = [

@@ -29,7 +29,7 @@ export interface User extends UserDB {
 export interface ProductDB {
   title: string;
   price: number;
-  oldPrice?: number;
+  oldprice?: number;
   category: string;
   imgSrc: string;
   imgHover?: string;

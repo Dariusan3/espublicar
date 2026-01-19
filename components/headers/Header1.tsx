@@ -8,6 +8,7 @@ import CartLength from "../common/CartLength";
 import WishlistLength from "../common/WishlistLength";
 import CompareLength from "../common/CompareLength";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 export default function Header1() {
   const { user, logout } = useAuth();
   return (
@@ -67,10 +68,7 @@ export default function Header1() {
                 <ul className="nav-icon justify-content-xl-center d-xl-none">
                   <li className="nav-account">
                     {user ? (
-                      <Link
-                        href={`/my-account`}
-                        className="link nav-icon-item"
-                      >
+                      <Link href={`/my-account`} className="link nav-icon-item">
                         <span>
                           <svg
                             width={22}
@@ -132,13 +130,18 @@ export default function Header1() {
                       <a
                         href="#"
                         onClick={async (e) => {
-                           e.preventDefault();
-                           await logout();
-                           window.location.href = '/';
+                          e.preventDefault();
+                          const result = await logout();
+                          if (result.success) {
+                            toast.success("👋 Logged out successfully!");
+                            setTimeout(() => {
+                              window.location.href = "/";
+                            }, 1500);
+                          }
                         }}
                         className="link nav-icon-item"
                       >
-                         <span>
+                        <span>
                           <svg
                             width={22}
                             height={23}
@@ -146,25 +149,25 @@ export default function Header1() {
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path 
-                              d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" 
-                              stroke="#333E48" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
+                            <path
+                              d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9"
+                              stroke="#333E48"
+                              strokeWidth="2"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
-                            <path 
-                              d="M16 17L21 12L16 7" 
-                              stroke="#333E48" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
+                            <path
+                              d="M16 17L21 12L16 7"
+                              stroke="#333E48"
+                              strokeWidth="2"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
-                            <path 
-                              d="M21 12H9" 
-                              stroke="#333E48" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
+                            <path
+                              d="M21 12H9"
+                              stroke="#333E48"
+                              strokeWidth="2"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                           </svg>

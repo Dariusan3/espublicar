@@ -1,23 +1,22 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useContextElement } from "@/context/Context";
+import useCart from "@/hooks/useCart";
 
-interface CartProduct {
-  id: number;
-  imgSrc: string;
-  imgHover?: string;
-  title: string;
-  price: number;
-  quantity: number;
-}
 export default function Cart() {
-  const { cartProducts, setCartProducts, totalPrice } = useContextElement();
+  const { cart, removeCartItem, getMyCart, updateCartItemQuantity } = useCart();
 
-  const removeItem = (id: number) => {
-    setCartProducts((pre: any) => [...pre.filter((elm: any) => elm.id != id)]);
+  useEffect(() => {
+    getMyCart();
+  }, [getMyCart]);
+
+  const removeItem = (id: string) => {
+    removeCartItem(id);
   };
+
+  const cartProducts = cart.items;
+  const totalPrice = cart.totalAmount;
 
   return (
     <div
@@ -32,7 +31,7 @@ export default function Cart() {
             data-bs-dismiss="offcanvas"
           />
         </div>
-        {!cartProducts.length ? (
+        {!cartProducts || !cartProducts.length ? (
           <div className="minicart-empty text-center">
             <svg
               width={100}
@@ -64,26 +63,17 @@ export default function Cart() {
           </div>
         ) : (
           <ul className="popup-body product-list-wrap">
-            {cartProducts.map((product: CartProduct, i: number) => (
+            {cartProducts.map((item, i: number) => (
               <li key={i} className="file-delete">
                 <div className="card-product style-row row-small-2 align-items-center">
                   <div className="card-product-wrapper">
                     <Link
-                      href={`/product-detail/${product.id}`}
+                      href={`/product-detail/${item.productId}`}
                       className="product-img"
                     >
                       <Image
                         className="img-product lazyload"
-                        src={product.imgSrc}
-                        alt="image-product"
-                        width={500}
-                        height={500}
-                      />
-                      <Image
-                        className="img-hover lazyload"
-                        src={
-                          product.imgHover ? product.imgHover : product.imgSrc
-                        }
+                        src={item.productImage || "/images/placeholder.jpg"}
                         alt="image-product"
                         width={500}
                         height={500}
@@ -93,22 +83,40 @@ export default function Cart() {
                   <div className="card-product-info">
                     <div className="box-title">
                       <Link
-                        href={`/product-detail/${product.id}`}
+                        href={`/product-detail/${item.productId}`}
                         className="name-product body-md-2 fw-semibold text-secondary link"
                       >
-                        {product.title}
+                        {item.productTitle || "Product"}
                       </Link>
                       <p className="price-wrap fw-medium">
                         <span className="new-price price-text fw-medium">
-                          ${product.price.toFixed(3)}
+                          ${(item.productPrice || 0).toFixed(3)}
                         </span>
                       </p>
-                      <p className="body-md-2">X{product.quantity}</p>
+                      <div className="d-flex align-items-center gap-10 mt-2">
+                        <button
+                          className="btn-quantity"
+                          onClick={() =>
+                            updateCartItemQuantity(item.id, item.quantity - 1)
+                          }
+                        >
+                          -
+                        </button>
+                        <span className="body-md-2">{item.quantity}</span>
+                        <button
+                          className="btn-quantity"
+                          onClick={() =>
+                            updateCartItemQuantity(item.id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <span
                     className="icon-close remove link"
-                    onClick={() => removeItem(product.id)}
+                    onClick={() => removeItem(item.id)}
                   />
                 </div>
               </li>
@@ -119,7 +127,7 @@ export default function Cart() {
           <p className="cart-total fw-semibold">
             <span>Subtotal:</span>
             <span className="price-amount product-title text-primary">
-              ${totalPrice.toFixed(2)}
+              ${totalPrice.toFixed(3)}
             </span>
           </p>
           <div className="box-btn">

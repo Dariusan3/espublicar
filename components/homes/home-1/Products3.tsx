@@ -96,7 +96,7 @@ export default function Products3() {
                                   ${product.price.toFixed(3)}
                                 </span>
                                 <span className="old-price body-md-2 text-main-2">
-                                  ${product.oldPrice.toFixed(3)}
+                                  ${product.oldprice.toFixed(3)}
                                 </span>
                               </p>
                               <ul className="list-product-btn flex-row">
@@ -173,7 +173,7 @@ export default function Products3() {
                                   ${product.price.toFixed(3)}
                                 </span>
                                 <span className="old-price body-md-2 text-main-2">
-                                  ${product.oldPrice.toFixed(3)}
+                                  ${product.oldprice.toFixed(3)}
                                 </span>
                               </p>
                               <ul className="list-product-btn flex-row">
@@ -251,7 +251,7 @@ export default function Products3() {
                                   ${product.price.toFixed(3)}
                                 </span>
                                 <span className="old-price body-md-2 text-main-2">
-                                  ${product.oldPrice.toFixed(3)}
+                                  ${product.oldprice.toFixed(3)}
                                 </span>
                               </p>
                               <ul className="list-product-btn flex-row">
@@ -328,7 +328,7 @@ export default function Products3() {
                                   ${product.price.toFixed(3)}
                                 </span>
                                 <span className="old-price body-md-2 text-main-2">
-                                  ${product.oldPrice.toFixed(3)}
+                                  ${product.oldprice.toFixed(3)}
                                 </span>
                               </p>
                               <ul className="list-product-btn flex-row">
@@ -406,7 +406,7 @@ export default function Products3() {
                                   ${product.price.toFixed(3)}
                                 </span>
                                 <span className="old-price body-md-2 text-main-2">
-                                  ${product.oldPrice.toFixed(3)}
+                                  ${product.oldprice.toFixed(3)}
                                 </span>
                               </p>
                               <ul className="list-product-btn flex-row">
@@ -483,7 +483,7 @@ export default function Products3() {
                                   ${product.price.toFixed(3)}
                                 </span>
                                 <span className="old-price body-md-2 text-main-2">
-                                  ${product.oldPrice.toFixed(3)}
+                                  ${product.oldprice.toFixed(3)}
                                 </span>
                               </p>
                               <ul className="list-product-btn flex-row">

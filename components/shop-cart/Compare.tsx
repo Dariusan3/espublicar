@@ -10,7 +10,7 @@ interface Product {
   imgHover?: string;
   title: string;
   price: number;
-  oldPrice?: number;
+  oldprice?: number;
   [key: string]: any;
 }
 
@@ -96,9 +96,9 @@ export default function Compare() {
                       <span className="new-price price-text fw-medium mb-0">
                         ${product.price.toFixed(3)}
                       </span>
-                      {product.oldPrice && (
+                      {product.oldprice && (
                         <span className="old-price body-md-2 text-main-2 fw-normal">
-                          ${product.oldPrice.toFixed(3)}
+                          ${product.oldprice.toFixed(3)}
                         </span>
                       )}
                     </p>

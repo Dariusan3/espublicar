@@ -27,7 +27,7 @@ export const toProduct = (doc: DocumentData): Product => ({
   updatedAt: doc.$updatedAt,
   title: doc.title,
   price: doc.price,
-  oldPrice: doc.oldPrice,
+  oldprice: doc.oldprice,
   category: doc.category,
   imgSrc: doc.imgSrc,
   imgHover: doc.imgHover,

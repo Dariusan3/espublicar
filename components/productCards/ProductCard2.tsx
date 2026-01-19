@@ -11,14 +11,13 @@ import AddToCompare from "../common/AddToCompare";
 import { useState } from "react";
 import CountdownTimer from "../common/Countdown";
 
-
 interface Product {
   id: number;
   images: string[];
   title: string;
   discount?: number;
   price: number;
-  oldPrice?: number;
+  oldprice?: number;
   countdown?: number;
 }
 
@@ -119,9 +118,9 @@ const ProductCard2 = ({
               <span className="new-price h4 fw-normal text-primary mb-0">
                 ${product.price.toFixed(3)}
               </span>
-              {product.oldPrice && (
+              {product.oldprice && (
                 <span className="old-price price-text text-main-2">
-                  ${product.oldPrice.toFixed(3)}
+                  ${product.oldprice.toFixed(3)}
                 </span>
               )}
             </p>

@@ -8,6 +8,7 @@ import LanguageSelect from "../common/LanguageSelect";
 import CurrencySelect from "../common/CurrencySelect";
 import NavCategories from "./NavCategories";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Header4({ fullWidth = false }) {
   const { user, logout } = useAuth();
@@ -103,13 +104,18 @@ export default function Header4({ fullWidth = false }) {
                       <a
                         href="#"
                         onClick={async (e) => {
-                           e.preventDefault();
-                           await logout();
-                           window.location.href = '/';
+                          e.preventDefault();
+                          const result = await logout();
+                          if (result.success) {
+                            toast.success("👋 Logged out successfully!");
+                            setTimeout(() => {
+                              window.location.href = "/";
+                            }, 1500);
+                          }
                         }}
                         className="link nav-icon-item link-fill"
                       >
-                         <span>
+                        <span>
                           <svg
                             width={26}
                             height={26}
@@ -117,25 +123,25 @@ export default function Header4({ fullWidth = false }) {
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path 
-                              d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" 
-                              stroke="#333E48" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
+                            <path
+                              d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9"
+                              stroke="#333E48"
+                              strokeWidth="2"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
-                            <path 
-                              d="M16 17L21 12L16 7" 
-                              stroke="#333E48" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
+                            <path
+                              d="M16 17L21 12L16 7"
+                              stroke="#333E48"
+                              strokeWidth="2"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
-                            <path 
-                              d="M21 12H9" 
-                              stroke="#333E48" 
-                              strokeWidth="2" 
-                              strokeLinecap="round" 
+                            <path
+                              d="M21 12H9"
+                              stroke="#333E48"
+                              strokeWidth="2"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                           </svg>

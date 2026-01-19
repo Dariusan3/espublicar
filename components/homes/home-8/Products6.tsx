@@ -12,18 +12,25 @@ import AddToCompare from "@/components/common/AddToCompare";
 export default function Products6() {
   const [activeTab, setActiveTab] = useState("Feature");
   const [filtered, setFiltered] = useState(
-    products11.reduce((acc: { id: number; wowDelay: string; products: typeof products11 }[], product, index) => {
-      const slideIndex = Math.floor(index / 2);
-      if (!acc[slideIndex]) {
-        acc[slideIndex] = {
-          id: slideIndex + 1,
-          wowDelay: product.wowDelay,
-          products: [],
-        };
-      }
-      acc[slideIndex].products.push(product);
-      return acc;
-    }, [])
+    products11.reduce(
+      (
+        acc: { id: number; wowDelay: string; products: typeof products11 }[],
+        product,
+        index,
+      ) => {
+        const slideIndex = Math.floor(index / 2);
+        if (!acc[slideIndex]) {
+          acc[slideIndex] = {
+            id: slideIndex + 1,
+            wowDelay: product.wowDelay,
+            products: [],
+          };
+        }
+        acc[slideIndex].products.push(product);
+        return acc;
+      },
+      [],
+    ),
   );
 
   const tabs = [
@@ -35,18 +42,29 @@ export default function Products6() {
     setFiltered(
       products11
         .filter((elm) => elm.filterTab.includes(activeTab))
-        .reduce((acc: { id: number; wowDelay: string; products: typeof products11 }[], product, index) => {
-          const slideIndex = Math.floor(index / 2);
-          if (!acc[slideIndex]) {
-            acc[slideIndex] = {
-              id: slideIndex + 1,
-              wowDelay: product.wowDelay,
-              products: [],
-            };
-          }
-          acc[slideIndex].products.push(product);
-          return acc;
-        }, [])
+        .reduce(
+          (
+            acc: {
+              id: number;
+              wowDelay: string;
+              products: typeof products11;
+            }[],
+            product,
+            index,
+          ) => {
+            const slideIndex = Math.floor(index / 2);
+            if (!acc[slideIndex]) {
+              acc[slideIndex] = {
+                id: slideIndex + 1,
+                wowDelay: product.wowDelay,
+                products: [],
+              };
+            }
+            acc[slideIndex].products.push(product);
+            return acc;
+          },
+          [],
+        ),
     );
   }, [activeTab]);
 
@@ -151,7 +169,7 @@ export default function Products6() {
                                     ${product.price.toFixed(3)}
                                   </span>
                                   <span className="old-price body-md-2 text-main-2">
-                                    ${product.oldPrice.toFixed(3)}
+                                    ${product.oldprice.toFixed(3)}
                                   </span>
                                 </p>
                                 <ul className="list-product-btn flex-row">

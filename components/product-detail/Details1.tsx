@@ -80,9 +80,9 @@ export default function Details1({ product }: { product: any }) {
                         <h4 className="text-primary">
                           ${product.price.toFixed(2)}
                         </h4>{" "}
-                        {product.oldPrice && (
+                        {product.oldprice && (
                           <span className="price-text text-main-2 old-price">
-                            ${product.oldPrice.toFixed(2)}
+                            ${product.oldprice.toFixed(2)}
                           </span>
                         )}
                       </div>

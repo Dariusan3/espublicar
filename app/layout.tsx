@@ -18,6 +18,8 @@ import Search from "@/components/modals/Search";
 import AddParallax from "@/utlis/AddParallax";
 import NewsLetter from "@/components/modals/NewsLetter";
 import ReduxProvider from "@/store/ReduxProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RootLayout({
   children,
@@ -154,6 +156,18 @@ export default function RootLayout({
               </Context>
             </AuthProvider>
           </ReduxProvider>
+          <ToastContainer
+            position="bottom-left"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
         </div>
       </body>
     </html>

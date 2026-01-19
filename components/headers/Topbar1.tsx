@@ -4,6 +4,7 @@ import CurrencySelect from "../common/CurrencySelect";
 import LanguageSelect from "../common/LanguageSelect";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 export default function Topbar1({ parentClass = "tf-topbar line-bt" }) {
   const { user, logout } = useAuth();
@@ -56,8 +57,13 @@ export default function Topbar1({ parentClass = "tf-topbar line-bt" }) {
                     className="tf-cur-item link"
                     onClick={async (e) => {
                       e.preventDefault();
-                      await logout();
-                      window.location.href = "/";
+                      const result = await logout();
+                      if (result.success) {
+                        toast.success("👋 Logged out successfully!");
+                        setTimeout(() => {
+                          window.location.href = "/";
+                        }, 1500);
+                      }
                     }}
                   >
                     <span className="body-small">Logout</span>

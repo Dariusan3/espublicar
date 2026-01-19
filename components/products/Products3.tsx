@@ -15,7 +15,7 @@ interface Product {
   imgHover?: string;
   title: string;
   price: number;
-  oldPrice?: number;
+  oldprice?: number;
   filterBrands?: string[];
   inNew?: boolean;
   isTodaysDeals?: boolean;
@@ -42,7 +42,8 @@ export default function Products3() {
 
   const allProps = {
     ...state,
-    setPrice: (value: number[]) => dispatch({ type: "SET_PRICE", payload: value }),
+    setPrice: (value: number[]) =>
+      dispatch({ type: "SET_PRICE", payload: value }),
 
     setDeals: (value: string) => {
       value == deals
@@ -60,7 +61,9 @@ export default function Products3() {
 
     setBrands: (newBrand: string) => {
       if (brands.includes(newBrand)) {
-        const updated = [...brands].filter((brand: string) => brand != newBrand);
+        const updated = [...brands].filter(
+          (brand: string) => brand != newBrand,
+        );
         dispatch({ type: "SET_BRANDS", payload: updated });
       } else {
         dispatch({ type: "SET_BRANDS", payload: [...brands, newBrand] });
@@ -77,8 +80,8 @@ export default function Products3() {
     setCurrentPage: (value: number) =>
       dispatch({ type: "SET_CURRENT_PAGE", payload: value }),
     setItemPerPage: (value: number) => {
-      dispatch({ type: "SET_CURRENT_PAGE", payload: 1 }),
-        dispatch({ type: "SET_ITEM_PER_PAGE", payload: value });
+      (dispatch({ type: "SET_CURRENT_PAGE", payload: 1 }),
+        dispatch({ type: "SET_ITEM_PER_PAGE", payload: value }));
     },
     clearFilter: () => {
       dispatch({ type: "CLEAR_FILTER" });
@@ -90,7 +93,7 @@ export default function Products3() {
 
     if (brands.length) {
       const filteredByBrands = [...products3].filter((elm: Product) =>
-        brands.some((el: string) => elm.filterBrands?.includes(el))
+        brands.some((el: string) => elm.filterBrands?.includes(el)),
       );
       filteredArrays = [...filteredArrays, filteredByBrands];
     }
@@ -106,30 +109,32 @@ export default function Products3() {
     }
     if (deals !== "All") {
       if (deals == "All Discounts") {
-        const filteredBydeails = [...products3].filter((elm: Product) => elm.oldPrice);
+        const filteredBydeails = [...products3].filter(
+          (elm: Product) => elm.oldprice,
+        );
         filteredArrays = [...filteredArrays, filteredBydeails];
       }
       if (deals == "Today’s Deals") {
         const filteredBydeails = [...products3].filter(
-          (elm: Product) => elm.isTodaysDeals
+          (elm: Product) => elm.isTodaysDeals,
         );
         filteredArrays = [...filteredArrays, filteredBydeails];
       }
     }
     if (rating !== "All") {
       const filteredByrating = [...products3].filter(
-        (elm: Product) => (elm.rating || 0) >= rating
+        (elm: Product) => (elm.rating || 0) >= rating,
       );
       filteredArrays = [...filteredArrays, filteredByrating];
     }
 
     const filteredByPrice = [...products3].filter(
-      (elm: Product) => elm.price >= price[0] && elm.price <= price[1]
+      (elm: Product) => elm.price >= price[0] && elm.price <= price[1],
     );
     filteredArrays = [...filteredArrays, filteredByPrice];
 
     const commonItems = [...products3].filter((item) =>
-      filteredArrays.every((array) => array.includes(item))
+      filteredArrays.every((array) => array.includes(item)),
     );
     dispatch({ type: "SET_FILTERED", payload: commonItems });
   }, [price, isNew, deals, rating, brands]);
@@ -184,7 +189,7 @@ export default function Products3() {
 
     // Get all elements that should trigger the close action
     const closeButtons = document.querySelectorAll(
-      ".close-filter, .overlay-filter"
+      ".close-filter, .overlay-filter",
     );
     closeButtons.forEach((button) => {
       button.addEventListener("click", handleCloseFilter);

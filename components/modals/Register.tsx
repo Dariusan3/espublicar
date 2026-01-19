@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import useUser from "@/hooks/useUser";
 import { UserDB } from "@/types/Types";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const { signUserUp, signUserIn } = useAuth();
@@ -82,7 +83,12 @@ export default function Register() {
       setConfirmPassword("");
 
       // Redirect to account page since user is now logged in
-      window.location.href = "/my-account";
+      toast.success("🎉 Registration successful! Welcome to our store!");
+
+      // Small delay to show the toast before redirect
+      setTimeout(() => {
+        window.location.href = "/my-account";
+      }, 1000);
     } catch (err: any) {
       setError("Error: " + err.message);
     } finally {

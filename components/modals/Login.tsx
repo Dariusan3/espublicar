@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const { login, user } = useAuth();
@@ -27,6 +28,9 @@ export default function Login() {
       }
       setEmail("");
       setPassword("");
+
+      // Show success toast
+      toast.success("✅ Login successful! Welcome back!");
     } else {
       setError(result.error || "Login failed. Please try again.");
     }

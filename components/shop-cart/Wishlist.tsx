@@ -9,7 +9,7 @@ interface Product {
   imgSrc: string;
   title: string;
   price: number;
-  oldPrice?: number;
+  oldprice?: number;
 }
 
 export default function Wishlist() {
@@ -19,9 +19,15 @@ export default function Wishlist() {
     addProductToCart,
     isAddedToCartProducts,
   } = useContextElement();
-  const [items, setItems] = useState<Product[]>(allProducts as unknown as Product[]);
+  const [items, setItems] = useState<Product[]>(
+    allProducts as unknown as Product[],
+  );
   useEffect(() => {
-    setItems([...(allProducts as unknown as Product[]).filter((elm) => wishList.includes(elm.id))]);
+    setItems([
+      ...(allProducts as unknown as Product[]).filter((elm) =>
+        wishList.includes(elm.id),
+      ),
+    ]);
   }, [wishList]);
   return (
     <div className="tf-sp-2">
@@ -78,9 +84,9 @@ export default function Wishlist() {
                         <span className="new-price price-text fw-medium mb-0">
                           ${product.price.toFixed(3)}
                         </span>
-                        {product.oldPrice && (
+                        {product.oldprice && (
                           <span className="old-price body-md-2 text-main-2 fw-normal">
-                            ${product.oldPrice.toFixed(3)}
+                            ${product.oldprice.toFixed(3)}
                           </span>
                         )}
                       </p>

@@ -163,9 +163,9 @@ export default function Quickview() {
                     <h4 className="text-primary">
                       ${quickViewItem.price.toFixed(2)}
                     </h4>
-                    {quickViewItem.oldPrice && (
+                    {quickViewItem.oldprice && (
                       <span className="price-text text-main-2 old-price">
-                        ${quickViewItem.oldPrice.toFixed(2)}
+                        ${quickViewItem.oldprice.toFixed(2)}
                       </span>
                     )}
                   </div>
