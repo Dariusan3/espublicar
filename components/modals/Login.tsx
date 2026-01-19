@@ -9,13 +9,13 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     const result = await login(email, password);
-    
+
     if (result.success) {
       // Close the modal on successful login
       const modal = document.getElementById("log");
@@ -29,7 +29,7 @@ export default function Login() {
     } else {
       setError(result.error || "Login failed. Please try again.");
     }
-    
+
     setLoading(false);
   };
 
@@ -48,7 +48,11 @@ export default function Login() {
               <p className="body-text-3 mt-3">
                 You are logged in as <strong>{user.email}</strong>
               </p>
-              <a href="/my-account" className="tf-btn w-100 text-white mt-4" data-bs-dismiss="modal">
+              <a
+                href="/my-account"
+                className="tf-btn w-100 text-white mt-4"
+                data-bs-dismiss="modal"
+              >
                 Go to My Account
               </a>
             </div>
@@ -79,8 +83,8 @@ export default function Login() {
                   <label className="fw-semibold body-md-2">
                     Email address *
                   </label>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     placeholder="Your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -89,8 +93,8 @@ export default function Login() {
                 </fieldset>
                 <fieldset>
                   <label className="fw-semibold body-md-2"> Password * </label>
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -98,12 +102,15 @@ export default function Login() {
                     minLength={8}
                   />
                 </fieldset>
-                <a href="#" className="link text-end body-text-3">
+                <a
+                  href="/forgot-password"
+                  className="link text-end body-text-3"
+                >
                   Forgot password ?
                 </a>
               </div>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="tf-btn w-100 text-white"
                 disabled={loading}
               >

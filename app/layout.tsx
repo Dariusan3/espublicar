@@ -2,7 +2,6 @@
 import React from "react";
 import Context from "@/context/Context";
 import { AuthProvider } from "@/context/AuthContext";
-import { ReduxProvider } from "@/store";
 import "../public/scss/main.scss";
 import "photoswipe/dist/photoswipe.css";
 import { useEffect } from "react";
@@ -18,9 +17,13 @@ import Toolbar from "@/components/modals/Toolbar";
 import Search from "@/components/modals/Search";
 import AddParallax from "@/utlis/AddParallax";
 import NewsLetter from "@/components/modals/NewsLetter";
+import ReduxProvider from "@/store/ReduxProvider";
 
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
   useEffect(() => {
     if (typeof window !== "undefined") {
