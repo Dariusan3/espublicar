@@ -4,6 +4,7 @@ import FilterSidebar from "@/components/shop/FilterSidebar"; // Use new componen
 import useProducts, { ProductFilters } from "@/hooks/useProducts";
 import ProductCards3 from "../productCards/ProductCards3";
 import { Product } from "@/types/Types";
+import { useSearchParams } from "next/navigation";
 
 export default function Products1() {
   const { searchProducts, products, totalCount, isLoading } = useProducts();
@@ -11,14 +12,27 @@ export default function Products1() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
+  const searchParams = useSearchParams();
+  const query = searchParams.get("query");
+  const category = searchParams.get("category");
+
   // Fetch products when filters or page changes
   useEffect(() => {
     const fetchProducts = async () => {
       const offset = (currentPage - 1) * itemsPerPage;
-      await searchProducts({ ...filters, limit: itemsPerPage, offset });
+      const currentFilters: ProductFilters = { ...filters };
+
+      // Apply URL params if they exist and override local state if needed
+      // Or better, syncing state with URL is complex.
+      // For now, let's just make sure when URL changes, we search.
+
+      if (query) currentFilters.search = query;
+      if (category) currentFilters.category = category;
+
+      await searchProducts({ ...currentFilters, limit: itemsPerPage, offset });
     };
     fetchProducts();
-  }, [filters, currentPage, searchProducts]);
+  }, [filters, currentPage, searchProducts, query, category]);
 
   const handleFilterChange = (newFilters: ProductFilters) => {
     setFilters(newFilters);

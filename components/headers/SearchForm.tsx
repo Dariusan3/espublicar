@@ -1,13 +1,17 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { categories } from "@/data/categories";
+import { useRouter } from "next/navigation";
 
 export default function SearchForm({
   parentClass = "form-search-product style-2",
 }) {
   const [activeDropdown, setActiveDropdown] = useState(false);
   const [activeCategory, setActiveCategory] = useState("Todas las categorías");
+  const [activeCategoryValue, setActiveCategoryValue] = useState("");
   const navRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
   // Close when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -22,12 +26,19 @@ export default function SearchForm({
     };
   }, []);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const query = inputRef.current?.value || "";
+    // Construct query parameters
+    const params = new URLSearchParams();
+    if (query) params.set("query", query);
+    if (activeCategoryValue) params.set("category", activeCategoryValue);
+
+    router.push(`/shop-default?${params.toString()}`);
+  };
+
   return (
-    <form
-      ref={navRef}
-      onSubmit={(e) => e.preventDefault()}
-      className={parentClass}
-    >
+    <form ref={navRef} onSubmit={handleSubmit} className={parentClass}>
       <div className={`select-category ${activeDropdown ? "active" : ""}`}>
         <div
           onClick={() => setActiveDropdown(true)}
@@ -52,6 +63,7 @@ export default function SearchForm({
             rel=""
             onClick={() => {
               setActiveCategory("Todas las categorías");
+              setActiveCategoryValue("");
               setActiveDropdown(false);
             }}
           >
@@ -62,6 +74,7 @@ export default function SearchForm({
               rel={item.value}
               onClick={() => {
                 setActiveCategory(item.label);
+                setActiveCategoryValue(item.value);
                 setActiveDropdown(false);
               }}
               key={index}
@@ -73,7 +86,7 @@ export default function SearchForm({
       </div>
       <span className="br-line type-vertical bg-line"></span>
       <fieldset>
-        <input type="text" placeholder="Buscar productos" />
+        <input ref={inputRef} type="text" placeholder="Buscar productos" />
       </fieldset>
       <button type="submit" className="btn-submit-form">
         <i className="icon-search"></i>
