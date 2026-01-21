@@ -1,79 +1,86 @@
 "use client";
-import { useCallback } from 'react';
-import { storage, BUCKETS, ID } from '@/lib/appwrite';
+import { useCallback } from "react";
+import { storage, BUCKETS, ID } from "@/lib/appwrite";
 
 /**
  * Custom hook for storage operations with Appwrite
  */
 const useStorage = () => {
-
   /**
    * Get a file preview URL
    */
-  const getFileUrl = useCallback((bucketId, fileId, width = 0, height = 0) => {
-    try {
-      if (width && height) {
+  const getFileUrl = useCallback(
+    (bucketId: string, fileId: string, width = 0, height = 0) => {
+      try {
+        if (width && height) {
+          return {
+            success: true,
+            message: "File URL generated!",
+            data: storage.getFilePreview(bucketId, fileId, width, height),
+          };
+        }
         return {
           success: true,
-          message: 'File URL generated!',
-          data: storage.getFilePreview(bucketId, fileId, width, height),
+          message: "File URL generated!",
+          data: storage.getFileView(bucketId, fileId),
+        };
+      } catch (error: any) {
+        console.error("Error getting file URL:", error);
+        return {
+          success: false,
+          message: error.message,
+          data: null,
         };
       }
-      return {
-        success: true,
-        message: 'File URL generated!',
-        data: storage.getFileView(bucketId, fileId),
-      };
-    } catch (error) {
-      console.error('Error getting file URL:', error);
-      return {
-        success: false,
-        message: error.message,
-        data: null,
-      };
-    }
-  }, []);
+    },
+    [],
+  );
 
   /**
    * Get product image URL
    * Note: Uses main storage bucket
    */
-  const getProductImageUrl = useCallback((fileId, width = 500, height = 500) => {
-    return getFileUrl(BUCKETS.PRODUCT_IMAGES, fileId, width, height);
-  }, [getFileUrl]);
+  const getProductImageUrl = useCallback(
+    (fileId: string, width = 500, height = 500) => {
+      return getFileUrl(BUCKETS.PRODUCT_IMAGES, fileId, width, height);
+    },
+    [getFileUrl],
+  );
 
   /**
    * Get blog image URL
    */
-  const getBlogImageUrl = useCallback((fileId, width = 800, height = 450) => {
-    return getFileUrl(BUCKETS.BLOG_IMAGES, fileId, width, height);
-  }, [getFileUrl]);
+  const getBlogImageUrl = useCallback(
+    (fileId: string, width = 800, height = 450) => {
+      return getFileUrl(BUCKETS.BLOG_IMAGES, fileId, width, height);
+    },
+    [getFileUrl],
+  );
 
   /**
    * Get user avatar URL
    */
-  const getUserAvatarUrl = useCallback((fileId, width = 100, height = 100) => {
-    return getFileUrl(BUCKETS.USER_AVATARS, fileId, width, height);
-  }, [getFileUrl]);
+  const getUserAvatarUrl = useCallback(
+    (fileId: string, width = 100, height = 100) => {
+      return getFileUrl(BUCKETS.USER_AVATARS, fileId, width, height);
+    },
+    [getFileUrl],
+  );
 
   /**
    * Upload a file to a bucket
    */
-  const uploadFile = useCallback(async (bucketId, file) => {
+  const uploadFile = useCallback(async (bucketId: string, file: File) => {
     try {
-      const response = await storage.createFile(
-        bucketId,
-        ID.unique(),
-        file
-      );
-      
+      const response = await storage.createFile(bucketId, ID.unique(), file);
+
       return {
         success: true,
-        message: 'File uploaded successfully!',
+        message: "File uploaded successfully!",
         data: response,
       };
-    } catch (error) {
-      console.error('Error uploading file:', error);
+    } catch (error: any) {
+      console.error("Error uploading file:", error);
       return {
         success: false,
         message: error.message,
@@ -85,38 +92,47 @@ const useStorage = () => {
   /**
    * Upload product image
    */
-  const uploadProductImage = useCallback(async (file) => {
-    return uploadFile(BUCKETS.PRODUCT_IMAGES, file);
-  }, [uploadFile]);
+  const uploadProductImage = useCallback(
+    async (file: File) => {
+      return uploadFile(BUCKETS.PRODUCT_IMAGES, file);
+    },
+    [uploadFile],
+  );
 
   /**
    * Upload blog image
    */
-  const uploadBlogImage = useCallback(async (file) => {
-    return uploadFile(BUCKETS.BLOG_IMAGES, file);
-  }, [uploadFile]);
+  const uploadBlogImage = useCallback(
+    async (file: File) => {
+      return uploadFile(BUCKETS.BLOG_IMAGES, file);
+    },
+    [uploadFile],
+  );
 
   /**
    * Upload user avatar
    */
-  const uploadUserAvatar = useCallback(async (file) => {
-    return uploadFile(BUCKETS.USER_AVATARS, file);
-  }, [uploadFile]);
+  const uploadUserAvatar = useCallback(
+    async (file: File) => {
+      return uploadFile(BUCKETS.USER_AVATARS, file);
+    },
+    [uploadFile],
+  );
 
   /**
    * Delete a file from storage
    */
-  const deleteFile = useCallback(async (bucketId, fileId) => {
+  const deleteFile = useCallback(async (bucketId: string, fileId: string) => {
     try {
       await storage.deleteFile(bucketId, fileId);
-      
+
       return {
         success: true,
-        message: 'File deleted successfully!',
+        message: "File deleted successfully!",
         data: null,
       };
-    } catch (error) {
-      console.error('Error deleting file:', error);
+    } catch (error: any) {
+      console.error("Error deleting file:", error);
       return {
         success: false,
         message: error.message,
@@ -128,17 +144,17 @@ const useStorage = () => {
   /**
    * List files in a bucket
    */
-  const listFiles = useCallback(async (bucketId) => {
+  const listFiles = useCallback(async (bucketId: string) => {
     try {
       const response = await storage.listFiles(bucketId);
-      
+
       return {
         success: true,
-        message: 'Files listed successfully!',
+        message: "Files listed successfully!",
         data: response.files,
       };
-    } catch (error) {
-      console.error('Error listing files:', error);
+    } catch (error: any) {
+      console.error("Error listing files:", error);
       return {
         success: false,
         message: error.message,

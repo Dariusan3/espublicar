@@ -3,7 +3,13 @@
 import { useContextElement } from "@/context/Context";
 import { allProducts } from "@/data/products";
 
-export default function AddToQuickview({ productId, tooltipClass = "" } : {productId: number, tooltipClass?: string}) {
+export default function AddToQuickview({
+  productId,
+  tooltipClass = "",
+}: {
+  productId: string | number;
+  tooltipClass?: string;
+}) {
   const product =
     allProducts.filter((elm) => elm.id == productId)[0] || allProducts[0];
   const { setQuickViewItem } = useContextElement();

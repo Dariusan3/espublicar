@@ -14,14 +14,14 @@ import {
 } from "@/data/menu";
 export default function MobileMenu() {
   const pathname = usePathname();
-  const isMenuActive = (link) => {
+  const isMenuActive = (link: any) => {
     return link.href?.split("/")[1] == pathname.split("/")[1];
   };
-  const isMenuParentActive = (menu) => {
-    return menu.some((elm) => isMenuActive(elm));
+  const isMenuParentActive = (menu: any) => {
+    return menu.some((elm: any) => isMenuActive(elm));
   };
-  const isMenuParentActive2 = (menu) => {
-    return menu.some((elm) => isMenuParentActive(elm.items));
+  const isMenuParentActive2 = (menu: any) => {
+    return menu.some((elm: any) => isMenuParentActive(elm.items));
   };
 
   return (
@@ -78,7 +78,7 @@ export default function MobileMenu() {
                         tabIndex={2}
                         defaultValue=""
                         aria-required="true"
-                        required=""
+                        required
                       />
                     </fieldset>
                     <button type="submit" className="button-submit">

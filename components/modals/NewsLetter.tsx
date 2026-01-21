@@ -4,22 +4,22 @@ import React, { useEffect, useRef, useState } from "react";
 
 import axios from "axios";
 export default function NewsLetter() {
-  const modalElement = useRef();
+  const modalElement = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const showModal = async () => {
       const bootstrap = await import("bootstrap"); // dynamically import bootstrap
       const myModal = new bootstrap.Modal(
-        document.getElementById("newsletterPopup"),
+        modalElement.current as HTMLDivElement,
         {
           keyboard: false,
-        }
+        },
       );
 
       // Show the modal after a delay using a promise
       await new Promise((resolve) => setTimeout(resolve, 2000));
       myModal.show();
 
-      modalElement.current.addEventListener("hidden.bs.modal", () => {
+      modalElement.current?.addEventListener("hidden.bs.modal", () => {
         myModal.hide();
       });
     };
@@ -34,31 +34,31 @@ export default function NewsLetter() {
       setShowMessage(false);
     }, 2000);
   };
-  const sendEmail = async (e) => {
+  const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission behavior
-    const email = e.target.email.value;
+    const email = e.currentTarget.email.value;
 
     try {
       const response = await axios.post(
         "https://express-brevomail.vercel.app/api/contacts",
         {
           email,
-        }
+        },
       );
 
       if ([200, 201].includes(response.status)) {
-        e.target.reset(); // Reset the form
+        e.currentTarget.reset(); // Reset the form
         setSuccess(true); // Set success state
         handleShowMessage();
       } else {
         setSuccess(false); // Handle unexpected responses
         handleShowMessage();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error.response?.data || "An error occurred");
       setSuccess(false); // Set error state
       handleShowMessage();
-      e.target.reset(); // Reset the form
+      e.currentTarget.reset(); // Reset the form
     }
   };
   return (
@@ -109,7 +109,7 @@ export default function NewsLetter() {
                   name="email"
                   placeholder="Enter Your Email Address"
                   aria-required="true"
-                  required=""
+                  required
                 />
               </fieldset>
             </div>

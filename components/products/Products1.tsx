@@ -1,239 +1,80 @@
 "use client";
-import React, { useEffect, useReducer } from "react";
-import FilterOptions from "./FilterOptions";
-import { products3 } from "@/data/products";
-
-import ShowLength from "./ShowLength";
-import { initialState, reducer } from "@/reducer/filterReducer";
-import LayoutHandler from "./LayoutHandler";
+import React, { useEffect, useState } from "react";
+import FilterSidebar from "@/components/shop/FilterSidebar"; // Use new component
+import useProducts, { ProductFilters } from "@/hooks/useProducts";
 import ProductCards3 from "../productCards/ProductCards3";
-
-interface Product {
-  id: number;
-  imgSrc: string;
-  imgHover?: string;
-  title: string;
-  price: number;
-  oldprice?: number;
-  filterBrands?: string[];
-  inNew?: boolean;
-  isTodaysDeals?: boolean;
-  rating?: number;
-  [key: string]: any;
-}
+import { Product } from "@/types/Types";
 
 export default function Products1() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const {
-    price,
-    isNew,
-    deals,
-    rating,
-    brands,
+  const { searchProducts, products, totalCount, isLoading } = useProducts();
+  const [filters, setFilters] = useState<ProductFilters>({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
-    filtered,
-    sortingOption,
-    sorted,
+  // Fetch products when filters or page changes
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const offset = (currentPage - 1) * itemsPerPage;
+      await searchProducts({ ...filters, limit: itemsPerPage, offset });
+    };
+    fetchProducts();
+  }, [filters, currentPage, searchProducts]);
 
-    currentPage,
-    itemPerPage,
-  } = state;
-
-  const allProps = {
-    ...state,
-    setPrice: (value: number[]) =>
-      dispatch({ type: "SET_PRICE", payload: value }),
-
-    setDeals: (value: string) => {
-      value == deals
-        ? dispatch({ type: "SET_DEALS", payload: "All" })
-        : dispatch({ type: "SET_DEALS", payload: value });
-    },
-    setRating: (value: number) => {
-      value == rating
-        ? dispatch({ type: "SET_RATING", payload: "All" })
-        : dispatch({ type: "SET_RATING", payload: value });
-    },
-    setIsNew: (value: boolean | string) => {
-      dispatch({ type: "SET_ISNEW", payload: value });
-    },
-
-    setBrands: (newBrand: string) => {
-      if (brands.includes(newBrand)) {
-        const updated = [...brands].filter(
-          (brand: string) => brand != newBrand,
-        );
-        dispatch({ type: "SET_BRANDS", payload: updated });
-      } else {
-        dispatch({ type: "SET_BRANDS", payload: [...brands, newBrand] });
-      }
-    },
-    removeBrand: (newBrand: string) => {
-      const updated = [...brands].filter((brand: string) => brand != newBrand);
-
-      dispatch({ type: "SET_BRANDS", payload: updated });
-    },
-    setSortingOption: (value: string) =>
-      dispatch({ type: "SET_SORTING_OPTION", payload: value }),
-
-    setCurrentPage: (value: number) =>
-      dispatch({ type: "SET_CURRENT_PAGE", payload: value }),
-    setItemPerPage: (value: number) => {
-      (dispatch({ type: "SET_CURRENT_PAGE", payload: 1 }),
-        dispatch({ type: "SET_ITEM_PER_PAGE", payload: value }));
-    },
-    clearFilter: () => {
-      dispatch({ type: "CLEAR_FILTER" });
-    },
+  const handleFilterChange = (newFilters: ProductFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1); // Reset to first page on filter change
   };
 
-  useEffect(() => {
-    let filteredArrays: Product[][] = [];
+  const clearFilters = () => {
+    setFilters({});
+    setCurrentPage(1);
+  };
 
-    if (brands.length) {
-      const filteredByBrands = [...products3].filter((elm: Product) =>
-        brands.some((el: string) => elm.filterBrands?.includes(el)),
-      );
-      filteredArrays = [...filteredArrays, filteredByBrands];
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      // Scroll to top of grid
+      document
+        .getElementById("gridLayout")
+        ?.scrollIntoView({ behavior: "smooth" });
     }
-    if (isNew !== "All") {
-      const filteredByisNew = [...products3].filter((elm: Product) => {
-        if (isNew) {
-          return elm.inNew;
-        } else {
-          return !elm.inNew;
-        }
-      });
-      filteredArrays = [...filteredArrays, filteredByisNew];
-    }
-    if (deals !== "All") {
-      if (deals == "All Discounts") {
-        const filteredBydeails = [...products3].filter(
-          (elm: Product) => elm.oldprice,
-        );
-        filteredArrays = [...filteredArrays, filteredBydeails];
-      }
-      if (deals == "Today’s Deals") {
-        const filteredBydeails = [...products3].filter(
-          (elm: Product) => elm.isTodaysDeals,
-        );
-        filteredArrays = [...filteredArrays, filteredBydeails];
-      }
-    }
-    if (rating !== "All") {
-      const filteredByrating = [...products3].filter(
-        (elm: Product) => (elm.rating || 0) >= rating,
-      );
-      filteredArrays = [...filteredArrays, filteredByrating];
-    }
+  };
 
-    const filteredByPrice = [...products3].filter(
-      (elm: Product) => elm.price >= price[0] && elm.price <= price[1],
-    );
-    filteredArrays = [...filteredArrays, filteredByPrice];
-
-    const commonItems = [...products3].filter((item) =>
-      filteredArrays.every((array) => array.includes(item)),
-    );
-    dispatch({ type: "SET_FILTERED", payload: commonItems });
-  }, [price, isNew, deals, rating, brands]);
-
-  useEffect(() => {
-    if (sortingOption === "Price Ascending") {
-      dispatch({
-        type: "SET_SORTED",
-        payload: [...filtered].sort((a, b) => a.price - b.price),
-      });
-    } else if (sortingOption === "Price Descending") {
-      dispatch({
-        type: "SET_SORTED",
-        payload: [...filtered].sort((a, b) => b.price - a.price),
-      });
-    } else if (sortingOption === "Title Ascending") {
-      dispatch({
-        type: "SET_SORTED",
-        payload: [...filtered].sort((a, b) => a.title.localeCompare(b.title)),
-      });
-    } else if (sortingOption === "Title Descending") {
-      dispatch({
-        type: "SET_SORTED",
-        payload: [...filtered].sort((a, b) => b.title.localeCompare(a.title)),
-      });
-    } else {
-      dispatch({ type: "SET_SORTED", payload: filtered });
-    }
-    dispatch({ type: "SET_CURRENT_PAGE", payload: 1 });
-  }, [filtered, sortingOption]);
-
-  useEffect(() => {
-    const handleOpenFilter = () => {
-      if (window.innerWidth <= 1200) {
-        document.querySelector(".sidebar-filter")?.classList.add("show");
-        document.querySelector(".overlay-filter")?.classList.add("show");
-        document.body.classList.toggle("no-scroll");
-      }
-    };
-
-    const handleCloseFilter = () => {
-      document.querySelector(".sidebar-filter")?.classList.remove("show");
-      document.querySelector(".overlay-filter")?.classList.remove("show");
-      document.body.classList.toggle("no-scroll");
-    };
-
-    // Get all elements that should trigger the open action
-    const openButtons = document.querySelectorAll("#filterShop, .sidebar-btn");
-    openButtons.forEach((button) => {
-      button.addEventListener("click", handleOpenFilter);
-    });
-
-    // Get all elements that should trigger the close action
-    const closeButtons = document.querySelectorAll(
-      ".close-filter, .overlay-filter",
-    );
-    closeButtons.forEach((button) => {
-      button.addEventListener("click", handleCloseFilter);
-    });
-
-    // Cleanup function to remove event listeners
-    return () => {
-      openButtons.forEach((button) => {
-        button.removeEventListener("click", handleOpenFilter);
-      });
-      closeButtons.forEach((button) => {
-        button.removeEventListener("click", handleCloseFilter);
-      });
-    };
-  }, []); // Empty dependency array means this runs once on mount
   return (
     <div className="flat-content">
       <div className="container">
         <div className="tf-product-view-content wrapper-control-shop">
-          <div className="canvas-filter-product sidebar-filter handle-canvas left">
+          {/* Mobile Filter Sidebar Wrapper (reusing existing classes for layout) */}
+          <div className="canvas-filter-product sidebar-filter handle-canvas left d-xl-none">
             <div className="canvas-wrapper">
               <div className="canvas-header d-flex d-xl-none">
                 <h5 className="title">Filter</h5>
                 <span className="icon-close link icon-close-popup close-filter" />
               </div>
               <div className="canvas-body">
-                <FilterOptions allProps={allProps} />
-              </div>
-              <div className="canvas-bottom d-flex d-xl-none">
-                <button
-                  id="reset-filter"
-                  onClick={() => allProps.clearFilter()}
-                  className="tf-btn btn-reset w-100"
-                >
-                  <span className="caption text-white">Reset Filters</span>
-                </button>
+                {/* New Filter Sidebar */}
+                <FilterSidebar
+                  currentFilters={filters}
+                  onFiltersChange={handleFilterChange}
+                  className="w-100"
+                />
               </div>
             </div>
           </div>
-          <div className="content-area">
+
+          <div className="content-area w-100">
             <div className="tf-shop-control flex-wrap gap-10">
               <div className="d-flex align-items-center gap-10">
                 <button
                   id="filterShop"
                   className="tf-btn-filter d-flex d-xl-none"
+                  onClick={() =>
+                    document
+                      .querySelector(".sidebar-filter")
+                      ?.classList.add("show")
+                  }
                 >
                   <span className="icon icon-filter">
                     <svg
@@ -249,182 +90,108 @@ export default function Products1() {
                   <span className="body-md-2 fw-medium">Filter</span>
                 </button>
                 <p className="body-text-3 d-none d-lg-block">
-                  1-16 of 66 results for "
-                  <span className="title-sidebar fw-bold"> macbook m1 </span>"
+                  Showing{" "}
+                  {products.length > 0
+                    ? (currentPage - 1) * itemsPerPage + 1
+                    : 0}
+                  - {Math.min(currentPage * itemsPerPage, totalCount)} of{" "}
+                  {totalCount} results
                 </p>
-              </div>
-              <div className="tf-control-view flat-title-tab-product flex-wrap">
-                <LayoutHandler />
-                <ShowLength />
-                <div
-                  className="tf-dropdown-sort tf-sort type-sort-by"
-                  data-bs-toggle="dropdown"
-                >
-                  <div className="btn-select w-100">
-                    <i className="icon-sort" />
-                    <p className="body-text-3 w-100">
-                      Sort by:{" "}
-                      <span className="text-sort-value">{sortingOption}</span>
-                    </p>
-                    <i className="icon-arrow-down fs-10" />
-                  </div>
-                  <div className="dropdown-menu">
-                    {[
-                      "Default",
-                      "Title Ascending",
-                      "Title Descending",
-                      "Price Ascending",
-                      "Price Descending",
-                    ].map((elm, i) => (
-                      <div
-                        key={i}
-                        className={`select-item ${
-                          sortingOption == elm ? "active" : ""
-                        }`}
-                        onClick={() => allProps.setSortingOption(elm)}
-                      >
-                        <span className="text-value-item">{elm}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
 
-            {price[0] != 0 ||
-            price[1] != 100 ||
-            isNew != "All" ||
-            deals != "All" ||
-            rating != "All" ||
-            brands.length ? (
-              <div className="meta-filter-shop" style={{}}>
-                <div id="product-count-grid" className="count-text">
-                  <span className="count">{sorted.length}</span> Products Found
-                </div>
-                <div id="product-count-list" className="count-text" />
-                <div id="applied-filters">
-                  {isNew == true && (
-                    <span
-                      className="filter-tag"
-                      onClick={() => allProps.setIsNew("All")}
-                    >
-                      New <span className="remove-tag icon-close" />
-                    </span>
-                  )}
-                  {isNew == false && (
-                    <span
-                      className="filter-tag"
-                      onClick={() => allProps.setIsNew("All")}
-                    >
-                      Old <span className="remove-tag icon-close" />
-                    </span>
-                  )}
-                  {brands.map((elm: string, i: number) => (
-                    <span
-                      key={i}
-                      className="filter-tag"
-                      onClick={() => allProps.removeBrand(elm)}
-                    >
-                      {elm}
-                      <span className="remove-tag icon-close" />
-                    </span>
-                  ))}
-                  {deals != "All" && (
-                    <span
-                      className="filter-tag"
-                      onClick={() => allProps.setDeals("All")}
-                    >
-                      {deals}
-                      <span className="remove-tag icon-close" />
-                    </span>
-                  )}
-                  {rating != "All" && (
-                    <span
-                      className="filter-tag"
-                      onClick={() => allProps.setRating("All")}
-                    >
-                      {rating} Rating
-                      <span className="remove-tag icon-close" />
-                    </span>
-                  )}
-                  {(price[0] != 0 || price[1] != 100) && (
-                    <span
-                      className="filter-tag"
-                      onClick={() => allProps.setPrice([0, 100])}
-                    >
-                      ${price[0]} to ${price[1]}
-                      <span
-                        className="remove-tag icon-close"
-                        data-filter="priceRadio"
-                      />
-                    </span>
-                  )}
-                </div>
-                <button
-                  id="remove-all"
-                  className="remove-all-filters"
-                  onClick={() => allProps.clearFilter()}
-                >
-                  <span className="caption">REMOVE ALL</span>
-                  <i className="icon icon-close" />
-                </button>
+            <div className="row">
+              {/* Desktop Filter Sidebar */}
+              <div className="col-xl-3 d-none d-xl-block">
+                <FilterSidebar
+                  currentFilters={filters}
+                  onFiltersChange={handleFilterChange}
+                />
               </div>
-            ) : (
-              ""
-            )}
 
-            <div className="gridLayout-wrapper">
-              <div
-                className="tf-grid-layout lg-col-4 md-col-3 sm-col-2 flat-grid-product wrapper-shop layout-tabgrid-1"
-                id="gridLayout"
-              >
-                {sorted.map((product: Product, i: number) => (
-                  <ProductCards3 key={i} product={product} />
-                ))}
-                {/* Navigation */}
-                <ul className="wg-pagination wd-load">
-                  <li>
-                    <a href="#" className="link">
-                      <i className="icon-arrow-left-lg" />
-                    </a>
-                  </li>
-                  <li className="active">
-                    <p className="title-normal link">1</p>
-                  </li>
-                  <li>
-                    <a href="#" className="title-normal link">
-                      2
-                    </a>
-                  </li>
-                  <li className="d-none d-sm-flex">
-                    <a href="#" className="title-normal link">
-                      3
-                    </a>
-                  </li>
-                  <li className="d-none d-sm-flex">
-                    <a href="#" className="title-normal link">
-                      4
-                    </a>
-                  </li>
-                  <li>
-                    <p className="title-normal">...</p>
-                  </li>
-                  <li>
-                    <a href="#" className="title-normal link">
-                      10
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="link">
-                      <i className="icon-arrow-right-lg" />
-                    </a>
-                  </li>
-                </ul>
+              {/* Product Grid */}
+              <div className="col-xl-9">
+                <div className="gridLayout-wrapper">
+                  {isLoading ? (
+                    <div className="text-center p-5">Loading products...</div>
+                  ) : (
+                    <>
+                      <div
+                        className="tf-grid-layout lg-col-3 md-col-2 sm-col-2 flat-grid-product wrapper-shop layout-tabgrid-1"
+                        id="gridLayout"
+                      >
+                        {products.length > 0 ? (
+                          products.map((product, i) => (
+                            // Cast to any if there are loose type mismatches with old component
+                            <ProductCards3
+                              key={product.id || i}
+                              product={product as any}
+                            />
+                          ))
+                        ) : (
+                          <div className="col-12 text-center p-5">
+                            No products found.
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Pagination */}
+                      {totalPages > 1 && (
+                        <ul className="wg-pagination wd-load">
+                          <li>
+                            <button
+                              onClick={() => handlePageChange(currentPage - 1)}
+                              disabled={currentPage === 1}
+                              className={`link ${currentPage === 1 ? "disabled" : ""}`}
+                            >
+                              <i className="icon-arrow-left-lg" />
+                            </button>
+                          </li>
+
+                          {Array.from(
+                            { length: totalPages },
+                            (_, i) => i + 1,
+                          ).map((page) => (
+                            <li
+                              key={page}
+                              className={currentPage === page ? "active" : ""}
+                            >
+                              <button
+                                onClick={() => handlePageChange(page)}
+                                className="title-normal link"
+                              >
+                                {page}
+                              </button>
+                            </li>
+                          ))}
+
+                          <li>
+                            <button
+                              onClick={() => handlePageChange(currentPage + 1)}
+                              disabled={currentPage === totalPages}
+                              className={`link ${currentPage === totalPages ? "disabled" : ""}`}
+                            >
+                              <i className="icon-arrow-right-lg" />
+                            </button>
+                          </li>
+                        </ul>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Sidebar Overlay/Scripts needing cleanup */}
+      <div
+        className="overlay-filter"
+        onClick={() =>
+          document.querySelector(".sidebar-filter")?.classList.remove("show")
+        }
+      ></div>
     </div>
   );
 }

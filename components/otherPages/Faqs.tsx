@@ -21,7 +21,7 @@ export default function Faqs() {
                   <input
                     type="text"
                     placeholder="Enter your question or keyword"
-                    required=""
+                    required
                   />
                 </fieldset>
                 <button type="submit" className="button-submit">

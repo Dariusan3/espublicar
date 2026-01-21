@@ -1,14 +1,100 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useContextElement } from "@/context/Context";
-export default function Checkout() {
-  const {
-    cartProducts,
+import { useRouter } from "next/navigation";
+import useCart from "@/hooks/useCart";
+import useOrders, { OrderItem, ShippingAddress } from "@/hooks/useOrders";
+import { toast } from "react-toastify";
 
-    totalPrice,
-  } = useContextElement();
+export default function Checkout() {
+  const router = useRouter();
+  const { cart, clearMyCart } = useCart();
+  const { createOrder } = useOrders();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Form state
+  const [contact, setContact] = useState("");
+  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
+    firstName: "",
+    lastName: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
+  });
+  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [orderNotes, setOrderNotes] = useState("");
+
+  const cartProducts = cart.items;
+  const totalPrice = cart.totalAmount;
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
+    const { name, value } = e.target;
+    setShippingAddress((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePlaceOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (cartProducts.length === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
+
+    // Validate required fields
+    if (
+      !contact ||
+      !shippingAddress.firstName ||
+      !shippingAddress.lastName ||
+      !shippingAddress.address ||
+      !shippingAddress.city ||
+      !shippingAddress.zipCode
+    ) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Prepare order items
+      const orderItems: OrderItem[] = cartProducts.map((item) => ({
+        productId: item.productId,
+        title: item.productTitle || "Product",
+        price: item.productPrice || 0,
+        quantity: item.quantity,
+        imgSrc: item.productImage,
+      }));
+
+      // Create order
+      const result = await createOrder(
+        orderItems,
+        totalPrice,
+        shippingAddress,
+        paymentMethod,
+        orderNotes,
+      );
+
+      if (result.success) {
+        // Clear cart after successful order
+        await clearMyCart();
+
+        // Redirect to order confirmation
+        router.push(`/order-details?orderId=${result.data.id}`);
+      }
+    } catch (error) {
+      console.error("Order error:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section className="tf-sp-2">
@@ -39,13 +125,14 @@ export default function Checkout() {
               <span className="icon">
                 <i className="icon-shop-cart-3" />
               </span>
-              <Link href={`/order-details`} className="link body-text-3">
-                Confirmation
-              </Link>
+              <span className="link body-text-3">Confirmation</span>
             </div>
           </div>
         </div>
-        <div className="tf-checkout-wrap flex-lg-nowrap">
+        <form
+          onSubmit={handlePlaceOrder}
+          className="tf-checkout-wrap flex-lg-nowrap"
+        >
           <div className="page-checkout">
             <div className="wrap">
               <h5 className="title has-account">
@@ -53,7 +140,7 @@ export default function Checkout() {
                 <span className="body-text-3">
                   Have an account?
                   <a
-                    href="#register"
+                    href="#login"
                     data-bs-toggle="modal"
                     className="body-text-3 text-secondary link"
                   >
@@ -61,73 +148,116 @@ export default function Checkout() {
                   </a>
                 </span>
               </h5>
-              <form action="#" className="form-checkout-contact">
+              <div className="form-checkout-contact">
                 <label className="body-md-2 fw-semibold">Email or Phone</label>
                 <input
                   className="def"
                   type="text"
                   placeholder="Your contact"
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
                   required
                 />
                 <p className="caption text-main-2 font-2">
                   Order information will be sent to your email
                 </p>
-              </form>
+              </div>
             </div>
             <div className="wrap">
               <h5 className="title fw-semibold">Delivery</h5>
-              <form action="#" className="def">
+              <div className="def">
                 <fieldset>
                   <label>Country/Region</label>
                   <div className="tf-select">
-                    <select>
-                      <option>Select your Country/Region</option>
-                      <option>American</option>
+                    <select
+                      name="country"
+                      value={shippingAddress.country}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select your Country/Region</option>
+                      <option value="US">United States</option>
+                      <option value="UK">United Kingdom</option>
+                      <option value="CA">Canada</option>
+                      <option value="AU">Australia</option>
+                      <option value="DE">Germany</option>
+                      <option value="FR">France</option>
                     </select>
                   </div>
                 </fieldset>
                 <div className="cols">
                   <fieldset>
-                    <label>First name</label>
-                    <input type="text" placeholder="e.g. Jonn" required />
+                    <label>First name *</label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      placeholder="e.g. John"
+                      value={shippingAddress.firstName}
+                      onChange={handleInputChange}
+                      required
+                    />
                   </fieldset>
                   <fieldset>
-                    <label>Last name</label>
-                    <input type="text" placeholder="e.g. Doe" required />
+                    <label>Last name *</label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      placeholder="e.g. Doe"
+                      value={shippingAddress.lastName}
+                      onChange={handleInputChange}
+                      required
+                    />
                   </fieldset>
                 </div>
                 <div className="cols">
                   <fieldset>
-                    <label>City</label>
+                    <label>City *</label>
                     <input
                       type="text"
+                      name="city"
                       placeholder="e.g. New York"
+                      value={shippingAddress.city}
+                      onChange={handleInputChange}
                       required
                     />
                   </fieldset>
                   <fieldset>
                     <label>State</label>
                     <div className="tf-select">
-                      <select>
-                        <option>Select</option>
-                        <option>Alabam</option>
-                        <option>Alaska</option>
-                        <option>California</option>
-                        <option>Georgia</option>
-                        <option>Washington</option>
+                      <select
+                        name="state"
+                        value={shippingAddress.state}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select</option>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="CA">California</option>
+                        <option value="GA">Georgia</option>
+                        <option value="NY">New York</option>
+                        <option value="WA">Washington</option>
                       </select>
                     </div>
                   </fieldset>
                   <fieldset>
-                    <label>ZIP code</label>
-                    <input type="text" placeholder="e.g. 83254" required />
+                    <label>ZIP code *</label>
+                    <input
+                      type="text"
+                      name="zipCode"
+                      placeholder="e.g. 83254"
+                      value={shippingAddress.zipCode}
+                      onChange={handleInputChange}
+                      required
+                    />
                   </fieldset>
                 </div>
                 <fieldset>
-                  <label>Address</label>
+                  <label>Address *</label>
                   <input
-                    type="email"
+                    type="text"
+                    name="address"
                     placeholder="Your detailed address"
+                    value={shippingAddress.address}
+                    onChange={handleInputChange}
                     required
                   />
                 </fieldset>
@@ -135,97 +265,95 @@ export default function Checkout() {
                   <label>Order note</label>
                   <textarea
                     placeholder="Note on your order"
-                    defaultValue={""}
+                    value={orderNotes}
+                    onChange={(e) => setOrderNotes(e.target.value)}
                   />
                 </fieldset>
-              </form>
+              </div>
             </div>
             <div className="wrap">
               <h5 className="title">Payment</h5>
-              <form action="#" className="form-payment">
+              <div className="form-payment">
                 <div className="payment-box" id="payment-box">
-                  <div className="payment-item payment-choose-card active">
+                  <div
+                    className={`payment-item ${paymentMethod === "card" ? "active" : ""}`}
+                  >
                     <label
                       htmlFor="credit-card-method"
                       className="payment-header"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#credit-card-payment"
-                      aria-controls="credit-card-payment"
-                      aria-expanded="true"
+                      onClick={() => setPaymentMethod("card")}
                     >
                       <span className="body-md-2 fw-semibold title">
-                        Select payment method
+                        Credit/Debit Card
                       </span>
                       <input
                         type="radio"
                         name="payment-method"
                         className="d-none tf-check-rounded"
                         id="credit-card-method"
-                        defaultChecked
+                        checked={paymentMethod === "card"}
+                        onChange={() => setPaymentMethod("card")}
                       />
-                      <p className="select-payment">Mastercard</p>
                     </label>
-                    <div
-                      id="credit-card-payment"
-                      className="collapse show"
-                      data-bs-parent="#payment-box"
-                    >
+                    {paymentMethod === "card" && (
                       <div className="payment-body">
                         <fieldset>
                           <label>Credit Card number</label>
                           <input
                             type="text"
                             className="number-credit-card"
-                            placeholder="xxxx   xxxx   xxxx   xxxx"
+                            placeholder="xxxx xxxx xxxx xxxx"
                           />
                         </fieldset>
                         <div className="cols">
                           <fieldset>
                             <label>Expiration date</label>
-                            <input type="date" />
+                            <input type="text" placeholder="MM/YY" />
                           </fieldset>
                           <fieldset>
                             <label>CVV</label>
-                            <input type="number" placeholder="xxx" />
+                            <input type="text" placeholder="xxx" />
                           </fieldset>
                         </div>
                         <fieldset>
                           <label>Name on card</label>
-                          <input type="text" placeholder="e.g. JOHNDOE" />
+                          <input type="text" placeholder="e.g. JOHN DOE" />
                         </fieldset>
                       </div>
-                    </div>
+                    )}
                   </div>
-                  <div className="payment-item">
+                  <div
+                    className={`payment-item ${paymentMethod === "cash" ? "active" : ""}`}
+                  >
                     <label
                       htmlFor="delivery-method"
-                      className="payment-header radio-item collapsed"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#delivery-payment"
-                      aria-controls="delivery-payment"
-                      aria-expanded="false"
+                      className="payment-header radio-item"
+                      onClick={() => setPaymentMethod("cash")}
                     >
                       <input
                         type="radio"
                         name="payment-method"
                         className="tf-check-rounded"
                         id="delivery-method"
+                        checked={paymentMethod === "cash"}
+                        onChange={() => setPaymentMethod("cash")}
                       />
                       <span className="body-text-3">Cash on delivery</span>
                     </label>
-                    <div
-                      id="delivery-payment"
-                      className="collapse"
-                      data-bs-parent="#payment-box"
-                    />
                   </div>
                 </div>
                 <div className="box-btn">
-                  <Link href={`/order-details`} className="tf-btn w-100">
-                    <span className="text-white">Place order</span>
-                  </Link>
+                  <button
+                    type="submit"
+                    className="tf-btn w-100"
+                    disabled={isSubmitting || cartProducts.length === 0}
+                  >
+                    <span className="text-white">
+                      {isSubmitting ? "Placing Order..." : "Place Order"}
+                    </span>
+                  </button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
           <div className="flat-sidebar-checkout">
@@ -233,12 +361,12 @@ export default function Checkout() {
               <h5 className="fw-semibold">Order Summary</h5>
               {cartProducts.length ? (
                 <ul className="list-product">
-                  {cartProducts.map((product, i) => (
+                  {cartProducts.map((item, i) => (
                     <li key={i} className="item-product">
                       <a href="#" className="img-product">
                         <Image
                           alt=""
-                          src={product.imgSrc}
+                          src={item.productImage || "/images/placeholder.jpg"}
                           width={500}
                           height={500}
                         />
@@ -248,15 +376,14 @@ export default function Checkout() {
                           href="#"
                           className="link-secondary body-md-2 fw-semibold"
                         >
-                          {product.title}
+                          {item.productTitle || "Product"}
                         </a>
                         <p className="price-quantity price-text fw-semibold">
-                          ${product.price.toFixed(2)}
+                          ${(item.productPrice || 0).toFixed(2)}
                           <span className="body-md-2 text-main-2 fw-normal">
-                            X{product.quantity}
+                            X{item.quantity}
                           </span>
                         </p>
-                        <p className="body-md-2 text-main-2">Gray</p>
                       </div>
                     </li>
                   ))}
@@ -264,7 +391,7 @@ export default function Checkout() {
               ) : (
                 <div className="p-4">
                   <div className="col-4">
-                    Your Cart is empty. Start adding favorite products to cart!{" "}
+                    Your Cart is empty. Start adding favorite products to cart!
                   </div>
                   <Link
                     className="tf-btn mt-2 mb-3 text-white"
@@ -277,17 +404,12 @@ export default function Checkout() {
               )}
               <div className="">
                 <p className="body-md-2 fw-semibold sub-type">Discount code</p>
-                <form action="#" className="ip-discount-code style-2">
-                  <input
-                    type="text"
-                    className="def"
-                    placeholder="Your code"
-                    required
-                  />
-                  <button type="submit" className="tf-btn btn-gray-2">
+                <div className="ip-discount-code style-2">
+                  <input type="text" className="def" placeholder="Your code" />
+                  <button type="button" className="tf-btn btn-gray-2">
                     <span>Apply</span>
                   </button>
-                </form>
+                </div>
               </div>
               <ul className="sec-total-price">
                 <li>
@@ -307,7 +429,7 @@ export default function Checkout() {
               </ul>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   );

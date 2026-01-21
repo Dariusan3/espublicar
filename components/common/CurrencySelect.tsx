@@ -29,13 +29,13 @@ const optionsData = [
 export default function CurrencySelect({ topStart = false, light = false }) {
   const [selected, setSelected] = useState(optionsData[0]);
   const [isDDOpen, setIsDDOpen] = useState(false);
-  const languageSelect = useRef();
+  const languageSelect = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         languageSelect.current &&
-        !languageSelect.current.contains(event.target)
+        !languageSelect.current.contains(event.target as Node)
       ) {
         setIsDDOpen(false); // Close the dropdown if click is outside
       }

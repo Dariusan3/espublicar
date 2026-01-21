@@ -6,8 +6,9 @@ import React from "react";
 import AddToCart from "../common/AddToCart";
 import AddToWishlist from "../common/AddToWishlist";
 import AddToQuickview from "../common/AddToQuickview";
+import { Product, ProductDB } from "@/types/Types";
 
-export default function ProductCards3({ product }) {
+export default function ProductCards3({ product }: { product: Product }) {
   const {
     addToWishlist,
     isAddedtoWishlist,
@@ -21,7 +22,7 @@ export default function ProductCards3({ product }) {
   return (
     <div className="card-product">
       <div className="card-product-wrapper">
-        <Link href={`/product-detail/${product.id}`} className="product-img">
+        <Link href={`/product/${product.id}`} className="product-img">
           <Image
             className="img-product ls-is-cached lazyloaded"
             src={product.imgSrc}
@@ -32,7 +33,7 @@ export default function ProductCards3({ product }) {
           />
           <Image
             className="img-hover ls-is-cached lazyloaded"
-            src={product.imgHover}
+            src={product.imgHover || product.imgSrc}
             data-=""
             alt="image-product"
             width={500}
@@ -65,7 +66,7 @@ export default function ProductCards3({ product }) {
           <div>
             <p className="product-tag caption text-main-2 d-none">Headphone</p>
             <Link
-              href={`/product-detail/${product.id}`}
+              href={`/product/${product.id}`}
               className="name-product body-md-2 fw-semibold text-secondary link"
             >
               {product.title}

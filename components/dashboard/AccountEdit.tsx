@@ -53,17 +53,13 @@ export default function AccountEdit() {
         <h4 className="fw-semibold mb-20">Change Password</h4>
         <form action="#" className="def form-reset-password">
           <fieldset>
-            <input type="password" placeholder="Password*" required="" />
+            <input type="password" placeholder="Password*" required />
           </fieldset>
           <fieldset>
-            <input type="password" placeholder="New Password*" required="" />
+            <input type="password" placeholder="New Password*" required />
           </fieldset>
           <fieldset>
-            <input
-              type="password"
-              placeholder="Confirm Password*"
-              required=""
-            />
+            <input type="password" placeholder="Confirm Password*" required />
           </fieldset>
           <div className="box-btn">
             <button type="submit" className="tf-btn btn-large">

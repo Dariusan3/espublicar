@@ -5,7 +5,9 @@ import { useEffect } from "react";
 export default function ScrollTop() {
   useEffect(() => {
     const goTop = document.getElementById("goTop");
-    const borderProgress = document.querySelector(".border-progress");
+    const borderProgress = document.querySelector(
+      ".border-progress",
+    ) as HTMLElement | null;
 
     const handleScroll = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -17,7 +19,7 @@ export default function ScrollTop() {
       if (borderProgress) {
         borderProgress.style.setProperty(
           "--progress-angle",
-          `${progressAngle}deg`
+          `${progressAngle}deg`,
         );
       }
 
