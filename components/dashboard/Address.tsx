@@ -31,7 +31,7 @@ export default function Address() {
       isDefault: false,
     },
   ]);
-  const [editingAddressId, setEditingAddressId] = useState(null);
+  const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
 
   const [newAddress, setNewAddress] = useState({
     firstName: "",
@@ -76,7 +76,10 @@ export default function Address() {
     });
   };
 
-  const handleInputChange = (e, formType = "new") => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    formType = "new",
+  ) => {
     const { id, value, type, checked } = e.target;
     const newValue = type === "checkbox" ? checked : value;
 
@@ -87,7 +90,7 @@ export default function Address() {
     }
   };
 
-  const handleAddAddressSubmit = (e) => {
+  const handleAddAddressSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Basic validation
@@ -118,7 +121,7 @@ export default function Address() {
     handleHideAddAddressForm();
   };
 
-  const handleEditAddress = (id) => {
+  const handleEditAddress = (id: number) => {
     setEditingAddressId(id);
     const addressToEdit = addresses.find((address) => address.id === id);
     if (addressToEdit) {
@@ -136,7 +139,7 @@ export default function Address() {
     }
   };
 
-  const handleUpdateAddressSubmit = (e) => {
+  const handleUpdateAddressSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Basic validation
@@ -157,8 +160,8 @@ export default function Address() {
       prev.map((address) =>
         address.id === editingAddressId
           ? { ...address, ...editAddressData, title: editAddressData.address1 }
-          : address
-      )
+          : address,
+      ),
     );
     setEditingAddressId(null);
   };
@@ -167,9 +170,9 @@ export default function Address() {
     setEditingAddressId(null);
   };
 
-  const handleDeleteAddress = (id) => {
+  const handleDeleteAddress = (id: number) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this address?"
+      "Are you sure you want to delete this address?",
     );
     if (confirmDelete) {
       setAddresses((prev) => prev.filter((address) => address.id !== id));

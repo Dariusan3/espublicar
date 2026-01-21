@@ -35,35 +35,13 @@ export default function Header1() {
             </div>
             <div className="col-xl-3 col-md-2 col-5 d-flex align-items-center justify-content-end">
               <div className="header-right">
-                <div className="support-wrap d-none d-xl-flex">
-                  <Image
-                    alt=""
-                    className="flex-shrink-0"
-                    style={{ height: 44, width: 44 }}
-                    src="/icons/headphone-2.svg"
-                    width={44}
-                    height={44}
-                  />
-                  <div className="content">
-                    <p className="call-us body-text-3">
-                      Call us now:{" "}
-                      <a
-                        href="tel:1234567"
-                        className="text-primary link-main body-md-2"
-                      >
-                        +1(800) 123 4567
-                      </a>
-                    </p>
-                    <p className="mail-us body-text-3">
-                      Email:{" "}
-                      <a
-                        href="mailto:Onsus@support.com"
-                        className="text-secondary link-main"
-                      >
-                        Onsus@support.com
-                      </a>
-                    </p>
-                  </div>
+                <div className="d-none d-xl-block me-3">
+                  <Link
+                    href="/dashboard/my-account-add-product"
+                    className="tf-btn btn-primary animate-hover-btn fw-bold"
+                  >
+                    <span>Publicar</span>
+                  </Link>
                 </div>
                 <ul className="nav-icon justify-content-xl-center d-xl-none">
                   <li className="nav-account">

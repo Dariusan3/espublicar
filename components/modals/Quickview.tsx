@@ -6,6 +6,8 @@ import { useContextElement } from "@/context/Context";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
+import type { Swiper as SwiperType } from "swiper";
+
 export default function Quickview() {
   const [quickviewImages, setQuickviewImages] = useState([
     "/images/product/product-thumb/quickview-1.jpg",
@@ -14,7 +16,7 @@ export default function Quickview() {
     "/images/product/product-thumb/quickview-4.jpg",
     "/images/product/product-thumb/quickview-5.jpg",
   ]);
-  const [thumbSwiper, setThumbSwiper] = useState(null);
+  const [thumbSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const [quantity, setQuantity] = useState(1); // Initial quantity is 1
   const { quickViewItem, addProductToCart, isAddedToCartProducts } =
     useContextElement();

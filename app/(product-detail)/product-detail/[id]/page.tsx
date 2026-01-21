@@ -49,7 +49,7 @@ export default async function ProductDetailPage({ params }: { params: any }) {
         </div>
       </div>
       <Details1 product={product} />
-      <Description />
+      <Description productId={product.id.toString()} />
       <SimilerProducts />
       <Relatedproducts />
       <BrandsSlider />

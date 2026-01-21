@@ -30,7 +30,7 @@ export interface ProductDB {
   title: string;
   price: number;
   oldprice?: number;
-  category: string;
+  category?: string;
   imgSrc: string;
   imgHover?: string;
   thumbImages?: string[];
@@ -47,9 +47,9 @@ export interface ProductDB {
 }
 
 export interface Product extends ProductDB {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
+  id: string | number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 /**
@@ -158,6 +158,27 @@ export interface CartDB {
 }
 
 export interface Cart extends CartDB {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Review/Testimonial extension for specific products
+ * Collection ID: reviews
+ */
+export interface ReviewDB {
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  productId: string;
+  rating: number;
+  title?: string;
+  content: string;
+  verified?: boolean;
+}
+
+export interface Review extends ReviewDB {
   id: string;
   createdAt: string;
   updatedAt: string;

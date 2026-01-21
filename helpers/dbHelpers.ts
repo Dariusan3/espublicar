@@ -8,6 +8,7 @@ import {
   Order,
   Wishlist,
   Cart,
+  Review,
   OrderItem,
 } from "@/types/Types";
 
@@ -149,6 +150,23 @@ export const toCart = (doc: DocumentData): Cart => ({
 });
 
 /**
+ * Convert Appwrite Document to Review type
+ */
+export const toReview = (doc: DocumentData): Review => ({
+  id: doc.$id,
+  createdAt: doc.$createdAt,
+  updatedAt: doc.$updatedAt,
+  userId: doc.userId,
+  userName: doc.userName,
+  userAvatar: doc.userAvatar,
+  productId: doc.productId,
+  rating: doc.rating,
+  title: doc.title,
+  content: doc.content,
+  verified: doc.verified ?? false,
+});
+
+/**
  * Parse order items JSON string to OrderItem array
  */
 export const parseOrderItems = (itemsJson: string): OrderItem[] => {
@@ -195,3 +213,5 @@ export const toWishlistItems = (docs: DocumentData[]): Wishlist[] =>
   docs.map(toWishlistItem);
 
 export const toCarts = (docs: DocumentData[]): Cart[] => docs.map(toCart);
+
+export const toReviews = (docs: DocumentData[]): Review[] => docs.map(toReview);

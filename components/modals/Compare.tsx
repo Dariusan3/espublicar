@@ -4,13 +4,16 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useContextElement } from "@/context/Context";
 import { allProducts } from "@/data/products";
+import { Product } from "@/types/Types";
 export default function Compare() {
   const { removeFromCompareItem, compareItem, setCompareItem } =
     useContextElement();
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<Product[]>([]);
   useEffect(() => {
     setItems([
-      ...allProducts.filter((product) => compareItem.includes(product.id)),
+      ...allProducts.filter((product: Product) =>
+        compareItem.includes(product.id),
+      ),
     ]);
   }, [compareItem]);
 

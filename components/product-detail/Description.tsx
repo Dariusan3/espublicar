@@ -1,6 +1,49 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-export default function Description() {
+import useReviews from "@/hooks/useReviews";
+import { toast } from "react-toastify";
+import Link from "next/link";
+
+export default function Description({ productId }: { productId?: string }) {
+  const { reviews, stats, isLoading, getProductReviews, addReview } =
+    useReviews();
+  const [reviewForm, setReviewForm] = useState({
+    rating: 5,
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  useEffect(() => {
+    if (productId) {
+      getProductReviews(productId);
+    }
+  }, [productId, getProductReviews]);
+
+  const handleRatingChange = (rating: number) => {
+    setReviewForm((prev) => ({ ...prev, rating }));
+  };
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!productId) {
+      toast.error("Product not found");
+      return;
+    }
+
+    // Basic validation
+    if (!reviewForm.message.trim()) {
+      toast.error("Please provide a review content");
+      return;
+    }
+
+    // Call addReview
+    await addReview(productId, reviewForm.rating, reviewForm.message);
+
+    // Reset form on success (the hook handles success toast)
+    setReviewForm((prev) => ({ ...prev, message: "" }));
+  };
   return (
     <section className="tf-sp-4">
       <div className="container">
@@ -254,209 +297,96 @@ export default function Description() {
                 <div className="tab-rating-wrap">
                   <div className="rating-percent">
                     <p className="rate-percent">
-                      4.8 <span>/ 5</span>
+                      {stats ? stats.averageRating.toFixed(1) : "0.0"}{" "}
+                      <span>/ 5</span>
                     </p>
                     <ul className="list-star justify-content-center">
-                      <li>
-                        <i className="icon-star" />
-                      </li>
-                      <li>
-                        <i className="icon-star" />
-                      </li>
-                      <li>
-                        <i className="icon-star" />
-                      </li>
-                      <li>
-                        <i className="icon-star" />
-                      </li>
-                      <li>
-                        <i className="icon-star text-main-4" />
-                      </li>
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <li key={s}>
+                          <i
+                            className={`icon-star ${s <= Math.round(stats?.averageRating || 0) ? "" : "text-third"}`}
+                          />
+                        </li>
+                      ))}
                     </ul>
-                    <p className="text-cl-3">Based on 1.738 reviews</p>
+                    <p className="text-cl-3">
+                      Based on {stats?.totalReviews || 0} reviews
+                    </p>
                   </div>
                   <ul className="rating-progress-list">
-                    <li>
-                      <p className="start-number body-text-3">
-                        5<i className="icon-star text-third" />
-                      </p>
-                      <div className="rating-progress">
-                        <div
-                          className="progress style-2"
-                          role="progressbar"
-                          aria-label="Basic example"
-                          aria-valuenow={0}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                        >
+                    {[5, 4, 3, 2, 1].map((rating) => (
+                      <li key={rating}>
+                        <p className="start-number body-text-3">
+                          {rating}
+                          <i className="icon-star text-third" />
+                        </p>
+                        <div className="rating-progress">
                           <div
-                            className="progress-bar"
-                            style={{ width: "100%" }}
-                          />
+                            className="progress style-2"
+                            role="progressbar"
+                            aria-valuenow={
+                              stats?.ratingDistribution[rating] || 0
+                            }
+                            aria-valuemin={0}
+                            aria-valuemax={stats?.totalReviews || 1}
+                          >
+                            <div
+                              className="progress-bar"
+                              style={{
+                                width: `${stats?.totalReviews ? ((stats.ratingDistribution[rating] || 0) / stats.totalReviews) * 100 : 0}%`,
+                              }}
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <p className="count-review body-text-3">100</p>
-                    </li>
-                    <li>
-                      <p className="start-number body-text-3">
-                        4<i className="icon-star text-third" />
-                      </p>
-                      <div className="rating-progress">
-                        <div
-                          className="progress style-2"
-                          role="progressbar"
-                          aria-label="Basic example"
-                          aria-valuenow={0}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                        >
-                          <div
-                            className="progress-bar"
-                            style={{ width: "80%" }}
-                          />
-                        </div>
-                      </div>
-                      <p className="count-review body-text-3">87</p>
-                    </li>
-                    <li>
-                      <p className="start-number body-text-3">
-                        3<i className="icon-star text-third" />
-                      </p>
-                      <div className="rating-progress">
-                        <div
-                          className="progress style-2"
-                          role="progressbar"
-                          aria-label="Basic example"
-                          aria-valuenow={0}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                        >
-                          <div
-                            className="progress-bar"
-                            style={{ width: "60%" }}
-                          />
-                        </div>
-                      </div>
-                      <p className="count-review body-text-3">32</p>
-                    </li>
-                    <li>
-                      <p className="start-number body-text-3">
-                        2<i className="icon-star text-third" />
-                      </p>
-                      <div className="rating-progress">
-                        <div
-                          className="progress style-2"
-                          role="progressbar"
-                          aria-label="Basic example"
-                          aria-valuenow={0}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                        >
-                          <div
-                            className="progress-bar"
-                            style={{ width: "40%" }}
-                          />
-                        </div>
-                      </div>
-                      <p className="count-review body-text-3">24</p>
-                    </li>
-                    <li>
-                      <p className="start-number body-text-3">
-                        1<i className="icon-star text-third" />
-                      </p>
-                      <div className="rating-progress">
-                        <div
-                          className="progress style-2"
-                          role="progressbar"
-                          aria-label="Basic example"
-                          aria-valuenow={0}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                        >
-                          <div
-                            className="progress-bar"
-                            style={{ width: "0%" }}
-                          />
-                        </div>
-                      </div>
-                      <p className="count-review body-text-3">0</p>
-                    </li>
+                        <p className="count-review body-text-3">
+                          {stats?.ratingDistribution[rating] || 0}
+                        </p>
+                      </li>
+                    ))}
                   </ul>
-                  <div className="rating-filter-wrap">
-                    <p className="title-sidebar fw-bold">Filter by</p>
-                    <ul className="rating-filter-list">
-                      <li>
-                        <a href="#" className="active">
-                          All
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">5 sao (8)</a>
-                      </li>
-                      <li>
-                        <a href="#">4 sao (12)</a>
-                      </li>
-                      <li>
-                        <a href="#">3 sao (23)</a>
-                      </li>
-                      <li>
-                        <a href="#">2 sao (10)</a>
-                      </li>
-                      <li>
-                        <a href="#">1 sao (0)</a>
-                      </li>
-                    </ul>
-                  </div>
                   <div className="add-comment-wrap">
-                    <h5 className="fw-semibold">Add your comment</h5>
+                    <h5 className="fw-semibold">Add your review</h5>
                     <div>
-                      <form action="#" className="form-add-comment">
+                      <form
+                        onSubmit={handleSubmitReview}
+                        className="form-add-comment"
+                      >
                         <fieldset className="rate">
                           <label>Rating:</label>
                           <ul className="list-star justify-content-start">
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star text-main-4" />
-                            </li>
+                            {[1, 2, 3, 4, 5].map((currRating) => (
+                              <li
+                                key={currRating}
+                                onClick={() => handleRatingChange(currRating)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <i
+                                  className={`icon-star ${currRating <= reviewForm.rating ? "" : "text-third"}`}
+                                />
+                              </li>
+                            ))}
                           </ul>
                         </fieldset>
-                        <fieldset>
-                          <label>Name:</label>
-                          <input
-                            type="text"
-                            placeholder="Your name"
-                            required
-                          />
-                        </fieldset>
-                        <fieldset>
-                          <label>Email:</label>
-                          <input
-                            type="text"
-                            placeholder="Your email"
-                            required
-                          />
-                        </fieldset>
                         <fieldset className="align-items-sm-start">
-                          <label>Comment:</label>
-                          <textarea placeholder="Message" defaultValue={""} />
+                          <label>Review:</label>
+                          <textarea
+                            placeholder="Write your review here"
+                            required
+                            value={reviewForm.message}
+                            onChange={(e) =>
+                              setReviewForm((prev) => ({
+                                ...prev,
+                                message: e.target.value,
+                              }))
+                            }
+                          />
                         </fieldset>
                         <div className="btn-submit">
                           <button
                             type="submit"
                             className="tf-btn btn-gray btn-large-2"
                           >
-                            <span className="text-white">Add Review</span>
+                            <span className="text-white">Submit Review</span>
                           </button>
                         </div>
                       </form>
@@ -464,173 +394,59 @@ export default function Description() {
                   </div>
                 </div>
                 <div className="tab-review-wrap">
-                  <ul className="review-list">
-                    <li className="box-review">
-                      <div className="avt">
-                        <Image
-                          alt=""
-                          src="/images/avatar/review-1.jpg"
-                          width={100}
-                          height={100}
-                        />
-                      </div>
-                      <div className="review-content">
-                        <div className="author-wrap">
-                          <h6 className="name fw-semibold">
-                            <a href="#" className="link">
-                              Cameron Williamson
-                            </a>
-                          </h6>
-                          <ul className="verified">
-                            <li className="body-small">Color: Black</li>
-                            <li className="body-small fw-semibold text-main-2">
-                              Verified Purchase
-                            </li>
-                          </ul>
-                          <ul className="list-star">
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star text-main-4" />
-                            </li>
-                          </ul>
-                        </div>
-                        <p className="text-review">
-                          Bought this nice little electric hot water kettle for
-                          an overnight date. She enjoyed tea and the hotel did
-                          not offer tea in the room. Problem solved! This kettle
-                          did its job, through the evening and into the morning
-                          we enjoyed many cups of nice, loose leaf tea. Too bad
-                          she ended up not liking me and eventually ghosted me.
-                          But, the tea was great thanks to this electric kettle.
-                          Highly recommend!
-                        </p>
-                        <p className="date-review body-small">
-                          14/12/2020 lúc 17:20
-                        </p>
-                      </div>
-                    </li>
-                    <li className="box-review">
-                      <div className="avt">
-                        <Image
-                          alt=""
-                          src="/images/avatar/review-5.jpg"
-                          width={100}
-                          height={100}
-                        />
-                      </div>
-                      <div className="review-content">
-                        <div className="author-wrap">
-                          <h6 className="name fw-semibold">
-                            <a href="#" className="link">
-                              Cameron Williamson
-                            </a>
-                          </h6>
-                          <ul className="verified">
-                            <li className="body-small">Color: Black</li>
-                            <li className="body-small fw-semibold text-main-2">
-                              Verified Purchase
-                            </li>
-                          </ul>
-                          <ul className="list-star">
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star text-main-4" />
-                            </li>
-                          </ul>
-                        </div>
-                        <p className="text-review">
-                          Nullam ornare a magna quis aliquet. Duis suscipit eros
-                          in suscipit venenatis. Pellentesque quis efficitur
-                          leo. Maecenas accumsan est in nibh interdum, quis
-                          dignissim neque scelerisque. Ut suscipit et leo sit
-                          amet lacinia. Sed a laoreet leo, ut tristique risus.
-                          Integer a est ut est semper fermentum nec quis nunc.
-                          Phasellus aliquam neque eget quam gravida, quis
-                          venenatis turpis tristique. Mauris id congue augue.
-                          Pellentesque hendrerit porttitor purus, vel porttitor
-                          sem blandit vel.
-                        </p>
-                        <p className="date-review body-small">
-                          14/12/2020 lúc 17:20
-                        </p>
-                      </div>
-                    </li>
-                    <li className="box-review">
-                      <div className="avt">
-                        <Image
-                          alt=""
-                          src="/images/avatar/review-6.jpg"
-                          width={100}
-                          height={100}
-                        />
-                      </div>
-                      <div className="review-content">
-                        <div className="author-wrap">
-                          <h6 className="name fw-semibold">
-                            <a href="#" className="link">
-                              Cameron Williamson
-                            </a>
-                          </h6>
-                          <ul className="verified">
-                            <li className="body-small">Color: Black</li>
-                            <li className="body-small fw-semibold text-main-2">
-                              Verified Purchase
-                            </li>
-                          </ul>
-                          <ul className="list-star">
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star text-main-4" />
-                            </li>
-                          </ul>
-                        </div>
-                        <p className="text-review">
-                          Suspendisse efficitur velit quis sodales facilisis.
-                          Aenean id enim nec purus interdum semper. In hac
-                          habitasse platea dictumst. Nulla posuere ac ligula sit
-                          amet posuere. Curabitur ultricies non dui ut blandit.
-                          In quis nulla nec tellus rutrum porttitor. Sed
-                          pharetra magna diam, et lacinia tortor congue ut.
-                        </p>
-                        <p className="date-review body-small">
-                          14/12/2020 lúc 17:20
-                        </p>
-                      </div>
-                    </li>
-                  </ul>
+                  {isLoading ? (
+                    <div className="text-center p-5">Loading reviews...</div>
+                  ) : reviews.length > 0 ? (
+                    <ul className="review-list">
+                      {reviews.map((review) => (
+                        <li key={review.id} className="box-review">
+                          <div className="avt">
+                            <Image
+                              alt="User Avatar"
+                              src={"/images/avatar/user.jpg"}
+                              width={100}
+                              height={100}
+                              className="rounded-circle"
+                              style={{ objectFit: "cover" }}
+                            />
+                          </div>
+                          <div className="review-content">
+                            <div className="author-wrap">
+                              <h6 className="name fw-semibold">
+                                <a href="#" className="link">
+                                  {review.userName || "User"}
+                                </a>
+                              </h6>
+                              {review.verified && (
+                                <ul className="verified">
+                                  <li className="body-small fw-semibold text-main-2">
+                                    Verified Purchase
+                                  </li>
+                                </ul>
+                              )}
+                              <ul className="list-star">
+                                {[1, 2, 3, 4, 5].map((s) => (
+                                  <li key={s}>
+                                    <i
+                                      className={`icon-star ${s <= review.rating ? "" : "text-third"}`}
+                                    />
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <p className="text-review">{review.content}</p>
+                            <p className="date-review body-small">
+                              {new Date(review.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="text-center py-5">
+                      <p>No reviews yet. Be the first to review!</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

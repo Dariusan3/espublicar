@@ -3,29 +3,13 @@ import { useCallback, useState } from "react";
 import { db, DB_ID, COLLECTIONS, Query, ID, account } from "@/lib/appwrite";
 import { toast } from "react-toastify";
 
-export interface Review {
-  id: string;
-  productId: string;
-  userId: string;
-  userName: string;
-  rating: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt?: string;
-  verified?: boolean;
-}
+import { HookResponse, Review } from "@/types/Types";
+export type { Review };
 
 export interface ReviewStats {
   averageRating: number;
   totalReviews: number;
   ratingDistribution: { [key: number]: number };
-}
-
-interface HookResponse {
-  success: boolean;
-  message: string;
-  data: any;
 }
 
 /**
