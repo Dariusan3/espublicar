@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useState } from "react";
-import { db, DB_ID, COLLECTIONS, Query } from "@/lib/appwrite";
+import { db, DB_ID, COLLECTIONS, Query, ID } from "@/lib/appwrite";
 import { HookResponse, Product } from "@/types/Types";
 import { toProduct } from "@/helpers/dbHelpers";
 
@@ -209,6 +209,101 @@ const useProducts = () => {
     }
   }, []);
 
+  /**
+   * Get products by User ID (My Listings)
+   */
+  const getMyProducts = useCallback(
+    async (userId: string): Promise<HookResponse> => {
+      setIsLoading(true);
+      try {
+        const response = await db.listDocuments({
+          databaseId: DB_ID,
+          collectionId: COLLECTIONS.PRODUCTS,
+          queries: [
+            Query.equal("userId", userId),
+            Query.orderDesc("$createdAt"),
+          ],
+        });
+
+        const productList = response.documents.map(toProduct);
+        setProducts(productList);
+        setTotalCount(response.total);
+
+        return {
+          success: true,
+          message: "User listings fetched successfully",
+          data: productList,
+        };
+      } catch (error: any) {
+        console.error("Error fetching user products:", error);
+        return {
+          success: false,
+          message: error.message,
+          data: null,
+        };
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [],
+  );
+
+  /**
+   * Add a new product listing
+   */
+  const addProduct = useCallback(
+    async (productData: any): Promise<HookResponse> => {
+      try {
+        const result = await db.createDocument(
+          DB_ID,
+          COLLECTIONS.PRODUCTS,
+          ID.unique(),
+          productData,
+        );
+        const newProduct = toProduct(result);
+        setProducts((prev) => [newProduct, ...prev]);
+        return {
+          success: true,
+          message: "Product listed successfully",
+          data: newProduct,
+        };
+      } catch (error: any) {
+        console.error("Error creating product:", error);
+        return {
+          success: false,
+          message: error.message,
+          data: null,
+        };
+      }
+    },
+    [],
+  );
+
+  /**
+   * Delete a product listing
+   */
+  const deleteProduct = useCallback(
+    async (productId: string): Promise<HookResponse> => {
+      try {
+        await db.deleteDocument(DB_ID, COLLECTIONS.PRODUCTS, productId);
+        setProducts((prev) => prev.filter((p) => p.id !== productId));
+        return {
+          success: true,
+          message: "Product deleted successfully",
+          data: null,
+        };
+      } catch (error: any) {
+        console.error("Error deleting product:", error);
+        return {
+          success: false,
+          message: error.message,
+          data: null,
+        };
+      }
+    },
+    [],
+  );
+
   return {
     // State
     products,
@@ -220,6 +315,9 @@ const useProducts = () => {
     getProductById,
     getCategories,
     getBrands,
+    getMyProducts,
+    addProduct,
+    deleteProduct,
   };
 };
 

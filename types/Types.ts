@@ -44,6 +44,7 @@ export interface ProductDB {
   filterBrands?: string[];
   sold?: number;
   available?: number;
+  userId: string; // Owner of the product
 }
 
 export interface Product extends ProductDB {

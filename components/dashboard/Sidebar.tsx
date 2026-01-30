@@ -2,35 +2,36 @@
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import { usePathname } from "next/navigation";
 
 export default function Sidebar() {
   const { logout } = useAuth();
+  const pathname = usePathname();
+
+  const menuItems = [
+    { name: "Dashboard", href: "/my-account" },
+    { name: "My Listings", href: "/my-account-listings" }, // New C2C feature
+    { name: "Sell Item", href: "/add-product" }, // New C2C feature
+    { name: "Orders", href: "/my-account-orders" },
+    { name: "Address", href: "/my-account-address" },
+    { name: "Account Details", href: "/my-account-edit" },
+    { name: "Wishlist", href: "/wishlist" },
+  ];
+
   return (
-    <>
-      {" "}
-      <li>
-        <span className="my-account-nav-item active">Dashboard</span>
-      </li>
-      <li>
-        <Link href={`/my-account-orders`} className="my-account-nav-item">
-          Orders
-        </Link>
-      </li>
-      <li>
-        <Link href={`/my-account-address`} className="my-account-nav-item">
-          Address
-        </Link>
-      </li>
-      <li>
-        <Link href={`/my-account-edit`} className="my-account-nav-item">
-          Account Details
-        </Link>
-      </li>
-      <li>
-        <Link href={`/wishlist`} className="my-account-nav-item">
-          Wishlist
-        </Link>
-      </li>
+    <ul className="my-account-nav">
+      {menuItems.map((item) => (
+        <li key={item.name}>
+          <Link
+            href={item.href}
+            className={`my-account-nav-item ${
+              pathname === item.href ? "active" : ""
+            }`}
+          >
+            {item.name}
+          </Link>
+        </li>
+      ))}
       <li>
         <button
           onClick={async (e) => {
@@ -49,6 +50,6 @@ export default function Sidebar() {
           Logout
         </button>
       </li>
-    </>
+    </ul>
   );
 }

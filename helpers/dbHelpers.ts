@@ -43,6 +43,7 @@ export const toProduct = (doc: DocumentData): Product => ({
   filterBrands: Array.isArray(doc.filterBrands) ? doc.filterBrands : [],
   sold: doc.sold ?? 0,
   available: doc.available ?? 0,
+  userId: doc.userId,
 });
 
 /**

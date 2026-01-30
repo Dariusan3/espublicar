@@ -28,6 +28,7 @@ Current attribute schemas and configuration for your e-commerce app.
 | `filterBrands`   | String[] | -    | ❌       | -       | Brands for filtering  |
 | `sold`           | Integer  | -    | ❌       | 0       | Items sold count      |
 | `available`      | Integer  | -    | ❌       | 0       | Stock available       |
+| `userId`         | String   | 36   | ✅       | -       | Owner User ID         |
 
 ---
 
