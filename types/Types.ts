@@ -45,6 +45,9 @@ export interface ProductDB {
   sold?: number;
   available?: number;
   userId: string; // Owner of the product
+  condition?: string; // New, Like New, etc.
+  location?: string; // City/Town
+  isNegotiable?: boolean; // If price can be negotiated
 }
 
 export interface Product extends ProductDB {

@@ -35,9 +35,7 @@ export default function page() {
           <div className="row">
             <div className="col-lg-3 d-none d-lg-block">
               <div className="wrap-sidebar-account">
-                <ul className="my-account-nav content-append">
-                  <Sidebar />
-                </ul>
+                <Sidebar />
               </div>
             </div>
             <div className="col-lg-9">

@@ -12,13 +12,16 @@ import { useState } from "react";
 import CountdownTimer from "../common/Countdown";
 
 interface Product {
-  id: number;
+  id: string | number;
   images: string[];
   title: string;
   discount?: number;
   price: number;
   oldprice?: number;
   countdown?: number;
+  condition?: string;
+  location?: string;
+  isNegotiable?: boolean;
 }
 
 const ProductCard2 = ({
@@ -26,7 +29,7 @@ const ProductCard2 = ({
   parentClass = "card-product style-border style-thums-2 p-lg-30 wow fadeInUp",
   typeClass = "",
 }: {
-  product: Product;
+  product: any;
   parentClass?: string;
   typeClass?: string;
 }) => {
@@ -40,7 +43,7 @@ const ProductCard2 = ({
             className="swiper tf-product-view-main "
             modules={[Thumbs]}
           >
-            {product.images.map((image, index) => (
+            {product.images?.map((image: string, index: number) => (
               <SwiperSlide className="swiper-slide" key={`main-${index}`}>
                 <Link
                   href={`/product-detail/${product.id}`}
@@ -80,7 +83,7 @@ const ProductCard2 = ({
             }}
             modules={[FreeMode, Thumbs]}
           >
-            {product.images.map((image, index) => (
+            {product.images?.map((image: string, index: number) => (
               <SwiperSlide className="swiper-slide" key={`thumb-${index}`}>
                 <div className="item">
                   <Image
@@ -104,6 +107,24 @@ const ProductCard2 = ({
       <div className="card-product-info">
         <div className="box-title gap-xl-6">
           <div className="d-flex flex-column">
+            <div className="d-flex align-items-center gap-2 mb-1">
+              {product.condition && (
+                <span
+                  className="badge bg-light text-primary border border-primary-subtle rounded-pill fw-medium"
+                  style={{ fontSize: "0.7rem", padding: "2px 8px" }}
+                >
+                  {product.condition}
+                </span>
+              )}
+              {product.isNegotiable && (
+                <span
+                  className="badge bg-success-subtle text-success rounded-pill fw-medium"
+                  style={{ fontSize: "0.7rem", padding: "2px 8px" }}
+                >
+                  Negociable
+                </span>
+              )}
+            </div>
             <h6 className="bg-white relative z-5">
               <Link
                 href={`/product-detail/${product.id}`}
@@ -112,6 +133,12 @@ const ProductCard2 = ({
                 {product.title}
               </Link>
             </h6>
+            {product.location && (
+              <div className="small text-muted d-flex align-items-center gap-1 mt-1">
+                <i className="icon-map-pin" style={{ fontSize: "0.8rem" }}></i>
+                <span>{product.location}</span>
+              </div>
+            )}
           </div>
           <div className="group-btn">
             <p className="price-wrap fw-medium">

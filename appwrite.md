@@ -29,6 +29,9 @@ Current attribute schemas and configuration for your e-commerce app.
 | `sold`           | Integer  | -    | ❌       | 0       | Items sold count      |
 | `available`      | Integer  | -    | ❌       | 0       | Stock available       |
 | `userId`         | String   | 36   | ✅       | -       | Owner User ID         |
+| `condition`      | String   | 50   | ❌       | -       | Item state (Nuevo...) |
+| `location`       | String   | 100  | ❌       | -       | Item location (City)  |
+| `isNegotiable`   | Boolean  | -    | ❌       | false   | Price negotiable flag |
 
 ---
 

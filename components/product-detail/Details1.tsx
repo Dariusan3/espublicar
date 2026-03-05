@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Slider1 from "./sliders/Slider1";
 import Link from "next/link";
 import { useContextElement } from "@/context/Context";
+import { toast } from "react-toastify";
 export default function Details1({ product }: { product: any }) {
   const [quantity, setQuantity] = useState(1);
   const { addProductToCart, isAddedToCartProducts } = useContextElement();
@@ -27,19 +28,30 @@ export default function Details1({ product }: { product: any }) {
                 <div className="tf-product-info-list other-image-zoom flex-xxl-nowrap">
                   <div className="tf-product-info-content">
                     <div className="infor-heading">
-                      <p className="caption">
-                        Categories:
+                      <p className="caption d-flex align-items-center gap-3">
+                        <span>Categoría:</span>
                         <Link
-                          href={`/shop-default`}
-                          className="link text-secondary"
+                          href={`/shop-default?category=${product.category}`}
+                          className="link text-secondary fw-medium"
                         >
-                          Consumer Electronics
+                          {product.category || "General"}
                         </Link>
                       </p>
+                      <div className="d-flex align-items-center gap-2 mb-2">
+                        {product.condition && (
+                          <span className="badge bg-primary-subtle text-primary rounded-pill px-3">
+                            {product.condition}
+                          </span>
+                        )}
+                        {product.location && (
+                          <span className="text-muted small d-flex align-items-center gap-1">
+                            <i className="icon-map-pin"></i>
+                            {product.location}
+                          </span>
+                        )}
+                      </div>
                       <h5 className="product-info-name fw-semibold">
-                        {product.title ??
-                          `Elite Gourmet EKT1001B Electric BPA-Free Glass Kettle,
-                        Cordless 360° Base`}
+                        {product.title}
                       </h5>
                       <ul className="product-info-rate-wrap">
                         <li className="star-review">
@@ -206,16 +218,32 @@ export default function Details1({ product }: { product: any }) {
                         onClick={() => addProductToCart(product.id, quantity)}
                       >
                         {isAddedToCartProducts(product.id)
-                          ? "Already Added"
-                          : "Add to cart"}
+                          ? "Ya en el carrito"
+                          : "Añadir al carrito"}
                         <i className="icon-cart-2" />
                       </a>
                       <Link
                         href={`/shop-cart`}
-                        className="tf-btn text-white btn-gray"
+                        className="tf-btn text-white btn-outline-primary"
+                        style={{
+                          background: "transparent",
+                          color: "var(--primary)",
+                          borderColor: "var(--primary)",
+                        }}
                       >
-                        Buy now
+                        Comprar ahora
                       </Link>
+                      {product.isNegotiable && (
+                        <button
+                          className="tf-btn btn-success text-white w-100 mt-2"
+                          onClick={() =>
+                            toast.info("Función de oferta próximamente")
+                          }
+                        >
+                          <i className="icon-message-square me-2"></i>
+                          Hacer una oferta
+                        </button>
+                      )}
                     </div>
                     <div className="product-detail">
                       <p className="caption">Details</p>

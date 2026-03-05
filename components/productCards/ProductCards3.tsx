@@ -64,6 +64,24 @@ export default function ProductCards3({ product }: { product: Product }) {
       <div className="card-product-info">
         <div className="box-title">
           <div>
+            <div className="d-flex align-items-center gap-2 mb-1">
+              {product.condition && (
+                <span
+                  className="badge bg-light text-primary border border-primary-subtle rounded-pill fw-medium"
+                  style={{ fontSize: "0.7rem", padding: "2px 8px" }}
+                >
+                  {product.condition}
+                </span>
+              )}
+              {product.isNegotiable && (
+                <span
+                  className="badge bg-success-subtle text-success rounded-pill fw-medium"
+                  style={{ fontSize: "0.7rem", padding: "2px 8px" }}
+                >
+                  Negociable
+                </span>
+              )}
+            </div>
             <p className="product-tag caption text-main-2 d-none">Headphone</p>
             <Link
               href={`/product/${product.id}`}
@@ -71,6 +89,12 @@ export default function ProductCards3({ product }: { product: Product }) {
             >
               {product.title}
             </Link>
+            {product.location && (
+              <div className="small text-muted d-flex align-items-center gap-1 mt-1">
+                <i className="icon-map-pin" style={{ fontSize: "0.8rem" }}></i>
+                <span>{product.location}</span>
+              </div>
+            )}
           </div>
           <p className="price-wrap fw-medium">
             <span className="new-price price-text fw-medium">

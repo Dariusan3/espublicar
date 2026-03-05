@@ -82,6 +82,24 @@ export default function ProductCard1({
       <div className="card-product-info">
         <div className="box-title gap-xl-12">
           <div className="d-flex flex-column">
+            <div className="d-flex align-items-center gap-2 mb-1">
+              {product.condition && (
+                <span
+                  className="badge bg-light text-primary border border-primary-subtle rounded-pill fw-medium"
+                  style={{ fontSize: "0.7rem", padding: "2px 8px" }}
+                >
+                  {product.condition}
+                </span>
+              )}
+              {product.isNegotiable && (
+                <span
+                  className="badge bg-success-subtle text-success rounded-pill fw-medium"
+                  style={{ fontSize: "0.7rem", padding: "2px 8px" }}
+                >
+                  Negociable
+                </span>
+              )}
+            </div>
             <h6>
               <Link
                 href={`/product-detail/${product.id}`}
@@ -90,6 +108,12 @@ export default function ProductCard1({
                 {product.title}
               </Link>
             </h6>
+            {product.location && (
+              <div className="small text-muted d-flex align-items-center gap-1 mt-1">
+                <i className="icon-map-pin" style={{ fontSize: "0.8rem" }}></i>
+                <span>{product.location}</span>
+              </div>
+            )}
           </div>
           <p className="price-wrap fw-medium">
             <span className="new-price h4 fw-normal text-primary mb-0">

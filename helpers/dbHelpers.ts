@@ -41,9 +41,11 @@ export const toProduct = (doc: DocumentData): Product => ({
   hotSale: doc.hotSale ?? false,
   salePercentage: doc.salePercentage,
   filterBrands: Array.isArray(doc.filterBrands) ? doc.filterBrands : [],
-  sold: doc.sold ?? 0,
   available: doc.available ?? 0,
   userId: doc.userId,
+  condition: doc.condition,
+  location: doc.location,
+  isNegotiable: doc.isNegotiable ?? false,
 });
 
 /**
