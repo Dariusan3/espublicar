@@ -8,7 +8,7 @@ import Link from "next/link";
 import React from "react";
 
 export const metadata = {
-  title: "Order Details || Onsus - Multipurpose React Nextjs eCommerce",
+  title: "Detalles del Pedido || Onsus - Multipurpose React Nextjs eCommerce",
   description: "Onsus - Multipurpose React Nextjs eCommerce",
 };
 export default function page() {
@@ -21,14 +21,14 @@ export default function page() {
             <li>
               <Link href={`/`} className="body-small link">
                 {" "}
-                Home{" "}
+                Inicio{" "}
               </Link>
             </li>
             <li className="d-flex align-items-center">
               <i className="icon icon-arrow-right" />
             </li>
             <li>
-              <span className="body-small"> Order Detail</span>
+              <span className="body-small"> Detalle del Pedido</span>
             </li>
           </ul>
         </div>

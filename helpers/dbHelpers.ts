@@ -10,6 +10,8 @@ import {
   Cart,
   Review,
   OrderItem,
+  Conversation,
+  Message,
 } from "@/types/Types";
 
 /**
@@ -170,6 +172,33 @@ export const toReview = (doc: DocumentData): Review => ({
 });
 
 /**
+ * Convert Appwrite Document to Conversation type
+ */
+export const toConversation = (doc: DocumentData): Conversation => ({
+  id: doc.$id,
+  createdAt: doc.$createdAt,
+  updatedAt: doc.$updatedAt,
+  participants: Array.isArray(doc.participants) ? doc.participants : [],
+  productId: doc.productId,
+  lastMessage: doc.lastMessage,
+  lastMessageAuthorId: doc.lastMessageAuthorId,
+  lastMessageAt: doc.lastMessageAt,
+});
+
+/**
+ * Convert Appwrite Document to Message type
+ */
+export const toMessage = (doc: DocumentData): Message => ({
+  id: doc.$id,
+  createdAt: doc.$createdAt,
+  updatedAt: doc.$updatedAt,
+  conversationId: doc.conversationId,
+  senderId: doc.senderId,
+  text: doc.text,
+  isRead: doc.isRead ?? false,
+});
+
+/**
  * Parse order items JSON string to OrderItem array
  */
 export const parseOrderItems = (itemsJson: string): OrderItem[] => {
@@ -218,3 +247,9 @@ export const toWishlistItems = (docs: DocumentData[]): Wishlist[] =>
 export const toCarts = (docs: DocumentData[]): Cart[] => docs.map(toCart);
 
 export const toReviews = (docs: DocumentData[]): Review[] => docs.map(toReview);
+
+export const toConversations = (docs: DocumentData[]): Conversation[] =>
+  docs.map(toConversation);
+
+export const toMessages = (docs: DocumentData[]): Message[] =>
+  docs.map(toMessage);

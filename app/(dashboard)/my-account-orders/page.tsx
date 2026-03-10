@@ -5,7 +5,7 @@ import Header4 from "@/components/headers/Header4";
 import React from "react";
 import Link from "next/link";
 export const metadata = {
-  title: "My Account Orders || Onsus - Multipurpose React Nextjs eCommerce",
+  title: "Mis Pedidos || Onsus - Multipurpose React Nextjs eCommerce",
   description: "Onsus - Multipurpose React Nextjs eCommerce",
 };
 export default function page() {
@@ -18,14 +18,14 @@ export default function page() {
             <li>
               <Link href={`/`} className="body-small link">
                 {" "}
-                Home{" "}
+                Inicio{" "}
               </Link>
             </li>
             <li className="d-flex align-items-center">
               <i className="icon icon-arrow-right" />
             </li>
             <li>
-              <span className="body-small">Account</span>
+              <span className="body-small">Mi Cuenta</span>
             </li>
           </ul>
         </div>

@@ -43,7 +43,7 @@ export default function Checkout() {
     e.preventDefault();
 
     if (cartProducts.length === 0) {
-      toast.error("Your cart is empty!");
+      toast.error("¡Tu carrito está vacío!");
       return;
     }
 
@@ -56,7 +56,7 @@ export default function Checkout() {
       !shippingAddress.city ||
       !shippingAddress.zipCode
     ) {
-      toast.error("Please fill in all required fields");
+      toast.error("Por favor, rellena todos los campos obligatorios");
       return;
     }
 
@@ -90,7 +90,7 @@ export default function Checkout() {
       }
     } catch (error) {
       console.error("Order error:", error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Algo salió mal. Por favor, inténtalo de nuevo.");
     } finally {
       setIsSubmitting(false);
     }
@@ -107,7 +107,7 @@ export default function Checkout() {
                 <i className="icon-shop-cart-1" />
               </span>
               <Link href={`/shop-cart`} className="link body-text-3">
-                Shopping Cart
+                Carrito
               </Link>
             </div>
             <div className="step-payment">
@@ -118,14 +118,14 @@ export default function Checkout() {
                 href={`/checkout`}
                 className="text-secondary link body-text-3"
               >
-                Shopping &amp; Checkout
+                Envío y Pago
               </Link>
             </div>
             <div className="step-payment">
               <span className="icon">
                 <i className="icon-shop-cart-3" />
               </span>
-              <span className="link body-text-3">Confirmation</span>
+              <span className="link body-text-3">Confirmación</span>
             </div>
           </div>
         </div>
@@ -136,72 +136,75 @@ export default function Checkout() {
           <div className="page-checkout">
             <div className="wrap">
               <h5 className="title has-account">
-                <span className="fw-semibold">Contact</span>
+                <span className="fw-semibold">Contacto</span>
                 <span className="body-text-3">
-                  Have an account?
+                  ¿Ya tienes cuenta?
                   <a
                     href="#login"
                     data-bs-toggle="modal"
                     className="body-text-3 text-secondary link"
                   >
-                    Login
+                    Inicia sesión
                   </a>
                 </span>
               </h5>
               <div className="form-checkout-contact">
-                <label className="body-md-2 fw-semibold">Email or Phone</label>
+                <label className="body-md-2 fw-semibold">
+                  Email o Teléfono
+                </label>
                 <input
                   className="def"
                   type="text"
-                  placeholder="Your contact"
+                  placeholder="Tu contacto"
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
                   required
                 />
                 <p className="caption text-main-2 font-2">
-                  Order information will be sent to your email
+                  La información del pedido se enviará a tu correo electrónico
                 </p>
               </div>
             </div>
             <div className="wrap">
-              <h5 className="title fw-semibold">Delivery</h5>
+              <h5 className="title fw-semibold">Entrega</h5>
               <div className="def">
                 <fieldset>
-                  <label>Country/Region</label>
+                  <label>País/Región</label>
                   <div className="tf-select">
                     <select
                       name="country"
                       value={shippingAddress.country}
                       onChange={handleInputChange}
                     >
-                      <option value="">Select your Country/Region</option>
-                      <option value="US">United States</option>
-                      <option value="UK">United Kingdom</option>
-                      <option value="CA">Canada</option>
+                      <option value="">Selecciona tu País/Región</option>
+                      <option value="ES">España</option>
+                      <option value="US">Estados Unidos</option>
+                      <option value="UK">Reino Unido</option>
+                      <option value="CA">Canadá</option>
                       <option value="AU">Australia</option>
-                      <option value="DE">Germany</option>
-                      <option value="FR">France</option>
+                      <option value="DE">Alemania</option>
+                      <option value="FR">Francia</option>
                     </select>
                   </div>
                 </fieldset>
                 <div className="cols">
                   <fieldset>
-                    <label>First name *</label>
+                    <label>Nombre *</label>
                     <input
                       type="text"
                       name="firstName"
-                      placeholder="e.g. John"
+                      placeholder="ej. Juan"
                       value={shippingAddress.firstName}
                       onChange={handleInputChange}
                       required
                     />
                   </fieldset>
                   <fieldset>
-                    <label>Last name *</label>
+                    <label>Apellidos *</label>
                     <input
                       type="text"
                       name="lastName"
-                      placeholder="e.g. Doe"
+                      placeholder="ej. Pérez"
                       value={shippingAddress.lastName}
                       onChange={handleInputChange}
                       required
@@ -210,40 +213,40 @@ export default function Checkout() {
                 </div>
                 <div className="cols">
                   <fieldset>
-                    <label>City *</label>
+                    <label>Ciudad *</label>
                     <input
                       type="text"
                       name="city"
-                      placeholder="e.g. New York"
+                      placeholder="ej. Madrid"
                       value={shippingAddress.city}
                       onChange={handleInputChange}
                       required
                     />
                   </fieldset>
                   <fieldset>
-                    <label>State</label>
+                    <label>Provincia</label>
                     <div className="tf-select">
                       <select
                         name="state"
                         value={shippingAddress.state}
                         onChange={handleInputChange}
                       >
-                        <option value="">Select</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="CA">California</option>
-                        <option value="GA">Georgia</option>
-                        <option value="NY">New York</option>
-                        <option value="WA">Washington</option>
+                        <option value="">Selecciona</option>
+                        <option value="M">Madrid</option>
+                        <option value="B">Barcelona</option>
+                        <option value="V">Valencia</option>
+                        <option value="S">Sevilla</option>
+                        <option value="Z">Zaragoza</option>
+                        <option value="MA">Málaga</option>
                       </select>
                     </div>
                   </fieldset>
                   <fieldset>
-                    <label>ZIP code *</label>
+                    <label>Código Postal *</label>
                     <input
                       type="text"
                       name="zipCode"
-                      placeholder="e.g. 83254"
+                      placeholder="ej. 28001"
                       value={shippingAddress.zipCode}
                       onChange={handleInputChange}
                       required
@@ -251,20 +254,20 @@ export default function Checkout() {
                   </fieldset>
                 </div>
                 <fieldset>
-                  <label>Address *</label>
+                  <label>Dirección *</label>
                   <input
                     type="text"
                     name="address"
-                    placeholder="Your detailed address"
+                    placeholder="Tu dirección detallada"
                     value={shippingAddress.address}
                     onChange={handleInputChange}
                     required
                   />
                 </fieldset>
                 <fieldset>
-                  <label>Order note</label>
+                  <label>Nota del pedido</label>
                   <textarea
-                    placeholder="Note on your order"
+                    placeholder="Nota sobre tu pedido"
                     value={orderNotes}
                     onChange={(e) => setOrderNotes(e.target.value)}
                   />
@@ -272,7 +275,7 @@ export default function Checkout() {
               </div>
             </div>
             <div className="wrap">
-              <h5 className="title">Payment</h5>
+              <h5 className="title">Pago</h5>
               <div className="form-payment">
                 <div className="payment-box" id="payment-box">
                   <div
@@ -284,7 +287,7 @@ export default function Checkout() {
                       onClick={() => setPaymentMethod("card")}
                     >
                       <span className="body-md-2 fw-semibold title">
-                        Credit/Debit Card
+                        Tarjeta de Crédito/Débito
                       </span>
                       <input
                         type="radio"
@@ -298,7 +301,7 @@ export default function Checkout() {
                     {paymentMethod === "card" && (
                       <div className="payment-body">
                         <fieldset>
-                          <label>Credit Card number</label>
+                          <label>Número de Tarjeta</label>
                           <input
                             type="text"
                             className="number-credit-card"
@@ -307,8 +310,8 @@ export default function Checkout() {
                         </fieldset>
                         <div className="cols">
                           <fieldset>
-                            <label>Expiration date</label>
-                            <input type="text" placeholder="MM/YY" />
+                            <label>Fecha de expiración</label>
+                            <input type="text" placeholder="MM/AA" />
                           </fieldset>
                           <fieldset>
                             <label>CVV</label>
@@ -316,8 +319,8 @@ export default function Checkout() {
                           </fieldset>
                         </div>
                         <fieldset>
-                          <label>Name on card</label>
-                          <input type="text" placeholder="e.g. JOHN DOE" />
+                          <label>Nombre en la tarjeta</label>
+                          <input type="text" placeholder="ej. JUAN PÉREZ" />
                         </fieldset>
                       </div>
                     )}
@@ -330,15 +333,7 @@ export default function Checkout() {
                       className="payment-header radio-item"
                       onClick={() => setPaymentMethod("cash")}
                     >
-                      <input
-                        type="radio"
-                        name="payment-method"
-                        className="tf-check-rounded"
-                        id="delivery-method"
-                        checked={paymentMethod === "cash"}
-                        onChange={() => setPaymentMethod("cash")}
-                      />
-                      <span className="body-text-3">Cash on delivery</span>
+                      <span className="body-text-3">Pago contra reembolso</span>
                     </label>
                   </div>
                 </div>
@@ -349,7 +344,9 @@ export default function Checkout() {
                     disabled={isSubmitting || cartProducts.length === 0}
                   >
                     <span className="text-white">
-                      {isSubmitting ? "Placing Order..." : "Place Order"}
+                      {isSubmitting
+                        ? "Tramitando Pedido..."
+                        : "Realizar Pedido"}
                     </span>
                   </button>
                 </div>
@@ -358,7 +355,7 @@ export default function Checkout() {
           </div>
           <div className="flat-sidebar-checkout">
             <div className="sidebar-checkout-content">
-              <h5 className="fw-semibold">Order Summary</h5>
+              <h5 className="fw-semibold">Resumen del Pedido</h5>
               {cartProducts.length ? (
                 <ul className="list-product">
                   {cartProducts.map((item, i) => (
@@ -376,12 +373,15 @@ export default function Checkout() {
                           href="#"
                           className="link-secondary body-md-2 fw-semibold"
                         >
-                          {item.productTitle || "Product"}
+                          {item.productTitle || "Producto"}
                         </a>
                         <p className="price-quantity price-text fw-semibold">
-                          ${(item.productPrice || 0).toFixed(2)}
+                          {item.productPrice
+                            ? `${item.productPrice.toFixed(2)}€`
+                            : "0.00€"}
                           <span className="body-md-2 text-main-2 fw-normal">
-                            X{item.quantity}
+                            {" "}
+                            x{item.quantity}
                           </span>
                         </p>
                       </div>
@@ -391,39 +391,42 @@ export default function Checkout() {
               ) : (
                 <div className="p-4">
                   <div className="col-4">
-                    Your Cart is empty. Start adding favorite products to cart!
+                    Tu carrito está vacío. ¡Empieza a añadir tus productos
+                    favoritos!
                   </div>
                   <Link
                     className="tf-btn mt-2 mb-3 text-white"
                     style={{ width: "fit-content" }}
-                    href="/shop-default"
+                    href="/product-grid"
                   >
-                    Explore Products
+                    Explorar Productos
                   </Link>
                 </div>
               )}
               <div className="">
-                <p className="body-md-2 fw-semibold sub-type">Discount code</p>
+                <p className="body-md-2 fw-semibold sub-type">
+                  Código de descuento
+                </p>
                 <div className="ip-discount-code style-2">
-                  <input type="text" className="def" placeholder="Your code" />
+                  <input type="text" className="def" placeholder="Tu código" />
                   <button type="button" className="tf-btn btn-gray-2">
-                    <span>Apply</span>
+                    <span>Aplicar</span>
                   </button>
                 </div>
               </div>
               <ul className="sec-total-price">
                 <li>
-                  <span className="body-text-3">Sub total</span>
-                  <span className="body-text-3">${totalPrice.toFixed(2)}</span>
+                  <span className="body-text-3">Subtotal</span>
+                  <span className="body-text-3">{totalPrice.toFixed(2)}€</span>
                 </li>
                 <li>
-                  <span className="body-text-3">Shipping</span>
-                  <span className="body-text-3">Free shipping</span>
+                  <span className="body-text-3">Envío</span>
+                  <span className="body-text-3">Gratis</span>
                 </li>
                 <li>
                   <span className="body-md-2 fw-semibold">Total</span>
                   <span className="body-md-2 fw-semibold text-primary">
-                    ${totalPrice.toFixed(2)}
+                    {totalPrice.toFixed(2)}€
                   </span>
                 </li>
               </ul>

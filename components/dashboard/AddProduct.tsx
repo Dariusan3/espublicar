@@ -5,6 +5,8 @@ import useProducts from "@/hooks/useProducts";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { uploadProductImage, getProductImageUrl } from "@/lib/storage";
+import Image from "next/image";
 
 export default function AddProduct() {
   const { user } = useAuth();
@@ -22,6 +24,9 @@ export default function AddProduct() {
     location: "",
     isNegotiable: false,
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -29,6 +34,20 @@ export default function AddProduct() {
     >,
   ) => {
     const { name, value, type } = e.target;
+
+    if (type === "file") {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        setImageFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+      return;
+    }
+
     const val =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
     setFormData((prev) => ({ ...prev, [name]: val }));
@@ -43,13 +62,34 @@ export default function AddProduct() {
 
     setIsLoading(true);
     try {
+      let finalImgSrc = formData.imgSrc;
+
+      // Handle file upload if present
+      if (imageFile) {
+        setIsUploading(true);
+        try {
+          const uploadResult = await uploadProductImage(imageFile);
+          // Get the URL for the uploaded file
+          finalImgSrc = getProductImageUrl(uploadResult.$id);
+        } catch (uploadError) {
+          console.error("Upload error:", uploadError);
+          toast.error(
+            "Error al subir la imagen. Por favor, inténtalo de nuevo.",
+          );
+          setIsLoading(false);
+          setIsUploading(false);
+          return;
+        }
+        setIsUploading(false);
+      }
+
       const productData = {
         title: formData.title,
         price: parseFloat(formData.price),
         category: formData.category,
         description: formData.description,
         imgSrc:
-          formData.imgSrc ||
+          finalImgSrc ||
           "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop",
         userId: user.$id,
         rating: 0,
@@ -218,20 +258,64 @@ export default function AddProduct() {
 
         <div className="mb-4">
           <label className="form-label fw-bold small text-uppercase ls-1">
-            URL de la Imagen
+            Imagen del Producto
           </label>
-          <input
-            type="text"
-            className="form-control rounded-3 p-3 border-light shadow-sm"
-            name="imgSrc"
-            value={formData.imgSrc}
-            onChange={handleChange}
-            placeholder="https://ejemplo.com/foto.jpg"
-          />
-          <div className="form-text small text-muted mt-2">
-            <i className="icon-info me-1"></i>
-            Por ahora, usa un link externo. La subida directa de fotos estará
-            pronto disponible.
+          <div className="d-flex flex-column gap-3">
+            {imagePreview && (
+              <div
+                className="position-relative w-100"
+                style={{ height: "200px" }}
+              >
+                <Image
+                  src={imagePreview}
+                  alt="Vista previa"
+                  fill
+                  className="rounded-3 object-fit-cover shadow-sm"
+                />
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 rounded-circle p-1"
+                  onClick={() => {
+                    setImageFile(null);
+                    setImagePreview(null);
+                  }}
+                  style={{ width: "30px", height: "30px" }}
+                >
+                  <i className="icon-x"></i>
+                </button>
+              </div>
+            )}
+            <div className="upload-box p-4 border-2 border-dashed border-light rounded-4 text-center hover-bg-light transition-all cursor-pointer position-relative">
+              <input
+                type="file"
+                className="position-absolute w-100 h-100 top-0 start-0 opacity-0 cursor-pointer"
+                accept="image/*"
+                onChange={handleChange}
+                style={{ zIndex: 2 }}
+              />
+              <div className="py-2">
+                <i className="icon-upload-cloud fs-1 text-primary mb-2 d-block"></i>
+                <span className="fw-medium text-dark d-block">
+                  Seleccionar foto o arrastrar aquí
+                </span>
+                <span className="small text-muted">
+                  JPG, PNG, WebP (Máx. 5MB)
+                </span>
+              </div>
+            </div>
+            {!imageFile && (
+              <div className="mt-2 text-center">
+                <span className="text-muted small">O usa una URL externa:</span>
+                <input
+                  type="text"
+                  className="form-control rounded-3 p-3 border-light shadow-sm mt-2"
+                  name="imgSrc"
+                  value={formData.imgSrc}
+                  onChange={handleChange}
+                  placeholder="https://ejemplo.com/foto.jpg"
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -270,7 +354,11 @@ export default function AddProduct() {
           ) : (
             <i className="icon-check-circle me-2"></i>
           )}
-          {isLoading ? "Publicando..." : "Publicar Anuncio Ahora"}
+          {isLoading
+            ? isUploading
+              ? "Subiendo imagen..."
+              : "Publicando..."
+            : "Publicar Anuncio Ahora"}
         </button>
       </form>
 
@@ -286,6 +374,12 @@ export default function AddProduct() {
         .form-select:focus {
           border-color: var(--primary) !important;
           box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.1) !important;
+        }
+        .border-dashed {
+          border-style: dashed !important;
+        }
+        .cursor-pointer {
+          cursor: pointer;
         }
       `}</style>
     </div>

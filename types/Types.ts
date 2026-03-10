@@ -188,6 +188,41 @@ export interface Review extends ReviewDB {
   updatedAt: string;
 }
 
+/**
+ * Conversation interface
+ * Collection ID: conversations
+ */
+export interface ConversationDB {
+  participants: string[]; // Array of user IDs
+  productId: string;
+  lastMessage?: string;
+  lastMessageAuthorId?: string;
+  lastMessageAt?: string;
+}
+
+export interface Conversation extends ConversationDB {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Message interface
+ * Collection ID: messages
+ */
+export interface MessageDB {
+  conversationId: string;
+  senderId: string;
+  text: string;
+  isRead: boolean;
+}
+
+export interface Message extends MessageDB {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // ==================== Helper Types ====================
 
 /**

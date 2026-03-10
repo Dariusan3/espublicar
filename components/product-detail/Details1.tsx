@@ -4,9 +4,42 @@ import Slider1 from "./sliders/Slider1";
 import Link from "next/link";
 import { useContextElement } from "@/context/Context";
 import { toast } from "react-toastify";
+import { useAuth } from "@/context/AuthContext";
+import useChat from "@/hooks/useChat";
+import { useRouter } from "next/navigation";
 export default function Details1({ product }: { product: any }) {
   const [quantity, setQuantity] = useState(1);
   const { addProductToCart, isAddedToCartProducts } = useContextElement();
+  const { user } = useAuth();
+  const { startConversation } = useChat();
+  const router = useRouter();
+
+  const handleContactSeller = async () => {
+    if (!user) {
+      toast.error("Por favor, inicia sesión para contactar al vendedor");
+      return;
+    }
+
+    if (user.$id === product.userId) {
+      toast.warning("Este es tu propio producto");
+      return;
+    }
+
+    try {
+      const result = await startConversation(
+        user.$id,
+        product.userId,
+        (product as any).$id || product.id,
+      );
+      if (result.success) {
+        router.push(`/my-account-messages?conversationId=${result.data.id}`);
+      } else {
+        toast.error("Error al iniciar la conversación");
+      }
+    } catch (error) {
+      toast.error("Ocurrió un error inesperado");
+    }
+  };
   return (
     <section>
       <div className="tf-main-product section-image-zoom">
@@ -242,6 +275,15 @@ export default function Details1({ product }: { product: any }) {
                         >
                           <i className="icon-message-square me-2"></i>
                           Hacer una oferta
+                        </button>
+                      )}
+                      {user?.$id !== product.userId && (
+                        <button
+                          className="tf-btn btn-outline-dark w-100 mt-2 rounded-pill"
+                          onClick={handleContactSeller}
+                        >
+                          <i className="icon-message-circle me-2"></i>
+                          Contactar Vendedor
                         </button>
                       )}
                     </div>

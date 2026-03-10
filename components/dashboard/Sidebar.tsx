@@ -20,10 +20,9 @@ export default function Sidebar() {
     { name: "Mis guardados", href: "/wishlist", icon: "icon-heart" },
     {
       name: "Mis mensajes",
-      href: "#",
+      href: "/my-account-messages",
       icon: "icon-message-circle",
-      badge: "0",
-    }, // Placeholder
+    },
     {
       name: "Mis direcciones",
       href: "/my-account-address",
@@ -93,9 +92,9 @@ export default function Sidebar() {
                 <i className={`${item.icon} fs-5`}></i>
                 <span className="fw-medium">{item.name}</span>
               </div>
-              {item.badge && (
+              {(item as any).badge && (
                 <span className="badge bg-danger rounded-pill">
-                  {item.badge}
+                  {(item as any).badge}
                 </span>
               )}
             </Link>
