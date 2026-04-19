@@ -1,0 +1,8 @@
+.next
+node_modules
+.env.local
+.env
+design_handoff_espublicar_redesign
+docs
+appwrite.md
+README.md
