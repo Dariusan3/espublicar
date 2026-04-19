@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { account, ID } from '@/lib/appwrite';
+import { OAuthProvider } from 'appwrite';
 import { Models } from 'appwrite';
 
 interface AuthContextType {
@@ -8,6 +9,8 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (email: string, password: string, name: string) => Promise<{ success: boolean; error?: string }>;
+  loginWithGoogle: () => void;
+  loginWithFacebook: () => void;
   logout: () => Promise<{ success: boolean; error?: string }>;
   updateProfile: (name: string) => Promise<{ success: boolean; error?: string }>;
   updateEmail: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
@@ -69,6 +72,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const loginWithGoogle = () => {
+    const origin = window.location.origin;
+    // Appwrite redirects to successUrl after approval, or failureUrl on error
+    account.createOAuth2Session(
+      OAuthProvider.Google,
+      `${origin}/auth/callback`,
+      `${origin}/?oauth_error=1`,
+    );
+  };
+
+  const loginWithFacebook = () => {
+    const origin = window.location.origin;
+    account.createOAuth2Session(
+      OAuthProvider.Facebook,
+      `${origin}/auth/callback`,
+      `${origin}/?oauth_error=1`,
+    );
+  };
+
   const logout = async () => {
     try {
       await account.deleteSession('current');
@@ -115,6 +137,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     login,
     register,
+    loginWithGoogle,
+    loginWithFacebook,
     logout,
     updateProfile,
     updateEmail,

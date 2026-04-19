@@ -1,13 +1,26 @@
 "use client";
 import React, { useState } from "react";
 import useAuth from "@/hooks/useAuth";
+import { useAuth as useAuthContext } from "@/context/AuthContext";
 import useUser from "@/hooks/useUser";
 import { UserDB } from "@/types/Types";
 import { toast } from "react-toastify";
 
 export default function Register() {
   const { signUserUp, signUserIn } = useAuth();
+  const { loginWithGoogle, loginWithFacebook } = useAuthContext();
   const { createUserInDB } = useUser();
+
+  const handleOAuth = (provider: "google" | "facebook") => {
+    const modal = document.getElementById("register");
+    if (modal && typeof window !== "undefined") {
+      const bootstrap = require("bootstrap");
+      const instance = bootstrap.Modal.getInstance(modal);
+      if (instance) instance.hide();
+    }
+    if (provider === "google") loginWithGoogle();
+    else loginWithFacebook();
+  };
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -207,16 +220,24 @@ export default function Register() {
             </div>
             <ul className="list-log">
               <li>
-                <a href="#" className="tf-btn btn-line w-100">
+                <button
+                  type="button"
+                  className="tf-btn btn-line w-100"
+                  onClick={() => handleOAuth("facebook")}
+                >
                   <i className="icon icon-facebook-2" />
                   <span className="body-md-2 fw-semibold">Facebook</span>
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#" className="tf-btn btn-line w-100">
+                <button
+                  type="button"
+                  className="tf-btn btn-line w-100"
+                  onClick={() => handleOAuth("google")}
+                >
                   <i className="icon icon-google" />
                   <span className="body-md-2 fw-semibold">Google</span>
-                </a>
+                </button>
               </li>
             </ul>
           </div>

@@ -175,8 +175,13 @@ export default function AddProduct() {
             setUploadProgress(Math.round(((i + 1) / imageFiles.length) * 100));
           }
           allImageUrls = urls;
-        } catch {
-          toast.error("Error al subir las fotos. Inténtalo de nuevo.");
+        } catch (uploadError: any) {
+          const msg =
+            uploadError?.message ||
+            uploadError?.response?.message ||
+            "Error desconocido";
+          console.error("Upload error:", uploadError);
+          toast.error(`Error al subir las fotos: ${msg}`);
           setIsLoading(false);
           setIsUploading(false);
           return;
