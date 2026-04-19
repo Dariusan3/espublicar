@@ -149,7 +149,7 @@ export default function BlogDetails() {
                   </a>
                 </p>
                 <p className="text">
-                  The headset could be expensive, maybe as much as $3,000 or
+                  The headset could be expensive, maybe as much as €3.000 or
                   more, with 8K displays, eye tracking and cameras that can scan
                   the world and blend AR and VR together, according to a report
                   from The Information last year.

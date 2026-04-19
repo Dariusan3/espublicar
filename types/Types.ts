@@ -44,7 +44,7 @@ export interface ProductDB {
   filterBrands?: string[];
   sold?: number;
   available?: number;
-  userId: string; // Owner of the product
+  userId?: string;
   condition?: string; // New, Like New, etc.
   location?: string; // City/Town
   isNegotiable?: boolean; // If price can be negotiated
@@ -222,6 +222,60 @@ export interface Message extends MessageDB {
   createdAt: string;
   updatedAt: string;
 }
+
+/**
+ * Offer interface (price negotiation)
+ * Collection ID: offers
+ */
+export interface OfferDB {
+  productId: string;
+  buyerId: string;
+  sellerId: string;
+  amount: number;
+  status: "pending" | "accepted" | "rejected" | "countered" | "expired";
+  counterAmount?: number;
+  message?: string;
+}
+
+export interface Offer extends OfferDB {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Notification interface
+ * Collection ID: notifications
+ */
+export interface NotificationDB {
+  userId: string;
+  type: "message" | "order" | "offer" | "review" | "system";
+  title: string;
+  body?: string;
+  referenceId?: string;
+  referenceType?: string;
+  isRead: boolean;
+}
+
+export interface Notification extends NotificationDB {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Product status for admin moderation
+ */
+export type ProductStatus =
+  | "active"
+  | "pending_review"
+  | "rejected"
+  | "suspended";
+
+/**
+ * User role for access control
+ */
+export type UserRole = "user" | "admin" | "moderator";
 
 // ==================== Helper Types ====================
 

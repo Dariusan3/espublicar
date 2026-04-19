@@ -39,9 +39,9 @@ export default function Product3() {
               </h1>
               <div className="box-price">
                 <p className="old-price style-white main-title-2 fw-light">
-                  $80.000
+                  €80,00
                 </p>
-                <h3 className="fw-semibold text-third">$60.000</h3>
+                <h3 className="fw-semibold text-third">€60,00</h3>
               </div>
             </div>
             <div className="box-btn">

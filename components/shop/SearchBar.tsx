@@ -61,7 +61,7 @@ export default function SearchBar({
   const handleProductClick = (productId: string) => {
     setShowDropdown(false);
     setQuery("");
-    router.push(`/product-detail/${productId}`);
+    router.push(`/product/${productId}`);
   };
 
   return (
@@ -118,7 +118,7 @@ export default function SearchBar({
                         {product.title}
                       </span>
                       <span className="search-result-price">
-                        ${product.price?.toFixed(2)}
+                        €{product.price?.toFixed(2)}
                       </span>
                     </div>
                   </li>

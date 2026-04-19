@@ -96,7 +96,7 @@ export default function Compare() {
                         onClick={() => removeFromCompareItem(product.id)}
                       />
                       <Link
-                        href={`/product-detail/${product.id}`}
+                        href={`/product/${product.id}`}
                         className="image"
                       >
                         <Image
@@ -110,13 +110,13 @@ export default function Compare() {
                       <div className="content">
                         <Link
                           className="text-line-clamp-2 body-md-2 fw-semibold text-secondary link"
-                          href={`/product-detail/${product.id}`}
+                          href={`/product/${product.id}`}
                         >
                           {product.title}
                         </Link>
                         <p className="price-wrap fw-medium">
                           <span className="new-price price-text fw-medium">
-                            ${product.price.toFixed(3)}
+                            €{product.price.toFixed(3)}
                           </span>
                         </p>
                       </div>

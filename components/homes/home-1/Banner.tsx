@@ -43,7 +43,7 @@ export default function Banner() {
               </h3>
               <div className="box-sale-wrap type-3 relative">
                 <p className="small-text">Save</p>
-                <p className="price-text-2">$68.990</p>
+                <p className="price-text-2">€68,99</p>
               </div>
             </div>
           </div>

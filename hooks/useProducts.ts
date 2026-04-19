@@ -14,47 +14,46 @@ export interface ProductFilters {
   isNew?: boolean;
   isTodaysDeals?: boolean;
   hotSale?: boolean;
+  location?: string;
+  condition?: string;
+  userId?: string;
   sortBy?: "price_asc" | "price_desc" | "newest" | "rating";
   limit?: number;
   offset?: number;
 }
 
-/**
- * Custom hook for product search and filtering with Appwrite
- */
 const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
 
-  /**
-   * Search and filter products
-   */
   const searchProducts = useCallback(
     async (filters: ProductFilters = {}): Promise<HookResponse> => {
       setIsLoading(true);
       try {
         const queries: any[] = [];
 
-        // Text search on title
         if (filters.search && filters.search.trim()) {
           queries.push(Query.search("title", filters.search.trim()));
         }
-
-        // Category filter
         if (filters.category) {
           queries.push(Query.equal("category", filters.category));
         }
-
-        // Price range
         if (filters.minPrice !== undefined) {
           queries.push(Query.greaterThanEqual("price", filters.minPrice));
         }
         if (filters.maxPrice !== undefined) {
           queries.push(Query.lessThanEqual("price", filters.maxPrice));
         }
-
-        // Boolean filters
+        if (filters.location) {
+          queries.push(Query.search("location", filters.location));
+        }
+        if (filters.condition) {
+          queries.push(Query.equal("condition", filters.condition));
+        }
+        if (filters.userId) {
+          queries.push(Query.equal("userId", filters.userId));
+        }
         if (filters.inStock !== undefined) {
           queries.push(Query.equal("inStock", filters.inStock));
         }
@@ -68,7 +67,6 @@ const useProducts = () => {
           queries.push(Query.equal("hotSale", true));
         }
 
-        // Sorting
         switch (filters.sortBy) {
           case "price_asc":
             queries.push(Query.orderAsc("price"));
@@ -86,21 +84,16 @@ const useProducts = () => {
             queries.push(Query.orderDesc("$createdAt"));
         }
 
-        // Pagination
-        if (filters.limit) {
-          queries.push(Query.limit(filters.limit));
-        } else {
-          queries.push(Query.limit(24)); // Default limit
-        }
+        queries.push(Query.limit(filters.limit || 24));
         if (filters.offset) {
           queries.push(Query.offset(filters.offset));
         }
 
-        const response = await db.listDocuments({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.PRODUCTS,
+        const response = await db.listDocuments(
+          DB_ID,
+          COLLECTIONS.PRODUCTS,
           queries,
-        });
+        );
 
         const productList = response.documents.map(toProduct);
         setProducts(productList);
@@ -113,11 +106,7 @@ const useProducts = () => {
         };
       } catch (error: any) {
         console.error("Error searching products:", error);
-        return {
-          success: false,
-          message: error.message,
-          data: null,
-        };
+        return { success: false, message: error.message, data: null };
       } finally {
         setIsLoading(false);
       }
@@ -125,49 +114,34 @@ const useProducts = () => {
     [],
   );
 
-  /**
-   * Get a single product by ID
-   */
   const getProductById = useCallback(
     async (productId: string): Promise<HookResponse> => {
       try {
-        const result = await db.getDocument({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.PRODUCTS,
-          documentId: productId,
-        });
-
-        const product = toProduct(result);
-
+        const result = await db.getDocument(
+          DB_ID,
+          COLLECTIONS.PRODUCTS,
+          productId,
+        );
         return {
           success: true,
           message: "Product fetched successfully",
-          data: product,
+          data: toProduct(result),
         };
       } catch (error: any) {
         console.error("Error fetching product:", error);
-        return {
-          success: false,
-          message: error.message,
-          data: null,
-        };
+        return { success: false, message: error.message, data: null };
       }
     },
     [],
   );
 
-  /**
-   * Get all unique categories
-   */
   const getCategories = useCallback(async (): Promise<string[]> => {
     try {
-      // Fetch all products and extract unique categories
-      const response = await db.listDocuments({
-        databaseId: DB_ID,
-        collectionId: COLLECTIONS.PRODUCTS,
-        queries: [Query.limit(500)],
-      });
-
+      const response = await db.listDocuments(
+        DB_ID,
+        COLLECTIONS.PRODUCTS,
+        [Query.limit(500)],
+      );
       const categories = [
         ...new Set(
           response.documents
@@ -175,7 +149,6 @@ const useProducts = () => {
             .filter((cat: any) => cat && cat.trim()),
         ),
       ] as string[];
-
       return categories.sort();
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -183,17 +156,13 @@ const useProducts = () => {
     }
   }, []);
 
-  /**
-   * Get all unique brands
-   */
   const getBrands = useCallback(async (): Promise<string[]> => {
     try {
-      const response = await db.listDocuments({
-        databaseId: DB_ID,
-        collectionId: COLLECTIONS.PRODUCTS,
-        queries: [Query.limit(500)],
-      });
-
+      const response = await db.listDocuments(
+        DB_ID,
+        COLLECTIONS.PRODUCTS,
+        [Query.limit(500)],
+      );
       const brands = [
         ...new Set(
           response.documents
@@ -201,7 +170,6 @@ const useProducts = () => {
             .filter((brand: any) => brand && brand.trim()),
         ),
       ] as string[];
-
       return brands.sort();
     } catch (error) {
       console.error("Error fetching brands:", error);
@@ -209,26 +177,39 @@ const useProducts = () => {
     }
   }, []);
 
-  /**
-   * Get products by User ID (My Listings)
-   */
+  const getLocations = useCallback(async (): Promise<string[]> => {
+    try {
+      const response = await db.listDocuments(
+        DB_ID,
+        COLLECTIONS.PRODUCTS,
+        [Query.limit(500)],
+      );
+      const locations = [
+        ...new Set(
+          response.documents
+            .map((doc: any) => doc.location)
+            .filter((loc: any) => loc && loc.trim()),
+        ),
+      ] as string[];
+      return locations.sort();
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      return [];
+    }
+  }, []);
+
   const getMyProducts = useCallback(
     async (userId: string): Promise<HookResponse> => {
       setIsLoading(true);
       try {
-        const response = await db.listDocuments({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.PRODUCTS,
-          queries: [
-            Query.equal("userId", userId),
-            Query.orderDesc("$createdAt"),
-          ],
-        });
-
+        const response = await db.listDocuments(
+          DB_ID,
+          COLLECTIONS.PRODUCTS,
+          [Query.equal("userId", userId), Query.orderDesc("$createdAt")],
+        );
         const productList = response.documents.map(toProduct);
         setProducts(productList);
         setTotalCount(response.total);
-
         return {
           success: true,
           message: "User listings fetched successfully",
@@ -236,11 +217,7 @@ const useProducts = () => {
         };
       } catch (error: any) {
         console.error("Error fetching user products:", error);
-        return {
-          success: false,
-          message: error.message,
-          data: null,
-        };
+        return { success: false, message: error.message, data: null };
       } finally {
         setIsLoading(false);
       }
@@ -248,9 +225,6 @@ const useProducts = () => {
     [],
   );
 
-  /**
-   * Add a new product listing
-   */
   const addProduct = useCallback(
     async (productData: any): Promise<HookResponse> => {
       try {
@@ -269,52 +243,35 @@ const useProducts = () => {
         };
       } catch (error: any) {
         console.error("Error creating product:", error);
-        return {
-          success: false,
-          message: error.message,
-          data: null,
-        };
+        return { success: false, message: error.message, data: null };
       }
     },
     [],
   );
 
-  /**
-   * Delete a product listing
-   */
   const deleteProduct = useCallback(
     async (productId: string): Promise<HookResponse> => {
       try {
         await db.deleteDocument(DB_ID, COLLECTIONS.PRODUCTS, productId);
         setProducts((prev) => prev.filter((p) => p.id !== productId));
-        return {
-          success: true,
-          message: "Product deleted successfully",
-          data: null,
-        };
+        return { success: true, message: "Product deleted successfully", data: null };
       } catch (error: any) {
         console.error("Error deleting product:", error);
-        return {
-          success: false,
-          message: error.message,
-          data: null,
-        };
+        return { success: false, message: error.message, data: null };
       }
     },
     [],
   );
 
   return {
-    // State
     products,
     isLoading,
     totalCount,
-
-    // Actions
     searchProducts,
     getProductById,
     getCategories,
     getBrands,
+    getLocations,
     getMyProducts,
     addProduct,
     deleteProduct,

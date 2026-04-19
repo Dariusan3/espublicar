@@ -19,7 +19,6 @@ export default function Login() {
     const result = await login(email, password);
 
     if (result.success) {
-      // Close the modal on successful login
       const modal = document.getElementById("log");
       const bootstrap = require("bootstrap");
       const modalInstance = bootstrap.Modal.getInstance(modal);
@@ -28,17 +27,14 @@ export default function Login() {
       }
       setEmail("");
       setPassword("");
-
-      // Show success toast
-      toast.success("✅ Login successful! Welcome back!");
+      toast.success("¡Inicio de sesión exitoso!");
     } else {
-      setError(result.error || "Login failed. Please try again.");
+      setError(result.error || "Error al iniciar sesión. Inténtalo de nuevo.");
     }
 
     setLoading(false);
   };
 
-  // If user is already logged in, show a different message
   if (user) {
     return (
       <div className="modal modalCentered fade modal-log" id="log">
@@ -49,16 +45,16 @@ export default function Login() {
               data-bs-dismiss="modal"
             />
             <div className="modal-log-wrap list-file-delete text-center">
-              <h5 className="title fw-semibold">Welcome back!</h5>
+              <h5 className="title fw-semibold">¡Bienvenido de vuelta!</h5>
               <p className="body-text-3 mt-3">
-                You are logged in as <strong>{user.email}</strong>
+                Has iniciado sesión como <strong>{user.email}</strong>
               </p>
               <a
                 href="/my-account"
                 className="tf-btn w-100 text-white mt-4"
                 data-bs-dismiss="modal"
               >
-                Go to My Account
+                Ir a mi cuenta
               </a>
             </div>
           </div>
@@ -76,7 +72,7 @@ export default function Login() {
             data-bs-dismiss="modal"
           />
           <div className="modal-log-wrap list-file-delete">
-            <h5 className="title fw-semibold">Log In</h5>
+            <h5 className="title fw-semibold">Iniciar sesión</h5>
             <form onSubmit={handleSubmit} className="form-log">
               <div className="form-content">
                 {error && (
@@ -86,21 +82,23 @@ export default function Login() {
                 )}
                 <fieldset>
                   <label className="fw-semibold body-md-2">
-                    Email address *
+                    Correo electrónico *
                   </label>
                   <input
                     type="email"
-                    placeholder="Your email"
+                    placeholder="Tu correo electrónico"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </fieldset>
                 <fieldset className="position-relative">
-                  <label className="fw-semibold body-md-2"> Password * </label>
+                  <label className="fw-semibold body-md-2">
+                    Contraseña *
+                  </label>
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder="Ingresa tu contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -120,14 +118,14 @@ export default function Login() {
                     }}
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? "Hide" : "Show"}
+                    {showPassword ? "Ocultar" : "Mostrar"}
                   </span>
                 </fieldset>
                 <a
                   href="/forgot-password"
                   className="link text-end body-text-3"
                 >
-                  Forgot password ?
+                  ¿Olvidaste tu contraseña?
                 </a>
               </div>
               <button
@@ -135,22 +133,22 @@ export default function Login() {
                 className="tf-btn w-100 text-white"
                 disabled={loading}
               >
-                {loading ? "Logging in..." : "Login"}
+                {loading ? "Iniciando sesión..." : "Iniciar sesión"}
               </button>
               <p className="body-text-3 text-center">
-                Don&apos;t you have an account?
+                ¿No tienes una cuenta?{" "}
                 <a
                   href="#register"
                   data-bs-toggle="modal"
                   className="text-primary"
                 >
-                  Register
+                  Registrarse
                 </a>
               </p>
             </form>
             <div className="orther-log text-center">
               <span className="br-line bg-gray-5" />
-              <p className="caption text-main-2">Or login with</p>
+              <p className="caption text-main-2">O inicia sesión con</p>
             </div>
             <ul className="list-log">
               <li>

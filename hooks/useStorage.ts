@@ -163,6 +163,43 @@ const useStorage = () => {
     }
   }, []);
 
+  /**
+   * Upload multiple product images in parallel
+   * Returns array of file IDs
+   */
+  const uploadMultipleProductImages = useCallback(
+    async (files: File[]) => {
+      try {
+        const results = await Promise.all(
+          files.map((file) => uploadProductImage(file)),
+        );
+
+        const failed = results.filter((r) => !r.success);
+        if (failed.length > 0) {
+          return {
+            success: false,
+            message: `${failed.length} of ${files.length} uploads failed`,
+            data: results.filter((r) => r.success).map((r) => r.data),
+          };
+        }
+
+        return {
+          success: true,
+          message: "All images uploaded successfully!",
+          data: results.map((r) => r.data),
+        };
+      } catch (error: any) {
+        console.error("Error uploading multiple images:", error);
+        return {
+          success: false,
+          message: error.message,
+          data: null,
+        };
+      }
+    },
+    [uploadProductImage],
+  );
+
   return {
     getFileUrl,
     getProductImageUrl,
@@ -172,6 +209,7 @@ const useStorage = () => {
     uploadProductImage,
     uploadBlogImage,
     uploadUserAvatar,
+    uploadMultipleProductImages,
     deleteFile,
     listFiles,
   };

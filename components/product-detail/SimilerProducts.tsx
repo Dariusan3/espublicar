@@ -56,7 +56,7 @@ export default function SimilerProducts() {
               <div className="card-product">
                 <div className="card-product-wrapper">
                   <Link
-                    href={`/product-detail/${product.id}`}
+                    href={`/product/${product.id}`}
                     className="product-img"
                   >
                     <Image
@@ -108,7 +108,7 @@ export default function SimilerProducts() {
                         {product.category}
                       </p>
                       <Link
-                        href={`/product-detail/${product.id}`}
+                        href={`/product/${product.id}`}
                         className="name-product body-md-2 fw-semibold text-secondary link"
                       >
                         {product.title}
@@ -116,10 +116,10 @@ export default function SimilerProducts() {
                     </div>
                     <p className="price-wrap fw-medium">
                       <span className="new-price price-text fw-medium mb-0">
-                        ${product.price.toFixed(3)}
+                        €{product.price.toFixed(3)}
                       </span>
                       <span className="old-price body-md-2 text-main-2 fw-normal">
-                        ${product.oldprice.toFixed(3)}
+                        €{product.oldprice.toFixed(3)}
                       </span>
                     </p>
                   </div>

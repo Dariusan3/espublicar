@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import useProducts from "@/hooks/useProducts";
 import { toast } from "react-toastify";
@@ -8,10 +8,13 @@ import Link from "next/link";
 import { uploadProductImage, getProductImageUrl } from "@/lib/storage";
 import Image from "next/image";
 
+const MAX_IMAGES = 8;
+
 export default function AddProduct() {
   const { user } = useAuth();
   const { addProduct } = useProducts();
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,14 +22,15 @@ export default function AddProduct() {
     price: "",
     category: "",
     description: "",
-    imgSrc: "",
     condition: "Como nuevo",
     location: "",
     isNegotiable: false,
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [externalUrl, setExternalUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -34,23 +38,62 @@ export default function AddProduct() {
     >,
   ) => {
     const { name, value, type } = e.target;
-
-    if (type === "file") {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        setImageFile(file);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-      }
-      return;
-    }
-
     const val =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
     setFormData((prev) => ({ ...prev, [name]: val }));
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    addFiles(files);
+    // Reset file input so same file can be selected again
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const addFiles = (files: File[]) => {
+    const remaining = MAX_IMAGES - imageFiles.length;
+    if (remaining <= 0) {
+      toast.warning(`Máximo ${MAX_IMAGES} imágenes permitidas`);
+      return;
+    }
+
+    const validFiles = files
+      .filter((f) => f.type.startsWith("image/"))
+      .slice(0, remaining);
+
+    if (validFiles.length < files.length) {
+      toast.warning(
+        `Solo se pueden añadir ${remaining} imagen(es) más`,
+      );
+    }
+
+    // Generate previews
+    validFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviews((prev) => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    setImageFiles((prev) => [...prev, ...validFiles]);
+  };
+
+  const removeImage = (index: number) => {
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const files = Array.from(e.dataTransfer.files);
+    addFiles(files);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,35 +105,46 @@ export default function AddProduct() {
 
     setIsLoading(true);
     try {
-      let finalImgSrc = formData.imgSrc;
+      let allImageUrls: string[] = [];
 
-      // Handle file upload if present
-      if (imageFile) {
+      // Upload files if present
+      if (imageFiles.length > 0) {
         setIsUploading(true);
+        setUploadProgress(0);
         try {
-          const uploadResult = await uploadProductImage(imageFile);
-          // Get the URL for the uploaded file
-          finalImgSrc = getProductImageUrl(uploadResult.$id);
+          const urls: string[] = [];
+          for (let i = 0; i < imageFiles.length; i++) {
+            const uploadResult = await uploadProductImage(imageFiles[i]);
+            urls.push(getProductImageUrl(uploadResult.$id));
+            setUploadProgress(Math.round(((i + 1) / imageFiles.length) * 100));
+          }
+          allImageUrls = urls;
         } catch (uploadError) {
           console.error("Upload error:", uploadError);
           toast.error(
-            "Error al subir la imagen. Por favor, inténtalo de nuevo.",
+            "Error al subir las imágenes. Por favor, inténtalo de nuevo.",
           );
           setIsLoading(false);
           setIsUploading(false);
           return;
         }
         setIsUploading(false);
+      } else if (externalUrl.trim()) {
+        allImageUrls = [externalUrl.trim()];
       }
+
+      const mainImage =
+        allImageUrls[0] ||
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop";
 
       const productData = {
         title: formData.title,
         price: parseFloat(formData.price),
         category: formData.category,
         description: formData.description,
-        imgSrc:
-          finalImgSrc ||
-          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000&auto=format&fit=crop",
+        imgSrc: mainImage,
+        imgHover: allImageUrls[1] || "",
+        thumbImages: allImageUrls.length > 0 ? allImageUrls : [],
         userId: user.$id,
         rating: 0,
         sold: 0,
@@ -256,67 +310,108 @@ export default function AddProduct() {
           </div>
         </div>
 
+        {/* Multi-Image Upload Section */}
         <div className="mb-4">
           <label className="form-label fw-bold small text-uppercase ls-1">
-            Imagen del Producto
+            Fotos del Producto
+            <span className="text-muted fw-normal ms-2">
+              ({imageFiles.length}/{MAX_IMAGES})
+            </span>
           </label>
-          <div className="d-flex flex-column gap-3">
-            {imagePreview && (
-              <div
-                className="position-relative w-100"
-                style={{ height: "200px" }}
-              >
-                <Image
-                  src={imagePreview}
-                  alt="Vista previa"
-                  fill
-                  className="rounded-3 object-fit-cover shadow-sm"
-                />
-                <button
-                  type="button"
-                  className="btn btn-sm btn-danger position-absolute top-0 end-0 m-2 rounded-circle p-1"
-                  onClick={() => {
-                    setImageFile(null);
-                    setImagePreview(null);
-                  }}
-                  style={{ width: "30px", height: "30px" }}
+
+          {/* Image Preview Grid */}
+          {imagePreviews.length > 0 && (
+            <div className="d-flex flex-wrap gap-3 mb-3">
+              {imagePreviews.map((preview, index) => (
+                <div
+                  key={index}
+                  className="position-relative rounded-3 overflow-hidden shadow-sm"
+                  style={{ width: "120px", height: "120px" }}
                 >
-                  <i className="icon-x"></i>
-                </button>
-              </div>
-            )}
-            <div className="upload-box p-4 border-2 border-dashed border-light rounded-4 text-center hover-bg-light transition-all cursor-pointer position-relative">
+                  <Image
+                    src={preview}
+                    alt={`Foto ${index + 1}`}
+                    fill
+                    className="object-fit-cover"
+                  />
+                  {index === 0 && (
+                    <span
+                      className="position-absolute top-0 start-0 badge bg-primary m-1"
+                      style={{ fontSize: "0.65rem" }}
+                    >
+                      Principal
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle p-0 d-flex align-items-center justify-content-center"
+                    onClick={() => removeImage(index)}
+                    style={{ width: "24px", height: "24px", fontSize: "0.7rem" }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Upload Area */}
+          {imageFiles.length < MAX_IMAGES && (
+            <div
+              className="upload-box p-4 border-2 border-dashed border-light rounded-4 text-center hover-bg-light transition-all cursor-pointer position-relative"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+            >
               <input
+                ref={fileInputRef}
                 type="file"
                 className="position-absolute w-100 h-100 top-0 start-0 opacity-0 cursor-pointer"
                 accept="image/*"
-                onChange={handleChange}
+                multiple
+                onChange={handleFileSelect}
                 style={{ zIndex: 2 }}
               />
               <div className="py-2">
                 <i className="icon-upload-cloud fs-1 text-primary mb-2 d-block"></i>
                 <span className="fw-medium text-dark d-block">
-                  Seleccionar foto o arrastrar aquí
+                  Seleccionar fotos o arrastrar aquí
                 </span>
                 <span className="small text-muted">
-                  JPG, PNG, WebP (Máx. 5MB)
+                  JPG, PNG, WebP — Máx. {MAX_IMAGES} fotos, 5MB cada una
                 </span>
               </div>
             </div>
-            {!imageFile && (
-              <div className="mt-2 text-center">
-                <span className="text-muted small">O usa una URL externa:</span>
-                <input
-                  type="text"
-                  className="form-control rounded-3 p-3 border-light shadow-sm mt-2"
-                  name="imgSrc"
-                  value={formData.imgSrc}
-                  onChange={handleChange}
-                  placeholder="https://ejemplo.com/foto.jpg"
-                />
+          )}
+
+          {/* External URL fallback */}
+          {imageFiles.length === 0 && (
+            <div className="mt-2 text-center">
+              <span className="text-muted small">O usa una URL externa:</span>
+              <input
+                type="text"
+                className="form-control rounded-3 p-3 border-light shadow-sm mt-2"
+                value={externalUrl}
+                onChange={(e) => setExternalUrl(e.target.value)}
+                placeholder="https://ejemplo.com/foto.jpg"
+              />
+            </div>
+          )}
+
+          {/* Upload Progress */}
+          {isUploading && (
+            <div className="mt-3">
+              <div className="progress rounded-pill" style={{ height: "8px" }}>
+                <div
+                  className="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                  role="progressbar"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
               </div>
-            )}
-          </div>
+              <small className="text-muted mt-1 d-block text-center">
+                Subiendo imágenes... {uploadProgress}%
+              </small>
+            </div>
+          )}
         </div>
 
         <div className="mb-4">
@@ -337,9 +432,9 @@ export default function AddProduct() {
         <div className="alert alert-warning border-0 rounded-3 small p-3 mb-4 d-flex gap-3">
           <i className="icon-alert-triangle fs-4 text-warning"></i>
           <div>
-            <strong>Consejo:</strong> Sube fotos de buena calidad y sé honesto
-            con el estado del producto para vender más rápido y evitar
-            devoluciones.
+            <strong>Consejo:</strong> Sube varias fotos de buena calidad desde
+            diferentes ángulos y sé honesto con el estado del producto para
+            vender más rápido y evitar devoluciones.
           </div>
         </div>
 
@@ -356,7 +451,7 @@ export default function AddProduct() {
           )}
           {isLoading
             ? isUploading
-              ? "Subiendo imagen..."
+              ? `Subiendo imágenes... ${uploadProgress}%`
               : "Publicando..."
             : "Publicar Anuncio Ahora"}
         </button>

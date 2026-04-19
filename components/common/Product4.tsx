@@ -34,7 +34,7 @@ export default function Products4() {
           {featuredProducts2.map((product) => (
             <SwiperSlide key={product.id} className="swiper-slide">
               <Link
-                href={`/product-detail/${product.id}`}
+                href={`/product/${product.id}`}
                 className="wg-product-view style-2 hover-img d-block"
               >
                 <div className="image img-style">
@@ -71,7 +71,7 @@ export default function Products4() {
                     </p>
                   </div>
                   <div className={`box-price ${product.priceColor} fw-medium`}>
-                    <span className="text">$</span>
+                    <span className="text">€</span>
                     <span className="price">
                       {product.price.toLocaleString()}
                     </span>

@@ -155,7 +155,7 @@ export default function ChatInbox() {
                 {/* Link to Product */}
                 {selectedConversation.productId && (
                   <Link
-                    href={`/product-detail/${selectedConversation.productId}`}
+                    href={`/product/${selectedConversation.productId}`}
                     className="btn btn-sm btn-outline-primary rounded-pill"
                     style={{ fontSize: "12px" }}
                   >

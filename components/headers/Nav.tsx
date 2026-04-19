@@ -30,7 +30,7 @@ export default function Nav() {
         }  pst-unset`}
       >
         <a href="#" className="item-link link body-md-2 fw-semibold">
-          <span>Home</span>
+          <span>Inicio</span>
           <i className="icon icon-arrow-down" />
         </a>
         <div className="sub-menu-container mega-menu mega-home">
@@ -76,7 +76,7 @@ export default function Nav() {
         className={`nav-item ${isMenuParentActive2(shopPages) ? "active" : ""}`}
       >
         <a href="#" className="item-link body-md-2 fw-semibold">
-          <span>Shop</span>
+          <span>Tienda</span>
           <i className="icon icon-arrow-down" />
         </a>
         <div className="sub-menu-container mega-menu text-nowrap">
@@ -107,7 +107,7 @@ export default function Nav() {
         }`}
       >
         <a href="#" className="item-link body-md-2 fw-semibold">
-          <span>Product</span>
+          <span>Producto</span>
           <i className="icon icon-arrow-down" />
         </a>
         <div className="sub-menu-container mega-menu text-nowrap">
@@ -162,7 +162,7 @@ export default function Nav() {
         }`}
       >
         <a href="#" className="item-link body-md-2 fw-semibold">
-          <span>Page</span>
+          <span>Páginas</span>
           <i className="icon icon-arrow-down" />
         </a>
         <div className="sub-menu-container">

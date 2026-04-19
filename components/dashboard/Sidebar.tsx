@@ -19,6 +19,16 @@ export default function Sidebar() {
     },
     { name: "Mis guardados", href: "/wishlist", icon: "icon-heart" },
     {
+      name: "Mis ofertas",
+      href: "/my-account-offers",
+      icon: "icon-tag",
+    },
+    {
+      name: "Notificaciones",
+      href: "/my-account-notifications",
+      icon: "icon-bell",
+    },
+    {
       name: "Mis mensajes",
       href: "/my-account-messages",
       icon: "icon-message-circle",

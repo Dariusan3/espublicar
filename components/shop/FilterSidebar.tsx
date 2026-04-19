@@ -2,6 +2,14 @@
 import { useState, useEffect } from "react";
 import useProducts, { ProductFilters } from "@/hooks/useProducts";
 
+const CONDITIONS = [
+  "Nuevo",
+  "Como nuevo",
+  "Muy bueno",
+  "Bueno",
+  "Aceptable",
+];
+
 interface FilterSidebarProps {
   onFiltersChange: (filters: ProductFilters) => void;
   currentFilters: ProductFilters;
@@ -13,29 +21,35 @@ export default function FilterSidebar({
   currentFilters,
   className = "",
 }: FilterSidebarProps) {
-  const { getCategories, getBrands } = useProducts();
+  const { getCategories, getBrands, getLocations } = useProducts();
   const [categories, setCategories] = useState<string[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
   const [localFilters, setLocalFilters] =
     useState<ProductFilters>(currentFilters);
   const [expandedSections, setExpandedSections] = useState({
     category: true,
     price: true,
+    location: true,
+    condition: true,
     brands: false,
     features: false,
   });
 
-  // Load categories and brands on mount
   useEffect(() => {
     const loadFilters = async () => {
-      const [cats, brs] = await Promise.all([getCategories(), getBrands()]);
+      const [cats, brs, locs] = await Promise.all([
+        getCategories(),
+        getBrands(),
+        getLocations(),
+      ]);
       setCategories(cats);
       setBrands(brs);
+      setLocations(locs);
     };
     loadFilters();
-  }, [getCategories, getBrands]);
+  }, [getCategories, getBrands, getLocations]);
 
-  // Sync local filters with prop changes
   useEffect(() => {
     setLocalFilters(currentFilters);
   }, [currentFilters]);
@@ -63,10 +77,10 @@ export default function FilterSidebar({
   return (
     <aside className={`filter-sidebar ${className}`}>
       <div className="filter-header">
-        <h3>Filters</h3>
+        <h3>Filtros</h3>
         {hasActiveFilters && (
           <button onClick={clearFilters} className="clear-btn">
-            Clear All
+            Limpiar todo
           </button>
         )}
       </div>
@@ -77,7 +91,7 @@ export default function FilterSidebar({
           className="section-header"
           onClick={() => toggleSection("category")}
         >
-          <span>Category</span>
+          <span>Categoría</span>
           <span
             className={`arrow ${expandedSections.category ? "up" : "down"}`}
           >
@@ -93,7 +107,7 @@ export default function FilterSidebar({
                 checked={!localFilters.category}
                 onChange={() => updateFilter("category", undefined)}
               />
-              <span>All Categories</span>
+              <span>Todas las categorías</span>
             </label>
             {categories.map((cat) => (
               <label key={cat} className="filter-option">
@@ -110,13 +124,91 @@ export default function FilterSidebar({
         )}
       </div>
 
+      {/* Location Section */}
+      <div className="filter-section">
+        <button
+          className="section-header"
+          onClick={() => toggleSection("location")}
+        >
+          <span>Ubicación</span>
+          <span
+            className={`arrow ${expandedSections.location ? "up" : "down"}`}
+          >
+            ▾
+          </span>
+        </button>
+        {expandedSections.location && (
+          <div className="section-content">
+            <label className="filter-option">
+              <input
+                type="radio"
+                name="location"
+                checked={!localFilters.location}
+                onChange={() => updateFilter("location", undefined)}
+              />
+              <span>Todas las ubicaciones</span>
+            </label>
+            {locations.map((loc) => (
+              <label key={loc} className="filter-option">
+                <input
+                  type="radio"
+                  name="location"
+                  checked={localFilters.location === loc}
+                  onChange={() => updateFilter("location", loc)}
+                />
+                <span>{loc}</span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Condition Section */}
+      <div className="filter-section">
+        <button
+          className="section-header"
+          onClick={() => toggleSection("condition")}
+        >
+          <span>Estado</span>
+          <span
+            className={`arrow ${expandedSections.condition ? "up" : "down"}`}
+          >
+            ▾
+          </span>
+        </button>
+        {expandedSections.condition && (
+          <div className="section-content">
+            <label className="filter-option">
+              <input
+                type="radio"
+                name="condition"
+                checked={!localFilters.condition}
+                onChange={() => updateFilter("condition", undefined)}
+              />
+              <span>Todos los estados</span>
+            </label>
+            {CONDITIONS.map((cond) => (
+              <label key={cond} className="filter-option">
+                <input
+                  type="radio"
+                  name="condition"
+                  checked={localFilters.condition === cond}
+                  onChange={() => updateFilter("condition", cond)}
+                />
+                <span>{cond}</span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
       {/* Price Range Section */}
       <div className="filter-section">
         <button
           className="section-header"
           onClick={() => toggleSection("price")}
         >
-          <span>Price Range</span>
+          <span>Rango de precio</span>
           <span className={`arrow ${expandedSections.price ? "up" : "down"}`}>
             ▾
           </span>
@@ -126,7 +218,7 @@ export default function FilterSidebar({
             <div className="price-inputs">
               <input
                 type="number"
-                placeholder="Min"
+                placeholder="Mín"
                 value={localFilters.minPrice ?? ""}
                 onChange={(e) =>
                   updateFilter(
@@ -140,7 +232,7 @@ export default function FilterSidebar({
               <span className="price-separator">-</span>
               <input
                 type="number"
-                placeholder="Max"
+                placeholder="Máx"
                 value={localFilters.maxPrice ?? ""}
                 onChange={(e) =>
                   updateFilter(
@@ -154,10 +246,10 @@ export default function FilterSidebar({
             </div>
             <div className="price-presets">
               {[
-                { label: "Under $25", min: 0, max: 25 },
-                { label: "$25 - $50", min: 25, max: 50 },
-                { label: "$50 - $100", min: 50, max: 100 },
-                { label: "Over $100", min: 100, max: undefined },
+                { label: "Menos de 25€", min: 0, max: 25 },
+                { label: "25€ - 50€", min: 25, max: 50 },
+                { label: "50€ - 100€", min: 50, max: 100 },
+                { label: "Más de 100€", min: 100, max: undefined },
               ].map((preset) => (
                 <button
                   key={preset.label}
@@ -186,7 +278,7 @@ export default function FilterSidebar({
           className="section-header"
           onClick={() => toggleSection("features")}
         >
-          <span>Features</span>
+          <span>Características</span>
           <span
             className={`arrow ${expandedSections.features ? "up" : "down"}`}
           >
@@ -203,7 +295,7 @@ export default function FilterSidebar({
                   updateFilter("inStock", e.target.checked ? true : undefined)
                 }
               />
-              <span>In Stock Only</span>
+              <span>En stock</span>
             </label>
             <label className="filter-option">
               <input
@@ -213,7 +305,7 @@ export default function FilterSidebar({
                   updateFilter("isNew", e.target.checked ? true : undefined)
                 }
               />
-              <span>New Arrivals</span>
+              <span>Nuevos</span>
             </label>
             <label className="filter-option">
               <input
@@ -226,7 +318,7 @@ export default function FilterSidebar({
                   )
                 }
               />
-              <span>Today's Deals</span>
+              <span>Ofertas del día</span>
             </label>
             <label className="filter-option">
               <input
@@ -236,7 +328,7 @@ export default function FilterSidebar({
                   updateFilter("hotSale", e.target.checked ? true : undefined)
                 }
               />
-              <span>Hot Sale</span>
+              <span>Rebaja</span>
             </label>
           </div>
         )}
@@ -244,7 +336,7 @@ export default function FilterSidebar({
 
       {/* Sorting */}
       <div className="filter-section">
-        <label className="sort-label">Sort By</label>
+        <label className="sort-label">Ordenar por</label>
         <select
           value={localFilters.sortBy || "newest"}
           onChange={(e) =>
@@ -252,10 +344,10 @@ export default function FilterSidebar({
           }
           className="sort-select"
         >
-          <option value="newest">Newest First</option>
-          <option value="price_asc">Price: Low to High</option>
-          <option value="price_desc">Price: High to Low</option>
-          <option value="rating">Top Rated</option>
+          <option value="newest">Más recientes</option>
+          <option value="price_asc">Precio: menor a mayor</option>
+          <option value="price_desc">Precio: mayor a menor</option>
+          <option value="rating">Mejor valorados</option>
         </select>
       </div>
 
@@ -317,6 +409,8 @@ export default function FilterSidebar({
         }
         .section-content {
           padding-top: 12px;
+          max-height: 250px;
+          overflow-y: auto;
         }
         .filter-option {
           display: flex;

@@ -124,7 +124,7 @@ export default function Description({ productId }: { productId?: string }) {
                         This item: Elite Gourmet EKT1001B Electric BPA-Free
                         Glass Kettle, Cordless 360°...
                       </a>
-                      <p className="price-text fw-medium">$18.99</p>
+                      <p className="price-text fw-medium">€18,99</p>
                     </div>
                   </div>
                 </div>
@@ -156,13 +156,13 @@ export default function Description({ productId }: { productId?: string }) {
                         Rubbermaid No-Slip Large, Silverware Tray Organizer,
                         Black with Gray
                       </a>
-                      <p className="price-text fw-medium">$8.29</p>
+                      <p className="price-text fw-medium">€8,29</p>
                     </div>
                   </div>
                 </div>
                 <div className="box-total-btn">
                   <p className="body-text-3 text-center">
-                    Total price: <span className="text-primary">$27.29</span>
+                    Precio total: <span className="text-primary">€27,29</span>
                   </p>
                   <a
                     href="#shoppingCart"

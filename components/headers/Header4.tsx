@@ -9,6 +9,7 @@ import CurrencySelect from "../common/CurrencySelect";
 import NavCategories from "./NavCategories";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import NotificationBell from "@/components/common/NotificationBell";
 
 export default function Header4({ fullWidth = false }) {
   const { user, logout } = useAuth();
@@ -65,7 +66,7 @@ export default function Header4({ fullWidth = false }) {
                             />
                           </svg>
                         </span>
-                        <p className="body-small">My Account</p>
+                        <p className="body-small">Mi Cuenta</p>
                       </Link>
                     ) : (
                       <a
@@ -95,7 +96,7 @@ export default function Header4({ fullWidth = false }) {
                             />
                           </svg>
                         </span>
-                        <p className="body-small">Sign in</p>
+                        <p className="body-small">Iniciar sesión</p>
                       </a>
                     )}
                   </li>
@@ -146,8 +147,13 @@ export default function Header4({ fullWidth = false }) {
                             />
                           </svg>
                         </span>
-                        <p className="body-small">Logout</p>
+                        <p className="body-small">Salir</p>
                       </a>
+                    </li>
+                  )}
+                  {user && (
+                    <li className="nav-account d-none d-xl-block">
+                      <NotificationBell />
                     </li>
                   )}
                   <li className="nav-support d-none d-xl-block">
@@ -172,7 +178,7 @@ export default function Header4({ fullWidth = false }) {
                       <span className="count-box style-pst-2 d-none d-xxl-flex">
                         04
                       </span>
-                      <p className="body-small">Wishlist</p>
+                      <p className="body-small">Favoritos</p>
                     </Link>
                   </li>
                   <li className="nav-cart">
@@ -206,7 +212,7 @@ export default function Header4({ fullWidth = false }) {
                       <span className="count-box style-pst-2 d-none d-xxl-flex">
                         10
                       </span>
-                      <p className="body-small">Your cart:</p>
+                      <p className="body-small">Tu carrito</p>
                     </a>
                   </li>
                   <li className="d-flex align-items-center d-xl-none btn-mobile">

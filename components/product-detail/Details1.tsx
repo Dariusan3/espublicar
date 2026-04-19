@@ -7,8 +7,10 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
 import useChat from "@/hooks/useChat";
 import { useRouter } from "next/navigation";
+import MakeOfferModal from "@/components/modals/MakeOfferModal";
 export default function Details1({ product }: { product: any }) {
   const [quantity, setQuantity] = useState(1);
+  const [showOfferModal, setShowOfferModal] = useState(false);
   const { addProductToCart, isAddedToCartProducts } = useContextElement();
   const { user } = useAuth();
   const { startConversation } = useChat();
@@ -49,7 +51,14 @@ export default function Details1({ product }: { product: any }) {
               {/* Product Image */}
               <div className="tf-product-media-wrap thumbs-default sticky-top">
                 <div className="thumbs-slider">
-                  <Slider1 firstIamge={product.imgSrc} />
+                  <Slider1
+                    firstIamge={product.imgSrc}
+                    images={
+                      product.thumbImages && product.thumbImages.length > 0
+                        ? product.thumbImages
+                        : undefined
+                    }
+                  />
                 </div>
               </div>
               {/* /Product Image */}
@@ -89,33 +98,31 @@ export default function Details1({ product }: { product: any }) {
                       <ul className="product-info-rate-wrap">
                         <li className="star-review">
                           <ul className="list-star">
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star" />
-                            </li>
-                            <li>
-                              <i className="icon-star text-main-4" />
-                            </li>
+                            {[...Array(5)].map((_, i) => (
+                              <li key={i}>
+                                <i
+                                  className={`icon-star ${i >= Math.round(product.rating || 0) ? "text-main-4" : ""}`}
+                                />
+                              </li>
+                            ))}
                           </ul>
-                          <p className="caption text-main-2">Reviews (1.738)</p>
+                          <p className="caption text-main-2">
+                            {product.rating?.toFixed(1) || "0"} / 5
+                          </p>
                         </li>
-                        <li>
-                          <p className="caption text-main-2">Sold: 349</p>
-                        </li>
+                        {product.sold > 0 && (
+                          <li>
+                            <p className="caption text-main-2">
+                              Vendidos: {product.sold}
+                            </p>
+                          </li>
+                        )}
                         <li className="d-flex">
                           <Link
-                            href={`/shop-default`}
+                            href="/shop-default"
                             className="caption text-secondary link"
                           >
-                            View shop
+                            Ver tienda
                           </Link>
                         </li>
                       </ul>
@@ -123,94 +130,67 @@ export default function Details1({ product }: { product: any }) {
                     <div className="infor-center">
                       <div className="product-info-price">
                         <h4 className="text-primary">
-                          ${product.price.toFixed(2)}
+                          €{product.price.toFixed(2)}
                         </h4>{" "}
                         {product.oldprice && (
                           <span className="price-text text-main-2 old-price">
-                            ${product.oldprice.toFixed(2)}
+                            €{product.oldprice.toFixed(2)}
                           </span>
                         )}
                       </div>
                       <ul className="product-fearture-list">
+                        {product.category && (
+                          <li>
+                            <p className="body-md-2 fw-semibold">Categoría</p>
+                            <span className="body-text-3">{product.category}</span>
+                          </li>
+                        )}
+                        {product.condition && (
+                          <li>
+                            <p className="body-md-2 fw-semibold">Estado</p>
+                            <span className="body-text-3">{product.condition}</span>
+                          </li>
+                        )}
+                        {product.location && (
+                          <li>
+                            <p className="body-md-2 fw-semibold">Ubicación</p>
+                            <span className="body-text-3">{product.location}</span>
+                          </li>
+                        )}
                         <li>
-                          <p className="body-md-2 fw-semibold">Brand</p>
-                          <span className="body-text-3">Elite Gourmet</span>
-                        </li>
-                        <li>
-                          <p className="body-md-2 fw-semibold">Capacity</p>
-                          <span className="body-text-3">1 Liters</span>
-                        </li>
-                        <li>
-                          <p className="body-md-2 fw-semibold">Material</p>
-                          <span className="body-text-3">Glass</span>
-                        </li>
-                        <li>
-                          <p className="body-md-2 fw-semibold">Wattage</p>
-                          <span className="body-text-3">1100 watts</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="infor-bottom">
-                      <h6 className="fw-semibold">About this item</h6>
-                      <ul className="product-about-list">
-                        <li>
-                          <p className="body-text-3">
-                            Here’s the quickest way to enjoy your delicious hot
-                            tea every single day.
-                          </p>
-                        </li>
-                        <li>
-                          <p className="body-text-3">
-                            100% BPA - Free premium design meets excellent
-                          </p>
-                        </li>
-                        <li>
-                          <p className="body-text-3">
-                            No more messy accidents or spills
-                          </p>
-                        </li>
-                        <li>
-                          <p className="body-text-3">
-                            So easy &amp; convenient that everyone can use it
-                          </p>
-                        </li>
-                        <li>
-                          <p className="body-text-3">
-                            This powerful 900-1100-Watt kettle has convenient
-                            capacity markings on the body lets you accurately
-                          </p>
-                        </li>
-                        <li>
-                          <p className="body-text-3">
-                            1 year limited warranty and us-based customer
-                            support team lets you buy with confidence.
-                          </p>
+                          <p className="body-md-2 fw-semibold">Disponibilidad</p>
+                          <span className="body-text-3">
+                            {product.inStock ? "En stock" : "Agotado"}
+                          </span>
                         </li>
                       </ul>
                     </div>
+                    {product.description && (
+                      <div className="infor-bottom">
+                        <h6 className="fw-semibold">Descripción</h6>
+                        <p className="body-text-3">{product.description}</p>
+                      </div>
+                    )}
                   </div>
                   <div className="tf-product-info-choose-option sticky-top">
                     <div className="product-delivery">
                       <p className="price-text fw-medium text-primary">
-                        ${product.price.toFixed(2)}
+                        €{product.price.toFixed(2)}
                       </p>
                       <p>
-                        <i className="icon-delivery-2" /> Free shipping
+                        <i className="icon-delivery-2" /> Envío disponible
                       </p>
-                      <div className="shipping-to">
-                        <p className="body-md-2">Shipping to:</p>
-                        <div className="tf-cur">
-                          <div className="tf-cur-item">
-                            <select className="select-default cs-pointer fw-semibold body-md-2">
-                              <option>Metro Manila</option>
-                              <option>Metro Manila</option>
-                            </select>
-                          </div>
+                      {product.location && (
+                        <div className="shipping-to">
+                          <p className="body-md-2">
+                            <i className="icon-map-pin me-1"></i>
+                            {product.location}
+                          </p>
                         </div>
-                      </div>
+                      )}
                     </div>
                     <div className="product-quantity">
-                      <p className="title body-text-3">Quantity</p>
+                      <p className="title body-text-3">Cantidad</p>
                       <div className="wg-quantity">
                         <button
                           className="btn-quantity btn-decrease"
@@ -232,15 +212,6 @@ export default function Details1({ product }: { product: any }) {
                         >
                           <i className="icon-plus" />
                         </button>
-                      </div>
-                    </div>
-                    <div className="product-color">
-                      <p className="title body-text-3">Color</p>
-                      <div className="tf-select-color">
-                        <select className="select-color">
-                          <option>Graphite Black</option>
-                          <option>Graphite Blue</option>
-                        </select>
                       </div>
                     </div>
                     <div className="product-box-btn">
@@ -266,17 +237,17 @@ export default function Details1({ product }: { product: any }) {
                       >
                         Comprar ahora
                       </Link>
-                      {product.isNegotiable && (
-                        <button
-                          className="tf-btn btn-success text-white w-100 mt-2"
-                          onClick={() =>
-                            toast.info("Función de oferta próximamente")
-                          }
-                        >
-                          <i className="icon-message-square me-2"></i>
-                          Hacer una oferta
-                        </button>
-                      )}
+                      {product.isNegotiable &&
+                        user &&
+                        user.$id !== product.userId && (
+                          <button
+                            className="tf-btn btn-success text-white w-100 mt-2"
+                            onClick={() => setShowOfferModal(true)}
+                          >
+                            <i className="icon-message-square me-2"></i>
+                            Hacer una oferta
+                          </button>
+                        )}
                       {user?.$id !== product.userId && (
                         <button
                           className="tf-btn btn-outline-dark w-100 mt-2 rounded-pill"
@@ -286,15 +257,23 @@ export default function Details1({ product }: { product: any }) {
                           Contactar Vendedor
                         </button>
                       )}
+                      {product.userId && (
+                        <Link
+                          href={`/seller/${product.userId}`}
+                          className="tf-btn btn-outline-secondary w-100 mt-2 rounded-pill text-center"
+                        >
+                          <i className="icon-user me-2"></i>
+                          Ver perfil del vendedor
+                        </Link>
+                      )}
                     </div>
                     <div className="product-detail">
-                      <p className="caption">Details</p>
+                      <p className="caption">Detalles</p>
                       <p className="body-text-3">
                         <span>
-                          Return policy: Eligible for Return, Refund or
-                          Replacement within 30 days of receipt
+                          Devoluciones: Aceptamos devoluciones dentro de los 30
+                          días posteriores a la recepción.
                         </span>
-                        <span>Support: Free Amazon tech support included</span>
                       </p>
                     </div>
                   </div>
@@ -305,6 +284,16 @@ export default function Details1({ product }: { product: any }) {
           </div>
         </div>
       </div>
+
+      {showOfferModal && (
+        <MakeOfferModal
+          productId={(product as any).$id || product.id}
+          sellerId={product.userId}
+          currentPrice={product.price}
+          productTitle={product.title}
+          onClose={() => setShowOfferModal(false)}
+        />
+      )}
     </section>
   );
 }

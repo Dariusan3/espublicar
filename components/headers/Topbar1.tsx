@@ -25,7 +25,7 @@ export default function Topbar1({ parentClass = "tf-topbar line-bt" }) {
               </p>
               <p className="body-small text-main-2">
                 Free Shipping on Orders{" "}
-                <span className="fw-semibold text-main">$50+</span>
+                <span className="fw-semibold text-main">€50+</span>
               </p>
             </div>
           </div>

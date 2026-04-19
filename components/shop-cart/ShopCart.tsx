@@ -102,7 +102,7 @@ export default function ShopCart() {
                             <div>
                               <h6 className="fw-bold mb-1 text-dark">
                                 <Link
-                                  href={`/product-detail/${item.productId}`}
+                                  href={`/product/${item.productId}`}
                                   className="text-decoration-none text-dark hover-text-primary"
                                 >
                                   {item.productTitle}

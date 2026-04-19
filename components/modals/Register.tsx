@@ -21,22 +21,19 @@ export default function Register() {
     e.preventDefault();
     setError("");
 
-    // Validate passwords match
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("Las contraseñas no coinciden");
       return;
     }
 
-    // Validate password length
     if (password.length < 8) {
-      setError("Password must be at least 8 characters long");
+      setError("La contraseña debe tener al menos 8 caracteres");
       return;
     }
 
     setLoading(true);
 
     try {
-      // 1. Sign up the user
       const signUpResult = await signUserUp(email, password);
       if (!signUpResult.success) {
         setError(signUpResult.message);
@@ -44,7 +41,6 @@ export default function Register() {
         return;
       }
 
-      // 2. Sign in the user to create a session
       const signInResult = await signUserIn(email, password);
       if (!signInResult.success) {
         setError(signInResult.message);
@@ -52,7 +48,6 @@ export default function Register() {
         return;
       }
 
-      // 3. Create user in database
       const newUser: UserDB = {
         name: name,
         email: email,
@@ -61,14 +56,13 @@ export default function Register() {
       const createUserResult = await createUserInDB(newUser, signUpResult.data);
       if (!createUserResult.success) {
         setError(
-          "Account created but failed to save profile: " +
+          "Cuenta creada pero error al guardar el perfil: " +
             createUserResult.message,
         );
         setLoading(false);
         return;
       }
 
-      // Success! Close the modal
       const modal = document.getElementById("register");
       const bootstrap = require("bootstrap");
       const modalInstance = bootstrap.Modal.getInstance(modal);
@@ -76,16 +70,13 @@ export default function Register() {
         modalInstance.hide();
       }
 
-      // Reset form
       setName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
 
-      // Redirect to account page since user is now logged in
-      toast.success("🎉 Registration successful! Welcome to our store!");
+      toast.success("¡Registro exitoso! Bienvenido a espublicar");
 
-      // Small delay to show the toast before redirect
       setTimeout(() => {
         window.location.href = "/my-account";
       }, 1000);
@@ -105,7 +96,7 @@ export default function Register() {
             data-bs-dismiss="modal"
           />
           <div className="modal-log-wrap list-file-delete">
-            <h5 className="title fw-semibold">Sign Up</h5>
+            <h5 className="title fw-semibold">Crear cuenta</h5>
             <form onSubmit={handleSubmit} className="form-log">
               <div className="form-content">
                 {error && (
@@ -114,10 +105,12 @@ export default function Register() {
                   </div>
                 )}
                 <fieldset>
-                  <label className="fw-semibold body-md-2">Full Name *</label>
+                  <label className="fw-semibold body-md-2">
+                    Nombre completo *
+                  </label>
                   <input
                     type="text"
-                    placeholder="Your full name"
+                    placeholder="Tu nombre completo"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -125,21 +118,23 @@ export default function Register() {
                 </fieldset>
                 <fieldset>
                   <label className="fw-semibold body-md-2">
-                    Email address *
+                    Correo electrónico *
                   </label>
                   <input
                     type="email"
-                    placeholder="Your email"
+                    placeholder="Tu correo electrónico"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </fieldset>
                 <fieldset className="position-relative">
-                  <label className="fw-semibold body-md-2"> Password * </label>
+                  <label className="fw-semibold body-md-2">
+                    Contraseña *
+                  </label>
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password (min 8 characters)"
+                    placeholder="Mínimo 8 caracteres"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -159,16 +154,16 @@ export default function Register() {
                     }}
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? "Hide" : "Show"}
+                    {showPassword ? "Ocultar" : "Mostrar"}
                   </span>
                 </fieldset>
                 <fieldset className="position-relative">
                   <label className="fw-semibold body-md-2">
-                    Confirm Password *
+                    Confirmar contraseña *
                   </label>
                   <input
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm your password"
+                    placeholder="Confirma tu contraseña"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
@@ -188,7 +183,7 @@ export default function Register() {
                     }}
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
-                    {showConfirmPassword ? "Hide" : "Show"}
+                    {showConfirmPassword ? "Ocultar" : "Mostrar"}
                   </span>
                 </fieldset>
               </div>
@@ -197,18 +192,18 @@ export default function Register() {
                 className="tf-btn w-100 text-white"
                 disabled={loading}
               >
-                {loading ? "Creating account..." : "Sign Up"}
+                {loading ? "Creando cuenta..." : "Crear cuenta"}
               </button>
               <p className="body-text-3 text-center">
-                Already have an account?
+                ¿Ya tienes una cuenta?{" "}
                 <a href="#log" data-bs-toggle="modal" className="text-primary">
-                  Sign in
+                  Iniciar sesión
                 </a>
               </p>
             </form>
             <div className="orther-log text-center">
               <span className="br-line bg-gray-5" />
-              <p className="caption text-main-2">Or sign up with</p>
+              <p className="caption text-main-2">O regístrate con</p>
             </div>
             <ul className="list-log">
               <li>

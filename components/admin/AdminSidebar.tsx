@@ -10,10 +10,10 @@ export default function AdminSidebar() {
   const { logout } = useAuth();
 
   const menuItems = [
-    { name: "Dashboard", path: "/admin", icon: "icon-grid" },
-    { name: "Products", path: "/admin/products", icon: "icon-box" },
-    { name: "Orders", path: "/admin/orders", icon: "icon-shopping-bag" },
-    { name: "Customers", path: "/admin/customers", icon: "icon-users" },
+    { name: "Panel", path: "/admin", icon: "icon-grid" },
+    { name: "Productos", path: "/admin/products", icon: "icon-box" },
+    { name: "Pedidos", path: "/admin/orders", icon: "icon-shopping-bag" },
+    { name: "Usuarios", path: "/admin/customers", icon: "icon-users" },
   ];
 
   return (
@@ -36,7 +36,7 @@ export default function AdminSidebar() {
         <li>
           <Link href="/" className="my-account-nav-item">
             <i className="icon-arrow-left me-2" />
-            Back to Shop
+            Volver a la tienda
           </Link>
         </li>
         <li>
@@ -44,13 +44,13 @@ export default function AdminSidebar() {
             onClick={async (e) => {
               e.preventDefault();
               await logout();
-              toast.success("Logged out");
+              toast.success("Sesión cerrada");
               window.location.href = "/";
             }}
             className="my-account-nav-item border-0 bg-transparent w-100 text-start text-danger"
           >
             <i className="icon-log-out me-2" />
-            Logout
+            Cerrar sesión
           </button>
         </li>
       </ul>

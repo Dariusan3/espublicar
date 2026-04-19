@@ -12,6 +12,8 @@ import {
   OrderItem,
   Conversation,
   Message,
+  Offer,
+  Notification,
 } from "@/types/Types";
 
 /**
@@ -253,3 +255,40 @@ export const toConversations = (docs: DocumentData[]): Conversation[] =>
 
 export const toMessages = (docs: DocumentData[]): Message[] =>
   docs.map(toMessage);
+
+/**
+ * Convert Appwrite Document to Offer type
+ */
+export const toOffer = (doc: DocumentData): Offer => ({
+  id: doc.$id,
+  createdAt: doc.$createdAt,
+  updatedAt: doc.$updatedAt,
+  productId: doc.productId,
+  buyerId: doc.buyerId,
+  sellerId: doc.sellerId,
+  amount: doc.amount,
+  status: doc.status ?? "pending",
+  counterAmount: doc.counterAmount,
+  message: doc.message,
+});
+
+export const toOffers = (docs: DocumentData[]): Offer[] => docs.map(toOffer);
+
+/**
+ * Convert Appwrite Document to Notification type
+ */
+export const toNotification = (doc: DocumentData): Notification => ({
+  id: doc.$id,
+  createdAt: doc.$createdAt,
+  updatedAt: doc.$updatedAt,
+  userId: doc.userId,
+  type: doc.type ?? "system",
+  title: doc.title,
+  body: doc.body,
+  referenceId: doc.referenceId,
+  referenceType: doc.referenceType,
+  isRead: doc.isRead ?? false,
+});
+
+export const toNotifications = (docs: DocumentData[]): Notification[] =>
+  docs.map(toNotification);

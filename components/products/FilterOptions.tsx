@@ -99,7 +99,7 @@ export default function FilterOptions({ allProps } : { allProps: any }) {
               readOnly
               className="tf-check"
             />
-            <label>Under $10</label>
+            <label>Menos de €10</label>
           </fieldset>
           <fieldset
             className="fieldset-item"
@@ -111,7 +111,7 @@ export default function FilterOptions({ allProps } : { allProps: any }) {
               readOnly
               className="tf-check"
             />
-            <label>$10 to $15</label>
+            <label>€10 a €15</label>
           </fieldset>
           <fieldset
             className="fieldset-item"
@@ -123,7 +123,7 @@ export default function FilterOptions({ allProps } : { allProps: any }) {
               className="tf-check"
               readOnly
             />
-            <label>$15 to $25</label>
+            <label>€15 a €25</label>
           </fieldset>
           <fieldset
             className="fieldset-item "
@@ -135,7 +135,7 @@ export default function FilterOptions({ allProps } : { allProps: any }) {
               className="tf-check"
               readOnly
             />
-            <label>$25 &amp; Above</label>
+            <label>€25 y más</label>
           </fieldset>
         </div>
         <div className="box-price-product">

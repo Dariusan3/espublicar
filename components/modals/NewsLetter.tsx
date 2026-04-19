@@ -74,7 +74,7 @@ export default function NewsLetter() {
             data-bs-dismiss="modal"
           />
           <div className="heading">
-            <h5 className="fw-semibold">Join our newsletter for $10 offs</h5>
+            <h5 className="fw-semibold">Join our newsletter for 10€ de descuento</h5>
             <p className="body-md-2">
               Register now to get latest updates on promotions &amp; coupons.{" "}
               <br />

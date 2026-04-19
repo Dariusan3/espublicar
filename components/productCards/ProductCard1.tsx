@@ -28,7 +28,7 @@ export default function ProductCard1({
     >
       <div className="card-product-wrapper overflow-visible">
         <div className="product-thumb-image">
-          <Link href={`/product-detail/${product.id}`} className="card-image">
+          <Link href={`/product/${product.id}`} className="card-image">
             <Image
               alt="Image Product"
               className="lazyload img-product"
@@ -102,7 +102,7 @@ export default function ProductCard1({
             </div>
             <h6>
               <Link
-                href={`/product-detail/${product.id}`}
+                href={`/product/${product.id}`}
                 className="name-product fw-semibold text-secondary link"
               >
                 {product.title}

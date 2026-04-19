@@ -98,11 +98,11 @@ export default function ProductCards3({ product }: { product: Product }) {
           </div>
           <p className="price-wrap fw-medium">
             <span className="new-price price-text fw-medium">
-              ${product.price.toFixed(3)}
+              €{product.price.toFixed(3)}
             </span>
             {product.oldprice && (
               <span className="old-price body-md-2 text-main-2">
-                ${product.oldprice.toFixed(3)}
+                €{product.oldprice.toFixed(3)}
               </span>
             )}
           </p>

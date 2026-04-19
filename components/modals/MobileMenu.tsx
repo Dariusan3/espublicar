@@ -46,7 +46,7 @@ export default function MobileMenu() {
                     className="tab-link link fw-semibold active"
                     data-bs-toggle="tab"
                   >
-                    Menu
+                    Menú
                   </a>
                 </li>
                 <li className="br-line type-vertical bg-line h23" />
@@ -56,7 +56,7 @@ export default function MobileMenu() {
                     className="tab-link link fw-semibold"
                     data-bs-toggle="tab"
                   >
-                    Categories
+                    Categorías
                   </a>
                 </li>
               </ul>
@@ -73,7 +73,7 @@ export default function MobileMenu() {
                       <input
                         className=""
                         type="text"
-                        placeholder="Search for anything"
+                        placeholder="Buscar..."
                         name="text"
                         tabIndex={2}
                         defaultValue=""
@@ -98,7 +98,7 @@ export default function MobileMenu() {
                         aria-expanded="true"
                         aria-controls="dropdown-menu-home"
                       >
-                        <span>Home</span>
+                        <span>Inicio</span>
                         <span className="btn-open-sub" />
                       </a>
                       <div id="dropdown-menu-home" className="collapse">
@@ -130,7 +130,7 @@ export default function MobileMenu() {
                         aria-expanded="true"
                         aria-controls="dropdown-menu-shop"
                       >
-                        <span>Shop</span>
+                        <span>Tienda</span>
                         <span className="btn-open-sub" />
                       </a>
                       <div id="dropdown-menu-shop" className="collapse">

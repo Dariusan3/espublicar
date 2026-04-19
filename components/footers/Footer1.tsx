@@ -83,7 +83,7 @@ export default function Footer1({ fullWidth = false }) {
                   />
                 </Link>
                 <div className="method-payment">
-                  <p>We accept:</p>
+                  <p>Aceptamos:</p>
                   <ul className="method-list">
                     <li>
                       <Image
@@ -123,33 +123,33 @@ export default function Footer1({ fullWidth = false }) {
               <ul className="ft-link-wrap w-100 tf-grid-layout md-col-2 lg-col-4">
                 <li className="footer-col-block">
                   <h6 className="ft-heading footer-heading-mobile fw-semibold">
-                    Get help
+                    Ayuda
                   </h6>
                   <div className="tf-collapse-content">
                     <ul className="ft-menu-list">
                       <li>
                         <Link href={`/privacy`} className="link">
-                          Delivery Information
+                          Información de envío
                         </Link>
                       </li>
                       <li>
                         <Link href={`/faq`} className="link">
-                          Sale Terms &amp; Conditions
+                          Términos y condiciones
                         </Link>
                       </li>
                       <li>
                         <Link href={`/privacy`} className="link">
-                          Returns &amp; Refunds
+                          Devoluciones y reembolsos
                         </Link>
                       </li>
                       <li>
                         <Link href={`/privacy`} className="link">
-                          Privacy Notice
+                          Aviso de privacidad
                         </Link>
                       </li>
                       <li>
                         <Link href={`/faq`} className="link">
-                          Shopping FAQs
+                          Preguntas frecuentes
                         </Link>
                       </li>
                     </ul>
@@ -157,43 +157,43 @@ export default function Footer1({ fullWidth = false }) {
                 </li>
                 <li className="footer-col-block">
                   <h6 className="ft-heading footer-heading-mobile fw-semibold">
-                    Popular categories
+                    Categorías populares
                   </h6>
                   <div className="tf-collapse-content">
                     <ul className="ft-menu-list">
                       <li>
-                        <Link href={`/shop-default`} className="link">
-                          Laptops &amp; Computers
+                        <Link href="/shop-default?category=Electrónica" className="link">
+                          Electrónica
                         </Link>
                       </li>
                       <li>
-                        <Link href={`/shop-default`} className="link">
-                          Cameras &amp; Photography
+                        <Link href="/shop-default?category=Moda" className="link">
+                          Moda
                         </Link>
                       </li>
                       <li>
-                        <Link href={`/shop-default`} className="link">
-                          Smart Phones &amp; Tablets
+                        <Link href="/shop-default?category=Hogar" className="link">
+                          Hogar
                         </Link>
                       </li>
                       <li>
-                        <Link href={`/shop-default`} className="link">
-                          Video Games &amp; Consoles
+                        <Link href="/shop-default?category=Deportes" className="link">
+                          Deportes
                         </Link>
                       </li>
                       <li>
-                        <Link href={`/shop-default`} className="link">
-                          TV &amp; Audio
+                        <Link href="/shop-default?category=Vehículos" className="link">
+                          Vehículos
                         </Link>
                       </li>
                       <li>
-                        <Link href={`/shop-default`} className="link">
-                          Gadgets
+                        <Link href="/shop-default?category=Muebles" className="link">
+                          Muebles
                         </Link>
                       </li>
                       <li>
-                        <Link href={`/shop-default`} className="link">
-                          Waterproof Headphones
+                        <Link href="/shop-default?category=Libros" className="link">
+                          Libros
                         </Link>
                       </li>
                     </ul>
@@ -201,38 +201,38 @@ export default function Footer1({ fullWidth = false }) {
                 </li>
                 <li className="footer-col-block">
                   <h6 className="ft-heading footer-heading-mobile fw-semibold">
-                    Customer Care
+                    Atención al cliente
                   </h6>
                   <div className="tf-collapse-content">
                     <ul className="ft-menu-list">
                       <li>
                         <Link href={`/my-account`} className="link">
-                          My Account
+                          Mi cuenta
                         </Link>
                       </li>
                       <li>
                         <Link href={`/track-your-order`} className="link">
-                          Track your Order
+                          Rastrear pedido
                         </Link>
                       </li>
                       <li>
                         <Link href={`/contact`} className="link">
-                          Customer Service
+                          Servicio al cliente
                         </Link>
                       </li>
                       <li>
                         <Link href={`/privacy`} className="link">
-                          Returns/Exchange
+                          Devoluciones y cambios
                         </Link>
                       </li>
                       <li>
                         <Link href={`/faq`} className="link">
-                          FAQs
+                          Preguntas frecuentes
                         </Link>
                       </li>
                       <li>
                         <Link href={`/contact`} className="link">
-                          Product Support
+                          Soporte
                         </Link>
                       </li>
                     </ul>
@@ -240,7 +240,7 @@ export default function Footer1({ fullWidth = false }) {
                 </li>
                 <li className="footer-col-block type-sp-2">
                   <h6 className="ft-heading footer-heading-mobile fw-semibold">
-                    Contact
+                    Contacto
                   </h6>
                   <div className="tf-collapse-content">
                     <ul className="ft-menu-list ft-contact-list">
@@ -249,7 +249,7 @@ export default function Footer1({ fullWidth = false }) {
                           <i className="icon-location" />
                         </span>
                         <a href="#" className="link">
-                          8500 Lorem Street Chicago, IL 55030 Dolor sit amet
+                          Madrid, España
                         </a>
                       </li>
                       <li>
@@ -268,7 +268,7 @@ export default function Footer1({ fullWidth = false }) {
                         </span>
                         <a href="#" className="">
                           <span className="text-primary">
-                            onsus@support.com
+                            soporte@espublicar.com
                           </span>
                         </a>
                       </li>
@@ -285,11 +285,11 @@ export default function Footer1({ fullWidth = false }) {
               <p className="notice text-white justify-content-xxl-between">
                 <span className="main-title fw-semibold">
                   <Image alt="" src="/images/mail.svg" width={24} height={21} />
-                  10% Off Your First Order
+                  10% de descuento en tu primer pedido
                 </span>
                 <span className="body-text-3">
-                  Be the first to know about offers, new products and discounted
-                  products
+                  Sé el primero en conocer ofertas, nuevos productos y
+                  descuentos
                 </span>
               </p>
 
@@ -307,10 +307,10 @@ export default function Footer1({ fullWidth = false }) {
                 >
                   {success ? (
                     <p style={{ color: "rgb(52, 168, 83)" }}>
-                      You have successfully subscribed.
+                      Te has suscrito correctamente.
                     </p>
                   ) : (
-                    <p style={{ color: "red" }}>Something went wrong</p>
+                    <p style={{ color: "red" }}>Algo salió mal</p>
                   )}
                 </div>
                 <div className="subscribe-content">
@@ -319,7 +319,7 @@ export default function Footer1({ fullWidth = false }) {
                       type="email"
                       name="email"
                       className="subscribe-email type-fs-2"
-                      placeholder="Enter your email address"
+                      placeholder="Ingresa tu correo electrónico"
                       tabIndex={0}
                       aria-required="true"
                       required
@@ -331,7 +331,7 @@ export default function Footer1({ fullWidth = false }) {
                       type="submit"
                     >
                       <span className="body-md-2 fw-semibold text-white">
-                        Subscribe
+                        Suscribirse
                       </span>
                     </button>
                   </div>
@@ -376,7 +376,7 @@ export default function Footer1({ fullWidth = false }) {
                     href={`/blog-grid`}
                     className="title-sidebar link fw-bold"
                   >
-                    New arrivals
+                    Novedades
                   </Link>
                 </li>
                 <li>
@@ -384,7 +384,7 @@ export default function Footer1({ fullWidth = false }) {
                     href={`/blog-grid`}
                     className="title-sidebar link fw-bold"
                   >
-                    Best sale
+                    Más vendidos
                   </Link>
                 </li>
                 <li>
@@ -392,7 +392,7 @@ export default function Footer1({ fullWidth = false }) {
                     href={`/blog-grid`}
                     className="title-sidebar link fw-bold"
                   >
-                    Value of the day
+                    Oferta del día
                   </Link>
                 </li>
                 <li>
@@ -400,7 +400,7 @@ export default function Footer1({ fullWidth = false }) {
                     href={`/blog-grid`}
                     className="title-sidebar link fw-bold"
                   >
-                    Top 100 offers
+                    Top 100 ofertas
                   </Link>
                 </li>
                 <li>
@@ -421,8 +421,8 @@ export default function Footer1({ fullWidth = false }) {
                 </li>
               </ul>
               <p className="nocopy caption text-center">
-                <span className="fw-medium">Onsus.</span>© 2025. All right
-                reserved - Designed by ThemesFlat
+                <span className="fw-medium">espublicar.</span> © 2025. Todos
+                los derechos reservados.
               </p>
             </div>
           </div>

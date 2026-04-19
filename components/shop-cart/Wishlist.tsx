@@ -61,7 +61,7 @@ export default function Wishlist() {
                       <i className="icon-close remove link cs-pointer" />
                     </td>
                     <td className="wishlist-item_image">
-                      <Link href={`/product-detail/${product.id}`}>
+                      <Link href={`/product/${product.id}`}>
                         <Image
                           src={product.imgSrc}
                           alt="Image"
@@ -74,7 +74,7 @@ export default function Wishlist() {
                     <td className="wishlist-item_info">
                       <Link
                         className="text-line-clamp-2 body-md-2 fw-semibold text-secondary link"
-                        href={`/product-detail/${product.id}`}
+                        href={`/product/${product.id}`}
                       >
                         {product.title}
                       </Link>
@@ -82,11 +82,11 @@ export default function Wishlist() {
                     <td className="wishlist-item_price">
                       <p className="price-wrap fw-medium flex-nowrap">
                         <span className="new-price price-text fw-medium mb-0">
-                          ${product.price.toFixed(3)}
+                          €{product.price.toFixed(3)}
                         </span>
                         {product.oldprice && (
                           <span className="old-price body-md-2 text-main-2 fw-normal">
-                            ${product.oldprice.toFixed(3)}
+                            €{product.oldprice.toFixed(3)}
                           </span>
                         )}
                       </p>

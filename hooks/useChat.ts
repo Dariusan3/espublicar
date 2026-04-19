@@ -1,34 +1,28 @@
 "use client";
 import { useCallback, useState } from "react";
 import { db, DB_ID, COLLECTIONS, ID, Query } from "@/lib/appwrite";
-import { HookResponse, Conversation, Message } from "@/types/Types";
+import { HookResponse } from "@/types/Types";
 import { toConversation, toMessages, toMessage } from "@/helpers/dbHelpers";
-import { toast } from "react-toastify";
 
 const useChat = () => {
   const [loading, setLoading] = useState(false);
 
-  /**
-   * Get all conversations for the current user
-   */
   const getMyConversations = useCallback(
     async (userId: string): Promise<HookResponse> => {
       setLoading(true);
       try {
-        const response = await db.listDocuments({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.CONVERSATIONS,
-          queries: [
+        const response = await db.listDocuments(
+          DB_ID,
+          COLLECTIONS.CONVERSATIONS,
+          [
             Query.contains("participants", userId),
             Query.orderDesc("lastMessageAt"),
           ],
-        });
-
-        const conversations = response.documents.map(toConversation);
+        );
         return {
           success: true,
           message: "Conversations fetched",
-          data: conversations,
+          data: response.documents.map(toConversation),
         };
       } catch (error: any) {
         console.error("Error fetching conversations:", error);
@@ -40,27 +34,22 @@ const useChat = () => {
     [],
   );
 
-  /**
-   * Get messages for a specific conversation
-   */
   const getMessages = useCallback(
     async (conversationId: string): Promise<HookResponse> => {
       try {
-        const response = await db.listDocuments({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.MESSAGES,
-          queries: [
+        const response = await db.listDocuments(
+          DB_ID,
+          COLLECTIONS.MESSAGES,
+          [
             Query.equal("conversationId", conversationId),
             Query.orderAsc("$createdAt"),
             Query.limit(100),
           ],
-        });
-
-        const messages = toMessages(response.documents);
+        );
         return {
           success: true,
           message: "Messages fetched",
-          data: messages,
+          data: toMessages(response.documents),
         };
       } catch (error: any) {
         console.error("Error fetching messages:", error);
@@ -70,9 +59,6 @@ const useChat = () => {
     [],
   );
 
-  /**
-   * Send a message
-   */
   const sendMessage = useCallback(
     async (
       conversationId: string,
@@ -80,31 +66,23 @@ const useChat = () => {
       text: string,
     ): Promise<HookResponse> => {
       try {
-        const messageData = {
+        const result = await db.createDocument(
+          DB_ID,
+          COLLECTIONS.MESSAGES,
+          ID.unique(),
+          { conversationId, senderId, text, isRead: false },
+        );
+
+        await db.updateDocument(
+          DB_ID,
+          COLLECTIONS.CONVERSATIONS,
           conversationId,
-          senderId,
-          text,
-          isRead: false,
-        };
-
-        const result = await db.createDocument({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.MESSAGES,
-          documentId: ID.unique(),
-          data: messageData,
-        });
-
-        // Update conversation's last message
-        await db.updateDocument({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.CONVERSATIONS,
-          documentId: conversationId,
-          data: {
+          {
             lastMessage: text,
             lastMessageAuthorId: senderId,
             lastMessageAt: new Date().toISOString(),
           },
-        });
+        );
 
         return {
           success: true,
@@ -119,9 +97,6 @@ const useChat = () => {
     [],
   );
 
-  /**
-   * Start or get existing conversation
-   */
   const startConversation = useCallback(
     async (
       buyerId: string,
@@ -129,16 +104,15 @@ const useChat = () => {
       productId: string,
     ): Promise<HookResponse> => {
       try {
-        // Check if conversation already exists for this product between these users
-        const existing = await db.listDocuments({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.CONVERSATIONS,
-          queries: [
+        const existing = await db.listDocuments(
+          DB_ID,
+          COLLECTIONS.CONVERSATIONS,
+          [
             Query.equal("productId", productId),
             Query.contains("participants", buyerId),
             Query.contains("participants", sellerId),
           ],
-        });
+        );
 
         if (existing.total > 0) {
           return {
@@ -148,19 +122,16 @@ const useChat = () => {
           };
         }
 
-        // Create new conversation
-        const conversationData = {
-          participants: [buyerId, sellerId],
-          productId,
-          lastMessageAt: new Date().toISOString(),
-        };
-
-        const result = await db.createDocument({
-          databaseId: DB_ID,
-          collectionId: COLLECTIONS.CONVERSATIONS,
-          documentId: ID.unique(),
-          data: conversationData,
-        });
+        const result = await db.createDocument(
+          DB_ID,
+          COLLECTIONS.CONVERSATIONS,
+          ID.unique(),
+          {
+            participants: [buyerId, sellerId],
+            productId,
+            lastMessageAt: new Date().toISOString(),
+          },
+        );
 
         return {
           success: true,

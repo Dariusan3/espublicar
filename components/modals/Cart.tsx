@@ -25,7 +25,7 @@ export default function Cart() {
     >
       <div className="popup-wrapper">
         <div className="popup-header">
-          <h5 className="title fw-semibold">Shopping cart</h5>
+          <h5 className="title fw-semibold">Carrito de compras</h5>
           <span
             className="icon-close icon-close-popup link"
             data-bs-dismiss="offcanvas"
@@ -54,11 +54,11 @@ export default function Cart() {
               />
             </svg>
             <h6>
-              Your cart is curently empty <br />
-              Let up help you find the perfect item
+              Tu carrito está vacío <br />
+              Déjanos ayudarte a encontrar el artículo perfecto
             </h6>
             <Link href={`/shop-default`} className="tf-btn btn-gray w-100">
-              <span className="text-white">Show All Shop</span>
+              <span className="text-white">Ver toda la tienda</span>
             </Link>
           </div>
         ) : (
@@ -68,7 +68,7 @@ export default function Cart() {
                 <div className="card-product style-row row-small-2 align-items-center">
                   <div className="card-product-wrapper">
                     <Link
-                      href={`/product-detail/${item.productId}`}
+                      href={`/product/${item.productId}`}
                       className="product-img"
                     >
                       <Image
@@ -83,14 +83,14 @@ export default function Cart() {
                   <div className="card-product-info">
                     <div className="box-title">
                       <Link
-                        href={`/product-detail/${item.productId}`}
+                        href={`/product/${item.productId}`}
                         className="name-product body-md-2 fw-semibold text-secondary link"
                       >
                         {item.productTitle || "Product"}
                       </Link>
                       <p className="price-wrap fw-medium">
                         <span className="new-price price-text fw-medium">
-                          ${(item.productPrice || 0).toFixed(3)}
+                          €{(item.productPrice || 0).toFixed(2)}
                         </span>
                       </p>
                       <div className="d-flex align-items-center gap-10 mt-2">
@@ -127,15 +127,15 @@ export default function Cart() {
           <p className="cart-total fw-semibold">
             <span>Subtotal:</span>
             <span className="price-amount product-title text-primary">
-              ${totalPrice.toFixed(3)}
+              €{totalPrice.toFixed(2)}
             </span>
           </p>
           <div className="box-btn">
             <Link href={`/shop-cart`} className="tf-btn btn-gray">
-              <span className="text-white">View Cart</span>
+              <span className="text-white">Ver carrito</span>
             </Link>
             <Link href={`/checkout`} className="tf-btn">
-              <span className="text-white">Check Out</span>
+              <span className="text-white">Finalizar compra</span>
             </Link>
           </div>
           <div className="delivery-progress">
@@ -151,8 +151,8 @@ export default function Cart() {
             </div>
             <p className="body-text-3">
               <i className="icon-delivery-2 fs-24" />
-              Free shipping on all orders over{" "}
-              <span className="fw-bold">$250</span>
+              Envío gratis en pedidos de más de{" "}
+              <span className="fw-bold">€250</span>
             </p>
           </div>
         </div>

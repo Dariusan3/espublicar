@@ -1,31 +1,41 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import Drift from "drift-zoom";
 import Image from "next/image";
-const productImages = [
-  { src: "/images/product/product-detail-1.jpg", color: "gray" },
-  { src: "/images/product/product-detail-2.jpg", color: "gray" },
-  { src: "/images/product/product-detail-3.jpg", color: "gray" },
-  { src: "/images/product/product-detail-4.jpg", color: "gray" },
-  { src: "/images/product/product-detail-5.jpg", color: "beige" },
-  { src: "/images/product/product-detail-6.jpg", color: "beige" },
+
+const defaultImages = [
+  { src: "/images/product/product-detail-1.jpg" },
+  { src: "/images/product/product-detail-2.jpg" },
+  { src: "/images/product/product-detail-3.jpg" },
+  { src: "/images/product/product-detail-4.jpg" },
 ];
 
 interface Slider1Props {
   firstIamge?: string;
+  images?: string[];
 }
 
-export default function Slider1({ firstIamge = productImages[0].src }: Slider1Props) {
+export default function Slider1({ firstIamge, images }: Slider1Props) {
   const [swiperThumb, setSwiperThumb] = useState<SwiperType | null>(null);
   const lightboxRef = useRef<PhotoSwipeLightbox | null>(null);
-  productImages[0].src = firstIamge;
+
+  // Build the image list from either the images array or fallback
+  const productImages = useMemo(() => {
+    if (images && images.length > 0) {
+      return images.map((src) => ({ src }));
+    }
+    if (firstIamge) {
+      return [{ src: firstIamge }, ...defaultImages.slice(1)];
+    }
+    return defaultImages;
+  }, [images, firstIamge]);
+
   useEffect(() => {
-    // Initialize PhotoSwipeLightbox
     const lightbox = new PhotoSwipeLightbox({
       gallery: "#gallery-swiper-started",
       children: ".item",
@@ -33,21 +43,15 @@ export default function Slider1({ firstIamge = productImages[0].src }: Slider1Pr
     });
 
     lightbox.init();
-
-    // Store the lightbox instance in the ref for later use
     lightboxRef.current = lightbox;
 
-    // Cleanup: destroy the lightbox when the component unmounts
     return () => {
       lightbox.destroy();
     };
   }, []);
-  useEffect(() => {
-    // Function to initialize Drift
-    // Function to check window width
-    const checkWindowSize = () => window.innerWidth >= 1200;
 
-    // Only proceed if window is wide enough
+  useEffect(() => {
+    const checkWindowSize = () => window.innerWidth >= 1200;
     if (!checkWindowSize()) return;
 
     const imageZoom = () => {
@@ -69,14 +73,18 @@ export default function Slider1({ firstIamge = productImages[0].src }: Slider1Pr
     const zoomElements = document.querySelectorAll(".tf-image-zoom");
 
     const handleMouseOver = (event: Event) => {
-      const parent = (event.target as HTMLElement).closest(".section-image-zoom");
+      const parent = (event.target as HTMLElement).closest(
+        ".section-image-zoom",
+      );
       if (parent) {
         parent.classList.add("zoom-active");
       }
     };
 
     const handleMouseLeave = (event: Event) => {
-      const parent = (event.target as HTMLElement).closest(".section-image-zoom");
+      const parent = (event.target as HTMLElement).closest(
+        ".section-image-zoom",
+      );
       if (parent) {
         parent.classList.remove("zoom-active");
       }
@@ -87,14 +95,14 @@ export default function Slider1({ firstIamge = productImages[0].src }: Slider1Pr
       element.addEventListener("mouseleave", handleMouseLeave);
     });
 
-    // Cleanup event listeners on component unmount
     return () => {
       zoomElements.forEach((element) => {
         element.removeEventListener("mouseover", handleMouseOver);
         element.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
-  }, []); // Empty dependency array to run only once on mount
+  }, []);
+
   return (
     <>
       <Swiper
@@ -104,7 +112,7 @@ export default function Slider1({ firstIamge = productImages[0].src }: Slider1Pr
         modules={[Thumbs]}
       >
         {productImages.map((item, i) => (
-          <SwiperSlide className="swiper-slide" data-color="gray">
+          <SwiperSlide key={i} className="swiper-slide" data-color="gray">
             <a
               href={item.src}
               target="_blank"
@@ -141,7 +149,6 @@ export default function Slider1({ firstIamge = productImages[0].src }: Slider1Pr
               nextEl: ".thumbs-next",
               prevEl: ".thumbs-prev",
             },
-
             breakpoints: {
               0: {
                 direction: "horizontal",
@@ -156,7 +163,7 @@ export default function Slider1({ firstIamge = productImages[0].src }: Slider1Pr
             <SwiperSlide
               key={index}
               className="swiper-slide stagger-item"
-              data-color={item.color}
+              data-color="gray"
             >
               <div className="item">
                 <Image

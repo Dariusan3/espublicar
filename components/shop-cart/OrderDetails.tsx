@@ -148,7 +148,7 @@ export default function OrderDetails() {
                   <tr key={index} className="tf-order-item">
                     <td className="tf-order-item_product">
                       <Link
-                        href={`/product-detail/${item.productId}`}
+                        href={`/product/${item.productId}`}
                         className="link fw-normal"
                       >
                         {item.title}

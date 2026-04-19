@@ -46,7 +46,7 @@ const ProductCard2 = ({
             {product.images?.map((image: string, index: number) => (
               <SwiperSlide className="swiper-slide" key={`main-${index}`}>
                 <Link
-                  href={`/product-detail/${product.id}`}
+                  href={`/product/${product.id}`}
                   className="d-block tf-image-view"
                 >
                   <Image
@@ -100,7 +100,7 @@ const ProductCard2 = ({
         {product.discount && (
           <div className="box-sale-wrap style-2 z-5">
             <p className="small-text">Save</p>
-            <p className="title-sidebar-2">${product.discount.toFixed(3)}</p>
+            <p className="title-sidebar-2">€{product.discount.toFixed(3)}</p>
           </div>
         )}
       </div>
@@ -127,7 +127,7 @@ const ProductCard2 = ({
             </div>
             <h6 className="bg-white relative z-5">
               <Link
-                href={`/product-detail/${product.id}`}
+                href={`/product/${product.id}`}
                 className="name-product fw-semibold text-secondary link"
               >
                 {product.title}
@@ -143,11 +143,11 @@ const ProductCard2 = ({
           <div className="group-btn">
             <p className="price-wrap fw-medium">
               <span className="new-price h4 fw-normal text-primary mb-0">
-                ${product.price.toFixed(3)}
+                €{product.price.toFixed(3)}
               </span>
               {product.oldprice && (
                 <span className="old-price price-text text-main-2">
-                  ${product.oldprice.toFixed(3)}
+                  €{product.oldprice.toFixed(3)}
                 </span>
               )}
             </p>

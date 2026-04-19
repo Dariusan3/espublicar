@@ -94,11 +94,11 @@ export default function Compare() {
                   <td key={i} className="tf-compare-col">
                     <p className="price-wrap fw-medium flex-nowrap">
                       <span className="new-price price-text fw-medium mb-0">
-                        ${product.price.toFixed(3)}
+                        €{product.price.toFixed(3)}
                       </span>
                       {product.oldprice && (
                         <span className="old-price body-md-2 text-main-2 fw-normal">
-                          ${product.oldprice.toFixed(3)}
+                          €{product.oldprice.toFixed(3)}
                         </span>
                       )}
                     </p>

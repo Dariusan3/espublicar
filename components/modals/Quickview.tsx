@@ -55,7 +55,7 @@ export default function Quickview() {
                 {quickviewImages.map((elm, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
                     <Link
-                      href={`/product-detail/${quickViewItem.id}`}
+                      href={`/product/${quickViewItem.id}`}
                       className="d-block tf-image-view"
                     >
                       <Image
@@ -118,7 +118,7 @@ export default function Quickview() {
                   </p>
                   <h5 className="product-info-name fw-semibold">
                     <Link
-                      href={`/product-detail/${quickViewItem.id}`}
+                      href={`/product/${quickViewItem.id}`}
                       className="link"
                     >
                       {quickViewItem.title ??
@@ -163,11 +163,11 @@ export default function Quickview() {
                 <div className="infor-center">
                   <div className="product-info-price">
                     <h4 className="text-primary">
-                      ${quickViewItem.price.toFixed(2)}
+                      €{quickViewItem.price.toFixed(2)}
                     </h4>
                     {quickViewItem.oldprice && (
                       <span className="price-text text-main-2 old-price">
-                        ${quickViewItem.oldprice.toFixed(2)}
+                        €{quickViewItem.oldprice.toFixed(2)}
                       </span>
                     )}
                   </div>

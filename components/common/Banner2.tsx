@@ -59,7 +59,7 @@ export default function Banner2() {
                 <div className="inner justify-content-xl-end">
                   <div className="box-sale-wrap type-3 relative">
                     <p className="small-text">From</p>
-                    <p className="main-title-2">$399</p>
+                    <p className="main-title-2">€399</p>
                   </div>
                   <h4 className="name fw-normal text-white lh-lg-38 text-xl-end">
                     Lenovo ThinkBook
@@ -96,7 +96,7 @@ export default function Banner2() {
                 <div className="inner">
                   <div className="box-sale-wrap box-price type-3 relative">
                     <p className="small-text sub-price">From</p>
-                    <p className="main-title-2 num-price">$1.399</p>
+                    <p className="main-title-2 num-price">€1.399</p>
                   </div>
                   <h4 className="name fw-normal text-white lh-lg-38 text-xxl-center text-line-clamp-2">
                     ThinkPad X1 Carbon Gen 9
