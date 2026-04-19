@@ -58,6 +58,8 @@ export default function Slider1({ firstIamge, images }: Slider1Props) {
       const driftAll = document.querySelectorAll(".tf-image-zoom");
       const pane = document.querySelector(".tf-zoom-main");
 
+      if (!pane) return; // zoom pane not in V2 layout — skip
+
       driftAll.forEach((el) => {
         new Drift(el as HTMLElement, {
           zoomFactor: 2,

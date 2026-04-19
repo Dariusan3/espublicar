@@ -25,7 +25,11 @@ const useNotifications = () => {
         setUnreadCount(notifications.filter((n) => !n.isRead).length);
         return { success: true, message: "Notifications fetched", data: notifications };
       } catch (error: any) {
-        return { success: false, message: error.message };
+        if (error?.code === 404) {
+          setUnreadCount(0);
+          return { success: true, message: "Collection not found", data: [] };
+        }
+        return { success: false, message: error.message, data: [] };
       } finally {
         setLoading(false);
       }
@@ -48,6 +52,7 @@ const useNotifications = () => {
         setUnreadCount(response.total);
         return response.total;
       } catch (error) {
+        setUnreadCount(0);
         return 0;
       }
     },

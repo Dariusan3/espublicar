@@ -1,456 +1,256 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import LanguageSelect from "../common/LanguageSelect";
-import CurrencySelect from "../common/CurrencySelect";
-import { usePathname } from "next/navigation";
-import {
-  blogMenuItems,
-  demoItems,
-  othersPages,
-  shopDetailsPages,
-  shopPages,
-} from "@/data/menu";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
+
+const PRIMARY_TILES = [
+  {
+    href: "/",
+    label: "Inicio",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    ),
+  },
+  {
+    href: "/shop-default",
+    label: "Buscar",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.35-4.35" />
+      </svg>
+    ),
+  },
+  {
+    href: "/add-product",
+    label: "Publicar",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+    ),
+    brand: true,
+  },
+  {
+    href: "/my-account-messages",
+    label: "Mensajes",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/wishlist",
+    label: "Favoritos",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+      </svg>
+    ),
+  },
+  {
+    href: "/my-account-listings",
+    label: "Mis anuncios",
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
+      </svg>
+    ),
+  },
+];
+
+const CATEGORIES = [
+  { slug: "Electrónica", name: "Electrónica" },
+  { slug: "Moda", name: "Moda" },
+  { slug: "Hogar", name: "Hogar" },
+  { slug: "Vehículos", name: "Vehículos" },
+  { slug: "Deportes", name: "Deportes" },
+  { slug: "Libros", name: "Libros" },
+];
+
 export default function MobileMenu() {
-  const pathname = usePathname();
-  const isMenuActive = (link: any) => {
-    return link.href?.split("/")[1] == pathname.split("/")[1];
-  };
-  const isMenuParentActive = (menu: any) => {
-    return menu.some((elm: any) => isMenuActive(elm));
-  };
-  const isMenuParentActive2 = (menu: any) => {
-    return menu.some((elm: any) => isMenuParentActive(elm.items));
+  const { user, logout } = useAuth();
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+
+  const closeMenu = () => {
+    const menu = document.getElementById("mobileMenu");
+    if (typeof window !== "undefined" && menu) {
+      const bootstrap = require("bootstrap");
+      const offcanvas = bootstrap.Offcanvas.getInstance(menu);
+      if (offcanvas) offcanvas.hide();
+    }
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = search.trim();
+    if (!q) return;
+    router.push(`/shop-default?query=${encodeURIComponent(q)}`);
+    closeMenu();
+  };
+
+  const initial = user?.name?.charAt(0).toUpperCase() || "U";
+
   return (
-    <div className="offcanvas offcanvas-start canvas-mb" id="mobileMenu">
-      <span
-        className="icon-close btn-close-mb link"
-        data-bs-dismiss="offcanvas"
-      />
-      <div className="logo-site">
-        <Link href={`/`}>
-          <Image alt="" src="/images/logo/logo.svg" width={185} height={41} />
+    <div
+      className="offcanvas offcanvas-end mobile-menu-v2"
+      id="mobileMenu"
+      tabIndex={-1}
+    >
+      <div className="mobile-menu-v2-header">
+        <Link href="/" className="mobile-menu-v2-logo" onClick={closeMenu}>
+          <Image
+            alt="espublicar"
+            src="/images/logo/logo.svg"
+            width={120}
+            height={28}
+          />
         </Link>
+        <button
+          type="button"
+          className="mobile-menu-v2-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Cerrar"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
-      <div className="mb-canvas-content">
-        <div className="mb-body">
-          <div className="flat-animate-tab">
-            <div className="flat-title-tab-nav-mobile">
-              <ul className="menu-tab-line" role="tablist">
-                <li className="nav-tab-item" role="presentation">
-                  <a
-                    href="#main-menu"
-                    className="tab-link link fw-semibold active"
-                    data-bs-toggle="tab"
-                  >
-                    Menú
-                  </a>
-                </li>
-                <li className="br-line type-vertical bg-line h23" />
-                <li className="nav-tab-item" role="presentation">
-                  <a
-                    href="#category"
-                    className="tab-link link fw-semibold"
-                    data-bs-toggle="tab"
-                  >
-                    Categorías
-                  </a>
-                </li>
-              </ul>
+
+      <div className="mobile-menu-v2-body">
+        {/* User block */}
+        {user ? (
+          <Link
+            href="/my-account"
+            className="mobile-menu-v2-user"
+            onClick={closeMenu}
+          >
+            <div className="mobile-menu-v2-avatar">{initial}</div>
+            <div className="mobile-menu-v2-user-info">
+              <p className="mobile-menu-v2-user-name">
+                {user.name || "Usuario"}
+              </p>
+              <p className="mobile-menu-v2-user-email">{user.email}</p>
             </div>
-            <div className="tab-content">
-              <div
-                className="tab-pane active show"
-                id="main-menu"
-                role="tabpanel"
-              >
-                <div className="mb-content-top">
-                  <form action="#" className="form-search">
-                    <fieldset>
-                      <input
-                        className=""
-                        type="text"
-                        placeholder="Buscar..."
-                        name="text"
-                        tabIndex={2}
-                        defaultValue=""
-                        aria-required="true"
-                        required
-                      />
-                    </fieldset>
-                    <button type="submit" className="button-submit">
-                      <i className="icon-search" />
-                    </button>
-                  </form>
-                  <ul className="nav-ul-mb" id="wrapper-menu-navigation">
-                    <li
-                      className={`nav-mb-item  ${
-                        isMenuParentActive(demoItems) ? "active" : ""
-                      } `}
-                    >
-                      <a
-                        href="#dropdown-menu-home"
-                        className="collapsed mb-menu-link"
-                        data-bs-toggle="collapse"
-                        aria-expanded="true"
-                        aria-controls="dropdown-menu-home"
-                      >
-                        <span>Inicio</span>
-                        <span className="btn-open-sub" />
-                      </a>
-                      <div id="dropdown-menu-home" className="collapse">
-                        <ul className="sub-nav-menu">
-                          {demoItems.map((item, i) => (
-                            <li key={i}>
-                              <Link
-                                href={item.href}
-                                className={`sub-nav-link ${
-                                  isMenuActive(item) ? "active" : ""
-                                }`}
-                              >
-                                {item.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                    <li
-                      className={`nav-mb-item  ${
-                        isMenuParentActive2(shopPages) ? "active" : ""
-                      } `}
-                    >
-                      <a
-                        href="#dropdown-menu-shop"
-                        className="collapsed mb-menu-link"
-                        data-bs-toggle="collapse"
-                        aria-expanded="true"
-                        aria-controls="dropdown-menu-shop"
-                      >
-                        <span>Tienda</span>
-                        <span className="btn-open-sub" />
-                      </a>
-                      <div id="dropdown-menu-shop" className="collapse">
-                        <ul className="sub-nav-menu">
-                          {shopPages.map((items, i) => (
-                            <li key={i}>
-                              <a
-                                href={`#shop_layout${i}`}
-                                className="sub-nav-link collapsed"
-                                data-bs-toggle="collapse"
-                                aria-expanded="true"
-                                aria-controls={`shop_layout${i}`}
-                              >
-                                {items.heading}
-                                <span className="btn-open-sub" />
-                              </a>
-                              <div id={`shop_layout${i}`} className="collapse">
-                                <ul className="sub-nav-menu sub-menu-level-2">
-                                  {items.items.map((item, i) => (
-                                    <li key={i}>
-                                      <Link
-                                        href={item.href}
-                                        className={`sub-nav-link body-md-2 ${
-                                          isMenuActive(item) ? "active" : ""
-                                        }`}
-                                      >
-                                        <span>{item.text}</span>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                    <li
-                      className={`nav-mb-item  ${
-                        isMenuParentActive2(shopDetailsPages) ? "active" : ""
-                      } `}
-                    >
-                      <a
-                        href="#dropdown-menu-product"
-                        className="collapsed mb-menu-link"
-                        data-bs-toggle="collapse"
-                        aria-expanded="true"
-                        aria-controls="dropdown-menu-product"
-                      >
-                        <span>Product</span>
-                        <span className="btn-open-sub" />
-                      </a>
-                      <div id="dropdown-menu-product" className="collapse">
-                        <ul className="sub-nav-menu">
-                          {shopDetailsPages.map((items, i) => (
-                            <li key={i}>
-                              <a
-                                href={`#product_layout${i}`}
-                                className="sub-nav-link collapsed"
-                                data-bs-toggle="collapse"
-                                aria-expanded="true"
-                                aria-controls={`product_layout${i}`}
-                              >
-                                {items.heading}
-                                <span className="btn-open-sub" />
-                              </a>
-                              <div
-                                className="collapse"
-                                id={`product_layout${i}`}
-                              >
-                                <ul className="sub-nav-menu sub-menu-level-2">
-                                  {items.items.map((item, i) => (
-                                    <li key={i}>
-                                      <Link
-                                        href={item.href}
-                                        className={`sub-nav-link body-md-2 ${
-                                          isMenuActive(item) ? "active" : ""
-                                        }`}
-                                      >
-                                        <span>{item.text}</span>
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                    <li
-                      className={`nav-mb-item  ${
-                        isMenuParentActive(blogMenuItems) ? "active" : ""
-                      } `}
-                    >
-                      <a
-                        href="#dropdown-menu-blog"
-                        className="collapsed mb-menu-link"
-                        data-bs-toggle="collapse"
-                        aria-expanded="true"
-                        aria-controls="dropdown-menu-blog"
-                      >
-                        <span>Blog</span>
-                        <span className="btn-open-sub" />
-                      </a>
-                      <div id="dropdown-menu-blog" className="collapse">
-                        <ul className="sub-nav-menu">
-                          {blogMenuItems.map((item, i) => (
-                            <li key={i}>
-                              <Link
-                                href={item.href}
-                                className={`sub-nav-link ${
-                                  isMenuActive(item) ? "active" : ""
-                                }`}
-                              >
-                                {item.text}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                    <li
-                      className={`nav-mb-item  ${
-                        isMenuParentActive(othersPages) ? "active" : ""
-                      } `}
-                    >
-                      <a
-                        href="#dropdown-menu-page"
-                        className="collapsed mb-menu-link"
-                        data-bs-toggle="collapse"
-                        aria-expanded="true"
-                        aria-controls="dropdown-menu-page"
-                      >
-                        <span>Pages</span>
-                        <span className="btn-open-sub" />
-                      </a>
-                      <div id="dropdown-menu-page" className="collapse">
-                        <ul className="sub-nav-menu">
-                          {othersPages.map((item, i) => (
-                            <li key={i}>
-                              <Link
-                                href={item.href}
-                                className={`sub-nav-link body-md-2 ${
-                                  isMenuActive(item) ? "active" : ""
-                                }`}
-                              >
-                                <span>{item.text}</span>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div className="mb-other-content">
-                  <ul className="mb-info">
-                    <li>
-                      <p>
-                        Address:
-                        <a
-                          target="_blank"
-                          href="https://www.google.com/maps?q=8500LoremStreetChicago,IL55030Dolorsitamet"
-                        >
-                          <span className="fw-medium">
-                            8500 Lorem Street Chicago, IL 55030 Dolor
-                          </span>
-                        </a>
-                      </p>
-                    </li>
-                    <li>
-                      <p>
-                        Phone:
-                        <a href="tel:+88001234567">
-                          <span className="fw-medium">+8(800) 123 4567</span>
-                        </a>
-                      </p>
-                    </li>
-                    <li>
-                      <p>
-                        Email:
-                        <a href="mailto:onsus@support.com">
-                          <span className="fw-medium">onsus@support.com</span>
-                        </a>
-                      </p>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="tab-pane" id="category" role="tabpanel">
-                <div className="mb-content-top">
-                  <ul className="nav-ul-mb">
-                    <li className="nav-mb-item">
-                      <a
-                        href="#drd-categories-appearl"
-                        className="collapsed mb-menu-link"
-                        data-bs-toggle="collapse"
-                        aria-expanded="true"
-                        aria-controls="drd-categories-appearl"
-                      >
-                        <span>Apparel</span>
-                        <span className="btn-open-sub" />
-                      </a>
-                      <div id="drd-categories-appearl" className="collapse">
-                        <ul className="sub-nav-menu">
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              New arrival
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              Steall the deals
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              Best Sellers
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              Men
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              Woman
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              Season collection
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              This Week's Highlights
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              Home wear
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              Underwear
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="sub-nav-link">
-                              Travel clothes
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Automotive Parts</span>
-                      </a>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Beauty &amp; Personal Care</span>
-                      </a>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Consumer Electronics</span>
-                      </a>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Furniture</span>
-                      </a>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Home Products</span>
-                      </a>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Machinery</span>
-                      </a>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Timepieces, Jewelry &amp; Eyewear</span>
-                      </a>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Tool &amp; Hardware</span>
-                      </a>
-                    </li>
-                    <li className="nav-mb-item">
-                      <a href="#" className="mb-menu-link">
-                        <span>Bestseller</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <span className="mobile-menu-v2-user-link">Ver perfil →</span>
+          </Link>
+        ) : (
+          <div className="mobile-menu-v2-auth">
+            <a
+              href="#log"
+              data-bs-toggle="modal"
+              className="btn-brand btn-block"
+              onClick={closeMenu}
+            >
+              Iniciar sesión
+            </a>
+            <a
+              href="#register"
+              data-bs-toggle="modal"
+              className="btn-ghost btn-block"
+              onClick={closeMenu}
+            >
+              Crear cuenta
+            </a>
           </div>
+        )}
+
+        {/* Search */}
+        <form className="mobile-menu-v2-search" onSubmit={handleSearch}>
+          <input
+            type="search"
+            className="input-search"
+            placeholder="Busca cualquier cosa…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </form>
+
+        {/* Primary tiles */}
+        <div className="mobile-menu-v2-tiles">
+          {PRIMARY_TILES.map((tile) => (
+            <Link
+              key={tile.href}
+              href={tile.href}
+              className={`mobile-menu-v2-tile ${tile.brand ? "is-brand" : ""}`}
+              onClick={closeMenu}
+            >
+              <span className="mobile-menu-v2-tile-icon">{tile.icon}</span>
+              <span className="mobile-menu-v2-tile-label">{tile.label}</span>
+            </Link>
+          ))}
         </div>
-        <div className="mb-bottom">
-          <div className="bottom-bar-language bar-lang">
-            <div className="tf-curs">
-              <CurrencySelect />
-            </div>
-            <div className="tf-lans">
-              <LanguageSelect parentClassName="image-select center style-default type-lan" />
-            </div>
-          </div>
+
+        {/* Categories list */}
+        <div className="mobile-menu-v2-section">
+          <p className="mobile-menu-v2-section-head">Categorías</p>
+          <ul className="mobile-menu-v2-list">
+            {CATEGORIES.map((cat) => (
+              <li key={cat.slug}>
+                <Link
+                  href={`/shop-default?category=${encodeURIComponent(cat.slug)}`}
+                  className="mobile-menu-v2-list-item"
+                  onClick={closeMenu}
+                >
+                  <span>{cat.name}</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
+
+        {/* Footer links */}
+        <div className="mobile-menu-v2-footer">
+          <Link href="/faq" onClick={closeMenu}>
+            Ayuda
+          </Link>
+          <span>·</span>
+          <Link href="/privacy" onClick={closeMenu}>
+            Términos
+          </Link>
+          <span>·</span>
+          <Link href="/privacy" onClick={closeMenu}>
+            Privacidad
+          </Link>
+        </div>
+
+        {user && (
+          <button
+            type="button"
+            className="mobile-menu-v2-logout"
+            onClick={async () => {
+              const result = await logout();
+              if (result.success) {
+                closeMenu();
+                toast.success("Sesión cerrada");
+                setTimeout(() => (window.location.href = "/"), 800);
+              }
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Cerrar sesión
+          </button>
+        )}
       </div>
     </div>
   );

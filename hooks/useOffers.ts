@@ -88,7 +88,10 @@ const useOffers = () => {
           data: toOffers(response.documents),
         };
       } catch (error: any) {
-        return { success: false, message: error.message };
+        if (error?.code === 404) {
+          return { success: true, message: "Collection not found", data: [] };
+        }
+        return { success: false, message: error.message, data: [] };
       } finally {
         setLoading(false);
       }
@@ -118,7 +121,10 @@ const useOffers = () => {
           data: toOffers(response.documents),
         };
       } catch (error: any) {
-        return { success: false, message: error.message };
+        if (error?.code === 404) {
+          return { success: true, message: "Collection not found", data: [] };
+        }
+        return { success: false, message: error.message, data: [] };
       } finally {
         setLoading(false);
       }
@@ -148,7 +154,10 @@ const useOffers = () => {
           data: toOffers(response.documents),
         };
       } catch (error: any) {
-        return { success: false, message: error.message };
+        if (error?.code === 404) {
+          return { success: true, message: "Collection not found", data: [] };
+        }
+        return { success: false, message: error.message, data: [] };
       } finally {
         setLoading(false);
       }

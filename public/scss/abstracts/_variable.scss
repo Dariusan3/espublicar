@@ -1,44 +1,150 @@
-// Setting
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url('https://fonts.cdnfonts.com/css/helvetica-neue-55');
-$font-main: "Inter",
-serif;
-$font-2: "Poppins",
-serif;
-$font-3: "MADE Outer";
-$font-4: "UTM Banque";
-$font-5: "Helvetica Neue",
-sans-serif;
-$fontIcon: "icomoon";
+// =============================================================================
+// espublicar Design Tokens — V2 Minimal
+// Drop-in replacement for public/scss/abstracts/_variable.scss
+// =============================================================================
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+// Font stacks — Inter only. Drop Poppins, MADE Outer, UTM Banque, Helvetica Neue.
+$font-main: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+$font-2:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; // alias for legacy components
+$font-3:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; // alias
+$font-4:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; // alias
+$font-5:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; // alias
+$fontIcon:  "icomoon";
 
 :root {
-    // Color
-    --white: #ffffff;
-    --black: #000000;
-    --text: #909090;
-    --text-2: #505050;
-    --text-3: #333333;
-    --text-4: #40484E;
-    --text-5: #2C3135;
-    --text-7: #FDFEFE;
-    --gray: #333e48;
-    --gray-2: #73787d;
-    --gray-4: #e1e1e1;
-    --gray-5: #ebebeb;
-    --gray-6: #f5f5f5;
-    --primary: #ff3d3d;
-    --primary-2: #D80027;
-    --secondary: #004ec3;
-    --third: #FCB500;
-    --third-2: #FFE604;
-    --third-3: #FFDC00;
-    --third-4: #FFDF8B;
-    --line: #e1e1e1;
-    --line-2: #ececec;
-    --line-3: #4f4f4f;
-    --line-4: #BFC6CC;
-    --bg: #fafafa;
-    --bg-2: #F8F8F8;
-    --bg-3: #F6F6F6;
-    --price: #FFEAB6;
+  // --- Brand ---------------------------------------------------------------
+  --brand:        #2563EB;
+  --brand-600:    #1E4FD1;
+  --brand-700:    #1D46B8;
+  --brand-50:     #EFF5FF;
+  --brand-100:    #DBE8FF;
+  --brand-alpha-30: rgba(37, 99, 235, 0.30);
+  --brand-alpha-12: rgba(37, 99, 235, 0.12);
+
+  // --- Ink (text) ----------------------------------------------------------
+  --ink:    #0F172A;
+  --ink-2:  #334155;
+  --ink-3:  #64748B;
+  --ink-4:  #94A3B8;
+  --ink-5:  #CBD5E1;
+
+  // --- Surface / backgrounds ----------------------------------------------
+  --surface:    #FFFFFF;
+  --surface-2:  #F8FAFC;
+  --surface-3:  #F1F5F9;
+  --surface-4:  #E2E8F0;
+
+  // --- Lines / borders ----------------------------------------------------
+  --line:    #E2E8F0;
+  --line-2:  #CBD5E1;
+  --line-3:  #94A3B8;
+
+  // --- Semantic -----------------------------------------------------------
+  --success:     #16A34A;
+  --success-bg:  #DCFCE7;
+  --warn:        #F59E0B;
+  --warn-bg:     #FEF3C7;
+  --danger:      #DC2626;
+  --danger-bg:   #FEE2E2;
+
+  // --- Glass --------------------------------------------------------------
+  --glass-bg:     rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.60);
+  --glass-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  --scrim:        rgba(15, 23, 42, 0.48);
+
+  // --- Spacing scale (4px base) -------------------------------------------
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  32px;
+  --space-8:  40px;
+  --space-9:  48px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+  --space-13: 128px;
+
+  // --- Radii --------------------------------------------------------------
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-2xl:  28px;
+  --radius-pill: 999px;
+
+  // --- Elevation ----------------------------------------------------------
+  --elev-0: none;
+  --elev-1: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --elev-2: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --elev-3: 0 12px 32px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.06);
+  --elev-4: 0 24px 64px rgba(15, 23, 42, 0.12), 0 8px 24px rgba(15, 23, 42, 0.08);
+
+  // --- Motion -------------------------------------------------------------
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:   cubic-bezier(0.4, 0, 1, 1);
+  --ease-std:  cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:  150ms;
+  --dur-base:  250ms;
+  --dur-slow:  400ms;
+
+  // --- Type scale (clamp for fluid sizing) --------------------------------
+  --fs-display: clamp(40px, 4.2vw, 64px);
+  --fs-h1:      clamp(28px, 2.6vw, 40px);
+  --fs-h2:      clamp(22px, 1.8vw, 28px);
+  --fs-h3:      20px;
+  --fs-h4:      18px;
+  --fs-body:    16px;
+  --fs-body-sm: 14px;
+  --fs-caption: 13px;
+  --fs-label:   12px;
+
+  // =========================================================================
+  // Legacy aliases — keep existing Themesflat components rendering.
+  // =========================================================================
+
+  --white:    #FFFFFF;
+  --black:    #000000;
+
+  --text:     var(--ink-3);
+  --text-2:   var(--ink-2);
+  --text-3:   var(--ink);
+  --text-4:   var(--ink-2);
+  --text-5:   var(--ink);
+  --text-7:   var(--surface);
+
+  --gray:     var(--ink);
+  --gray-2:   var(--ink-3);
+  --gray-4:   var(--line);
+  --gray-5:   var(--surface-3);
+  --gray-6:   var(--surface-2);
+
+  --primary:   var(--brand);
+  --primary-2: var(--brand-600);
+  --secondary: var(--ink);
+  --third:     var(--warn);
+  --third-2:   var(--warn);
+  --third-3:   var(--warn);
+  --third-4:   var(--warn-bg);
+
+  --bg:   var(--surface-2);
+  --bg-2: var(--surface-2);
+  --bg-3: var(--surface-3);
+
+  --price: var(--brand-50);
+}
+
+// Force Inter on body — overrides any stray font declarations in legacy components
+body {
+  font-family: $font-main;
+  color: var(--ink);
+  background: var(--surface-2);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

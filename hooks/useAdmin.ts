@@ -22,19 +22,51 @@ const useAdmin = () => {
     ): Promise<HookResponse> => {
       setLoading(true);
       try {
-        const queries: any[] = [
+        const baseQueries = [
           Query.orderDesc("$createdAt"),
           Query.limit(limit),
           Query.offset(offset),
         ];
-        if (filters?.search) {
-          queries.push(Query.search("title", filters.search));
+
+        let response;
+        let needClientFilter = false;
+        try {
+          const queries = [...baseQueries];
+          if (filters?.search) {
+            queries.push(Query.search("title", filters.search));
+          }
+          response = await db.listDocuments(DB_ID, COLLECTIONS.PRODUCTS, queries);
+        } catch (err: any) {
+          if (
+            err?.type === "index_not_found" ||
+            /fulltext index/i.test(err?.message || "")
+          ) {
+            needClientFilter = true;
+            response = await db.listDocuments(
+              DB_ID,
+              COLLECTIONS.PRODUCTS,
+              baseQueries,
+            );
+          } else {
+            throw err;
+          }
         }
-        const response = await db.listDocuments(DB_ID, COLLECTIONS.PRODUCTS, queries);
+
+        let products = toProducts(response.documents);
+        let total = response.total;
+
+        if (needClientFilter && filters?.search) {
+          const q = filters.search.toLowerCase();
+          products = products.filter((p) =>
+            (p.title || "").toLowerCase().includes(q),
+          );
+          total = products.length;
+        }
+
         return {
           success: true,
           message: "Products fetched",
-          data: { products: toProducts(response.documents), total: response.total },
+          data: { products, total },
         };
       } catch (error: any) {
         return { success: false, message: error.message };

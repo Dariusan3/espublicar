@@ -31,78 +31,119 @@ const useProducts = () => {
     async (filters: ProductFilters = {}): Promise<HookResponse> => {
       setIsLoading(true);
       try {
-        const queries: any[] = [];
+        // Build Appwrite queries. We try native Query.search for title/location first;
+        // if the collection lacks a fulltext index, we retry without them and filter
+        // client-side.
+        const buildQueries = (useTitleSearch: boolean, useLocationSearch: boolean) => {
+          const queries: any[] = [];
 
-        if (filters.search && filters.search.trim()) {
-          queries.push(Query.search("title", filters.search.trim()));
-        }
-        if (filters.category) {
-          queries.push(Query.equal("category", filters.category));
-        }
-        if (filters.minPrice !== undefined) {
-          queries.push(Query.greaterThanEqual("price", filters.minPrice));
-        }
-        if (filters.maxPrice !== undefined) {
-          queries.push(Query.lessThanEqual("price", filters.maxPrice));
-        }
-        if (filters.location) {
-          queries.push(Query.search("location", filters.location));
-        }
-        if (filters.condition) {
-          queries.push(Query.equal("condition", filters.condition));
-        }
-        if (filters.userId) {
-          queries.push(Query.equal("userId", filters.userId));
-        }
-        if (filters.inStock !== undefined) {
-          queries.push(Query.equal("inStock", filters.inStock));
-        }
-        if (filters.isNew) {
-          queries.push(Query.equal("isNew", true));
-        }
-        if (filters.isTodaysDeals) {
-          queries.push(Query.equal("isTodaysDeals", true));
-        }
-        if (filters.hotSale) {
-          queries.push(Query.equal("hotSale", true));
+          if (useTitleSearch && filters.search && filters.search.trim()) {
+            queries.push(Query.search("title", filters.search.trim()));
+          }
+          if (filters.category) {
+            queries.push(Query.equal("category", filters.category));
+          }
+          if (filters.minPrice !== undefined) {
+            queries.push(Query.greaterThanEqual("price", filters.minPrice));
+          }
+          if (filters.maxPrice !== undefined) {
+            queries.push(Query.lessThanEqual("price", filters.maxPrice));
+          }
+          if (useLocationSearch && filters.location) {
+            queries.push(Query.search("location", filters.location));
+          }
+          if (filters.condition) {
+            queries.push(Query.equal("condition", filters.condition));
+          }
+          if (filters.userId) {
+            queries.push(Query.equal("userId", filters.userId));
+          }
+          if (filters.inStock !== undefined) {
+            queries.push(Query.equal("inStock", filters.inStock));
+          }
+          if (filters.isNew) {
+            queries.push(Query.equal("isNew", true));
+          }
+          if (filters.isTodaysDeals) {
+            queries.push(Query.equal("isTodaysDeals", true));
+          }
+          if (filters.hotSale) {
+            queries.push(Query.equal("hotSale", true));
+          }
+
+          switch (filters.sortBy) {
+            case "price_asc":
+              queries.push(Query.orderAsc("price"));
+              break;
+            case "price_desc":
+              queries.push(Query.orderDesc("price"));
+              break;
+            case "newest":
+              queries.push(Query.orderDesc("$createdAt"));
+              break;
+            case "rating":
+              queries.push(Query.orderDesc("rating"));
+              break;
+            default:
+              queries.push(Query.orderDesc("$createdAt"));
+          }
+
+          queries.push(Query.limit(filters.limit || 24));
+          if (filters.offset) {
+            queries.push(Query.offset(filters.offset));
+          }
+          return queries;
+        };
+
+        let response;
+        let needClientFilter = false;
+        try {
+          response = await db.listDocuments(
+            DB_ID,
+            COLLECTIONS.PRODUCTS,
+            buildQueries(true, true),
+          );
+        } catch (err: any) {
+          // Fallback if fulltext index is missing on "title" or "location"
+          if (
+            err?.type === "index_not_found" ||
+            /fulltext index/i.test(err?.message || "")
+          ) {
+            needClientFilter = true;
+            response = await db.listDocuments(
+              DB_ID,
+              COLLECTIONS.PRODUCTS,
+              buildQueries(false, false),
+            );
+          } else {
+            throw err;
+          }
         }
 
-        switch (filters.sortBy) {
-          case "price_asc":
-            queries.push(Query.orderAsc("price"));
-            break;
-          case "price_desc":
-            queries.push(Query.orderDesc("price"));
-            break;
-          case "newest":
-            queries.push(Query.orderDesc("$createdAt"));
-            break;
-          case "rating":
-            queries.push(Query.orderDesc("rating"));
-            break;
-          default:
-            queries.push(Query.orderDesc("$createdAt"));
+        let productList = response.documents.map(toProduct);
+        let total = response.total;
+
+        // Client-side filter for title/location if we couldn't use Appwrite search
+        if (needClientFilter) {
+          const q = filters.search?.trim().toLowerCase();
+          const loc = filters.location?.trim().toLowerCase();
+          productList = productList.filter((p) => {
+            const matchQ = q ? (p.title || "").toLowerCase().includes(q) : true;
+            const matchLoc = loc
+              ? (p.location || "").toLowerCase().includes(loc)
+              : true;
+            return matchQ && matchLoc;
+          });
+          total = productList.length;
         }
 
-        queries.push(Query.limit(filters.limit || 24));
-        if (filters.offset) {
-          queries.push(Query.offset(filters.offset));
-        }
-
-        const response = await db.listDocuments(
-          DB_ID,
-          COLLECTIONS.PRODUCTS,
-          queries,
-        );
-
-        const productList = response.documents.map(toProduct);
         setProducts(productList);
-        setTotalCount(response.total);
+        setTotalCount(total);
 
         return {
           success: true,
           message: "Products fetched successfully",
-          data: { products: productList, total: response.total },
+          data: { products: productList, total },
         };
       } catch (error: any) {
         console.error("Error searching products:", error);

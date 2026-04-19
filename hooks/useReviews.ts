@@ -83,6 +83,20 @@ const useReviews = () => {
           data: { reviews: reviewList, stats: reviewStats },
         };
       } catch (error: any) {
+        if (error?.code === 404) {
+          const emptyStats: ReviewStats = {
+            averageRating: 0,
+            totalReviews: 0,
+            ratingDistribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+          };
+          setReviews([]);
+          setStats(emptyStats);
+          return {
+            success: true,
+            message: "Collection not found",
+            data: { reviews: [], stats: emptyStats },
+          };
+        }
         console.error("Error fetching reviews:", error);
         return {
           success: false,

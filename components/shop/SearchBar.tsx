@@ -107,7 +107,10 @@ export default function SearchBar({
                     className="search-result-item"
                   >
                     <Image
-                      src={product.imgSrc || "/placeholder.png"}
+                      src={
+                        product.imgSrc ||
+                        "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=100&auto=format&fit=crop"
+                      }
                       alt={product.title}
                       width={50}
                       height={50}

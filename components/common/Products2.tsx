@@ -8,7 +8,6 @@ import { Navigation, Pagination } from "swiper/modules";
 import AddToCart from "./AddToCart";
 import AddToWishlist from "./AddToWishlist";
 import AddToQuickview from "./AddToQuickview";
-import AddToCompare from "./AddToCompare";
 export default function Products2({
   parentClass = "tf-sp-2 pt-0",
   title = "Smart Home Appliances",
@@ -135,7 +134,7 @@ export default function Products2({
                                 />
                               </li>
                               <li className="">
-                                <AddToCompare productId={product.id} />
+                                
                               </li>
                             </ul>
                           </div>

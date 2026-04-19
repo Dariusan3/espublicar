@@ -1,0 +1,146 @@
+// =============================================================================
+// espublicar — Utility classes for V2 Minimal
+// =============================================================================
+
+@use "../abstracts/mixins-extra" as *;
+
+// --- Buttons -----------------------------------------------------------------
+.btn-brand  { @include btn-brand; }
+.btn-ghost  { @include btn-ghost; }
+.btn-danger { @include btn-base; background: var(--danger); color: #fff;
+  &:hover { background: color-mix(in oklch, var(--danger) 92%, black); }
+}
+.btn-sm { height: 36px; padding: 0 var(--space-4); font-size: 14px; }
+.btn-lg { height: 52px; padding: 0 var(--space-6); font-size: 16px; }
+.btn-block { width: 100%; }
+
+// --- Chips / pills -----------------------------------------------------------
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font: 500 13px/1 "Inter", sans-serif;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-std);
+
+  &:hover { background: var(--surface-3); border-color: var(--line-2); }
+
+  &.is-active {
+    background: var(--brand);
+    color: #fff;
+    border-color: var(--brand);
+  }
+
+  &.chip-soft {
+    background: var(--brand-50);
+    color: var(--brand);
+    border-color: transparent;
+    &:hover { background: var(--brand-100); }
+  }
+
+  &.chip-success { background: var(--success-bg); color: var(--success); border-color: transparent; }
+  &.chip-warn    { background: var(--warn-bg);    color: var(--warn);    border-color: transparent; }
+  &.chip-danger  { background: var(--danger-bg);  color: var(--danger);  border-color: transparent; }
+}
+
+// --- Glass surface -----------------------------------------------------------
+.glass    { @include glass; }
+.glass-sm { @include glass($blur: 6px); }
+.glass-lg { @include glass($blur: 20px); }
+
+// --- Elevation utilities -----------------------------------------------------
+.elev-0 { box-shadow: var(--elev-0); }
+.elev-1 { box-shadow: var(--elev-1); }
+.elev-2 { box-shadow: var(--elev-2); }
+.elev-3 { box-shadow: var(--elev-3); }
+.elev-4 { box-shadow: var(--elev-4); }
+
+// --- Surface helpers ---------------------------------------------------------
+.surface    { background: var(--surface); }
+.surface-2  { background: var(--surface-2); }
+.surface-3  { background: var(--surface-3); }
+.card-flat  { @include card(1); }
+.card-hover { @include card(1); transition: box-shadow var(--dur-base) var(--ease-std), transform var(--dur-base) var(--ease-out);
+  &:hover { box-shadow: var(--elev-2); transform: translateY(-2px); }
+}
+
+// --- Radii helpers -----------------------------------------------------------
+.rounded-sm   { border-radius: var(--radius-sm); }
+.rounded-md   { border-radius: var(--radius-md); }
+.rounded-lg   { border-radius: var(--radius-lg); }
+.rounded-xl   { border-radius: var(--radius-xl); }
+.rounded-2xl  { border-radius: var(--radius-2xl); }
+.rounded-pill { border-radius: var(--radius-pill); }
+
+// --- Inputs ------------------------------------------------------------------
+.input-field {
+  display: block;
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--ink);
+  font: 400 15px/1 "Inter", sans-serif;
+  transition: all var(--dur-fast) var(--ease-std);
+
+  &::placeholder { color: var(--ink-4); }
+  &:hover   { border-color: var(--line-2); }
+  &:focus   { @include focus-ring; background: var(--surface); }
+  &:disabled { background: var(--surface-3); color: var(--ink-4); }
+}
+
+textarea.input-field { height: auto; min-height: 120px; padding: var(--space-3) var(--space-4); resize: vertical; line-height: 1.55; }
+
+input.input-search,
+.input-search {
+  @extend .input-field;
+  height: 56px !important;
+  border-radius: var(--radius-pill) !important;
+  padding: 0 var(--space-4) 0 52px !important;
+  background: var(--surface-3) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.35-4.35'/></svg>") no-repeat 20px center !important;
+  border: 1px solid transparent !important;
+  &:hover { background-color: var(--surface-4) !important; }
+  &:focus { background-color: var(--surface) !important; border-color: var(--brand) !important; }
+}
+
+// --- Labels / captions -------------------------------------------------------
+.label {
+  display: inline-block;
+  font: 500 12px/1 "Inter", sans-serif;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+// --- Stack spacing (vertical rhythm) ----------------------------------------
+.stack-2 > * + * { margin-top: var(--space-2); }
+.stack-3 > * + * { margin-top: var(--space-3); }
+.stack-4 > * + * { margin-top: var(--space-4); }
+.stack-5 > * + * { margin-top: var(--space-5); }
+.stack-6 > * + * { margin-top: var(--space-6); }
+.stack-7 > * + * { margin-top: var(--space-7); }
+.stack-8 > * + * { margin-top: var(--space-8); }
+
+// --- Text color helpers ------------------------------------------------------
+.text-ink   { color: var(--ink); }
+.text-ink-2 { color: var(--ink-2); }
+.text-ink-3 { color: var(--ink-3); }
+.text-ink-4 { color: var(--ink-4); }
+.text-brand { color: var(--brand); }
+
+// --- Tabular numbers (for prices) -------------------------------------------
+.num { font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+// --- Scroll area with hidden scrollbar --------------------------------------
+.hscroll { overflow-x: auto; @include hide-scrollbar; display: flex; gap: var(--space-3); }
+
+// --- Divider -----------------------------------------------------------------
+.divider { height: 1px; background: var(--line); border: 0; margin: var(--space-6) 0; }

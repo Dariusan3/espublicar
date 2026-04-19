@@ -73,7 +73,10 @@ export default function Cart() {
                     >
                       <Image
                         className="img-product lazyload"
-                        src={item.productImage || "/images/placeholder.jpg"}
+                        src={
+                          item.productImage ||
+                          "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=200&auto=format&fit=crop"
+                        }
                         alt="image-product"
                         width={500}
                         height={500}

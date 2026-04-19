@@ -8,7 +8,6 @@ import { Navigation, Pagination } from "swiper/modules";
 import AddToCart from "./AddToCart";
 import AddToWishlist from "./AddToWishlist";
 import AddToQuickview from "./AddToQuickview";
-import AddToCompare from "./AddToCompare";
 export default function Products6({ parentClass = "tf-sp-2 pt-0" }) {
   return (
     <section className={parentClass}>
@@ -117,10 +116,7 @@ export default function Products6({ parentClass = "tf-sp-2 pt-0" }) {
                         />
                       </li>
                       <li className="d-none d-sm-block">
-                        <AddToCompare
-                          productId={product.id}
-                          tooltipClass="tooltip-left"
-                        />
+                        
                       </li>
                     </ul>
                   </div>

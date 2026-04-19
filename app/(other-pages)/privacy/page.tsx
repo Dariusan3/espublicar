@@ -1,296 +1,279 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header4 from "@/components/headers/Header4";
 import React from "react";
 import Link from "next/link";
+import Header1 from "@/components/headers/Header1";
+import Footer1 from "@/components/footers/Footer1";
+
 export const metadata = {
-  title: "Privacy || Onsus - Multipurpose React Nextjs eCommerce",
-  description: "Onsus - Multipurpose React Nextjs eCommerce",
+  title: "Política de privacidad | espublicar",
+  description:
+    "Cómo recogemos, usamos y protegemos tus datos en espublicar.",
 };
-export default function page() {
+
+export default function Page() {
   return (
     <>
-      <Header4 />
-      <div className="tf-sp-1 pb-0">
-        <div className="container">
-          <ul className="breakcrumbs">
-            <li>
-              <Link href={`/`} className="body-small link">
-                {" "}
-                Home{" "}
-              </Link>
-            </li>
+      <Header1 />
+      <section className="legal-v2">
+        <div className="legal-v2-container">
+          <nav className="pd-v2-breadcrumb" aria-label="Navegación" style={{ marginBottom: "var(--space-6)" }}>
+            <Link href="/">Inicio</Link>
+            <span className="pd-v2-breadcrumb-sep">›</span>
+            <span>Privacidad</span>
+          </nav>
 
-            <li className="d-flex align-items-center">
-              <i className="icon icon-arrow-right" />
-            </li>
-            <li>
-              <span className="body-small">Privacy</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <section className="tf-sp-2">
-        <div className="container">
-          <div className="privary-wrap">
-            <div className="entry-privary">
-              <div className="wrap">
-                <h4 className="fw-semibold">Who we are</h4>
-                <p className="title-sidebar-2 text-main-2">
-                  <span className="fw-medium">Suggested text:</span> Our website
-                  address is: http://example.com
+          <header className="legal-v2-header">
+            <span className="legal-v2-eyebrow">Legal</span>
+            <h1 className="legal-v2-title">Política de privacidad</h1>
+            <p className="legal-v2-lead">
+              En espublicar nos tomamos muy en serio la protección de tus
+              datos. Aquí te explicamos qué información recopilamos, para qué
+              la usamos y cuáles son tus derechos.
+            </p>
+            <p className="legal-v2-updated">Última actualización: enero de 2025</p>
+          </header>
+
+          <article className="legal-v2-card">
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">Quiénes somos</h2>
+              <div className="legal-v2-prose">
+                <p>
+                  espublicar es un marketplace de segunda mano operado desde
+                  España. Nuestra dirección web es:{" "}
+                  <Link href="/">espublicar.com</Link>. Puedes contactarnos en{" "}
+                  <a href="mailto:soporte@espublicar.com">
+                    soporte@espublicar.com
+                  </a>
+                  .
                 </p>
               </div>
-              <div className="wrap">
-                <h4 className="fw-semibold">Comments (If Applicable)</h4>
-                <ul className="text-list">
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">Qué datos recopilamos</h2>
+              <div className="legal-v2-prose">
+                <p>
+                  Recogemos únicamente los datos necesarios para ofrecerte el
+                  servicio. Esto incluye:
+                </p>
+                <ul>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      When visitors leave comments on the site, we collect the
-                      data shown in the comments form, and also the visitor's IP
-                      address and browser user agent string to help spam
-                      detection.
-                    </p>
+                    <strong>Cuenta</strong>: nombre, correo electrónico y, si
+                    lo añades, número de teléfono o foto de perfil.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      An anonymized string created from your email address (also
-                      called a hash) may be provided to the Gravatar service to
-                      see if you are using it. The Gravatar service privacy
-                      policy is available here:
-                      <Link
-                        href={`/privacy`}
-                        className="link text-secondary fw-semibold"
-                        target="_blank"
-                      >
-                        Privacy
-                      </Link>
-                      .
-                    </p>
+                    <strong>Anuncios</strong>: las fotos, descripciones,
+                    precios y ubicación que publiques.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      After approval of your comment, your profile picture is
-                      visible to the public in the context of your comment.
-                    </p>
+                    <strong>Transacciones</strong>: dirección de envío,
+                    método de pago (últimos 4 dígitos de la tarjeta o teléfono
+                    Bizum enmascarado) y el historial de pedidos.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Please note that customer reviews may be used for
-                      promotional purposes, without disclosing personal
-                      information.
-                    </p>
+                    <strong>Mensajes</strong>: las conversaciones que
+                    mantienes con otros usuarios dentro del chat.
+                  </li>
+                  <li>
+                    <strong>Datos técnicos</strong>: dirección IP, tipo de
+                    navegador, páginas visitadas y cookies (ver más abajo).
                   </li>
                 </ul>
               </div>
-              <div className="wrap">
-                <h4 className="fw-semibold">Media (Product Images)</h4>
-                <ul className="text-list">
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">Fotos de los artículos</h2>
+              <div className="legal-v2-prose">
+                <p>
+                  Si subes fotos de un artículo, evita incluir imágenes con
+                  datos de ubicación incrustados (EXIF GPS). Cualquier
+                  visitante del anuncio puede descargarlas.
+                </p>
+                <p>
+                  Las fotos que subes pueden usarse en caso de disputa para
+                  resolver reclamaciones y verificar el estado del producto.
+                </p>
+              </div>
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">Cookies</h2>
+              <div className="legal-v2-prose">
+                <p>
+                  Usamos cookies estrictamente necesarias para que el sitio
+                  funcione correctamente:
+                </p>
+                <ul>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      If you upload product images to the website, you should
-                      avoid uploading images with embedded location data (EXIF
-                      GPS) included. Visitors to the website can download and
-                      extract any location data from images on the website.
-                    </p>
+                    Cookies de sesión para mantener tu inicio de sesión durante
+                    48 horas (o 14 días si marcas &ldquo;Recuérdame&rdquo;).
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Customers' product images could be used for warranty
-                      purposes, or for dealing with product-related issues.
-                    </p>
+                    Cookies de preferencias para recordar tus filtros de
+                    búsqueda, idioma y moneda.
+                  </li>
+                  <li>
+                    Cookies del carrito para guardar los artículos que estás
+                    reservando.
+                  </li>
+                </ul>
+                <p>
+                  No usamos cookies publicitarias ni de rastreo entre sitios.
+                </p>
+              </div>
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">
+                Contenido de terceros
+              </h2>
+              <div className="legal-v2-prose">
+                <p>
+                  Algunas páginas pueden incluir contenido de terceros (mapas,
+                  vídeos, pasarelas de pago). Esos servicios tienen sus
+                  propias políticas de privacidad y pueden recopilar datos
+                  sobre tu visita:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Appwrite</strong>: proveedor de nuestra
+                    infraestructura (autenticación, base de datos,
+                    almacenamiento).
+                  </li>
+                  <li>
+                    <strong>Bizum, Stripe, PayPal</strong>: procesadores de
+                    pago cuando realizas una compra.
+                  </li>
+                  <li>
+                    <strong>Servicios de mensajería</strong>: para la gestión
+                    de envíos con seguimiento.
                   </li>
                 </ul>
               </div>
-              <div className="wrap">
-                <h4 className="fw-semibold">Cookies</h4>
-                <ul className="text-list">
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">
+                Con quién compartimos tus datos
+              </h2>
+              <div className="legal-v2-prose">
+                <ul>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      If you leave a comment on our site, you may opt-in to
-                      saving your name, email address, and website in cookies.
-                      These are for your convenience so that you do not have to
-                      fill in your details again when you leave another comment.
-                      These cookies will last for one year.
-                    </p>
+                    Con otros usuarios: tu nombre, foto y anuncios son
+                    públicos. Los datos de envío se comparten sólo con el
+                    vendedor de un pedido confirmado.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      If you visit our login page, we will set a temporary
-                      cookie to determine if your browser accepts cookies. This
-                      cookie contains no personal data and is discarded when you
-                      close your browser.
-                    </p>
+                    Con las empresas de envío para entregar tus compras.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      When you log in, we will also set up several cookies to
-                      save your login information and your screen display
-                      choices. Login cookies last for two days, and screen
-                      options cookies last for a year. If you select "Remember
-                      Me", your login will persist for two weeks. If you log out
-                      of your account, the login cookies will be removed.
-                    </p>
+                    Con los procesadores de pago para completar transacciones.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      If you edit or publish an article, an additional cookie
-                      will be saved in your browser. This cookie includes no
-                      personal data and simply indicates the post ID of the
-                      article you just edited. It expires after 1 day.
-                    </p>
+                    Con las autoridades cuando sea legalmente obligatorio.
+                  </li>
+                </ul>
+                <p>
+                  <strong>No vendemos tus datos a terceros</strong> bajo
+                  ninguna circunstancia.
+                </p>
+              </div>
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">
+                Cuánto tiempo conservamos tus datos
+              </h2>
+              <div className="legal-v2-prose">
+                <ul>
+                  <li>
+                    Los datos de tu cuenta se conservan mientras ésta esté
+                    activa.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      This electronic store website uses cookies to save the
-                      customer's shopping cart information and to store what
-                      products a client has viewed, to recommend related
-                      products.
-                    </p>
+                    El historial de compras se conserva durante 6 años por
+                    obligaciones fiscales.
+                  </li>
+                  <li>
+                    Los mensajes se conservan durante 2 años para resolver
+                    posibles disputas.
+                  </li>
+                  <li>
+                    Los anuncios vendidos o eliminados se borran pasados 90
+                    días.
                   </li>
                 </ul>
               </div>
-              <div className="wrap">
-                <h4 className="fw-semibold">
-                  Embedded Content From Other Websites
-                </h4>
-                <ul className="text-list">
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">Tus derechos</h2>
+              <div className="legal-v2-prose">
+                <p>
+                  De acuerdo con el RGPD, tienes derecho a:
+                </p>
+                <ul>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Articles on this site may include embedded content (e.g.,
-                      videos, images, articles, etc.). Embedded content from
-                      other websites behaves in the exact same way as if the
-                      visitor has visited the other website.
-                    </p>
+                    <strong>Acceso</strong>: solicitar una copia de los datos
+                    que tenemos sobre ti.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      These websites may collect data about you, use cookies,
-                      embed additional third-party tracking, and monitor your
-                      interaction with that embedded content, including tracking
-                      your interaction with the embedded content if you have an
-                      account and are logged in to that website.
-                    </p>
-                  </li>
-                </ul>
-              </div>
-              <div className="wrap">
-                <h4 className="fw-semibold">Who We Share Your Data With</h4>
-                <ul className="text-list">
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      If you request a password reset, your IP address will be
-                      included in the reset email.
-                    </p>
+                    <strong>Rectificación</strong>: corregir cualquier dato
+                    incorrecto o incompleto.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Customer information will be shared with shipping services
-                      in order to deliver products.
-                    </p>
+                    <strong>Supresión</strong>: pedirnos que borremos tus
+                    datos (excepto los que debamos conservar legalmente).
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Customer information could be shared with product
-                      suppliers in order to support warranties.
-                    </p>
+                    <strong>Portabilidad</strong>: recibir tus datos en un
+                    formato estructurado y transferible.
                   </li>
                   <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Information could be shared with payment processors in
-                      order to process transactions.
-                    </p>
+                    <strong>Oposición</strong>: oponerte al tratamiento de tus
+                    datos con fines de marketing.
                   </li>
                 </ul>
+                <p>
+                  Para ejercer cualquier derecho, escríbenos a{" "}
+                  <a href="mailto:privacidad@espublicar.com">
+                    privacidad@espublicar.com
+                  </a>
+                  . Responderemos en un plazo máximo de 30 días.
+                </p>
               </div>
-              <div className="wrap">
-                <h4 className="fw-semibold">How Long We Retain Your Data</h4>
-                <ul className="text-list">
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      If you leave a comment, the comment and its metadata are
-                      retained indefinitely. This is so we can recognize and
-                      approve any follow-up comments automatically instead of
-                      holding them in a moderation queue.
-                    </p>
-                  </li>
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      For users that register on our website (if any), we also
-                      store the personal information they provide in their user
-                      profile. All users can see, edit, or delete their personal
-                      information at any time (except they cannot change their
-                      username). Website administrators can also see and edit
-                      that information.
-                    </p>
-                  </li>
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Purchase information is retained to support warranties and
-                      customer support.
-                    </p>
-                  </li>
-                </ul>
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">Seguridad</h2>
+              <div className="legal-v2-prose">
+                <p>
+                  Implementamos medidas técnicas y organizativas para proteger
+                  tus datos: cifrado en tránsito (HTTPS/TLS), cifrado en
+                  reposo, control de acceso y auditorías periódicas. No
+                  almacenamos contraseñas en texto plano.
+                </p>
+                <p>
+                  Si detectáramos una brecha de seguridad que afecte a tus
+                  datos, te avisaremos dentro de las 72 horas posteriores a
+                  tener conocimiento.
+                </p>
               </div>
-              <div className="wrap">
-                <h4 className="fw-semibold">
-                  What Rights You Have Over Your Data
-                </h4>
-                <ul className="text-list">
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      If you have an account on this site, or have left
-                      comments, you can request to receive an exported file of
-                      the personal data we hold about you, including any data
-                      you have provided to us.
-                    </p>
-                  </li>
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      You can also request that we erase any personal data we
-                      hold about you. This does not include any data we are
-                      obliged to keep for administrative, legal, or security
-                      purposes.
-                    </p>
-                  </li>
-                </ul>
+            </section>
+
+            <section className="legal-v2-section">
+              <h2 className="legal-v2-section-title">Cambios en esta política</h2>
+              <div className="legal-v2-prose">
+                <p>
+                  Podemos actualizar esta política para reflejar cambios en la
+                  ley o en nuestros servicios. Te avisaremos por correo antes
+                  de que entren en vigor cambios significativos.
+                </p>
               </div>
-              <div className="wrap">
-                <h4 className="fw-semibold">
-                  Additional Notes for an Electronics Store
-                </h4>
-                <ul className="text-list">
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Customer information is used for warranty and technical
-                      support purposes to ensure proper service and assistance.
-                    </p>
-                  </li>
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      If necessary, we may collect computer or laptop
-                      configuration details to provide accurate support
-                      services.
-                    </p>
-                  </li>
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      Customer information may be used for marketing purposes,
-                      such as promotional emails and product recommendations.
-                      Customers have the option to opt out at any time.
-                    </p>
-                  </li>
-                  <li>
-                    <p className="title-sidebar-2 text-main-2">
-                      We implement security measures, including data encryption,
-                      to protect customer information and ensure privacy.
-                    </p>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+            </section>
+          </article>
         </div>
-      </section>{" "}
+      </section>
       <Footer1 />
     </>
   );

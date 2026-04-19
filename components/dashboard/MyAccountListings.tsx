@@ -53,7 +53,10 @@ export default function MyAccountListings() {
                     <td>
                       <div className="d-flex align-items-center gap-3">
                         <Image
-                          src={item.imgSrc || "/images/products/1.jpg"}
+                          src={
+                            item.imgSrc ||
+                            "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=200&auto=format&fit=crop"
+                          }
                           alt={item.title}
                           width={60}
                           height={60}

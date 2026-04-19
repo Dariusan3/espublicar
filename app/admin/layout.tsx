@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
-import Header4 from "@/components/headers/Header4";
+import Header1 from "@/components/headers/Header1";
 import Footer1 from "@/components/footers/Footer1";
 
 export default function AdminLayout({
@@ -11,7 +11,7 @@ export default function AdminLayout({
 }) {
   return (
     <>
-      <Header4 />
+      <Header1 />
       <section className="flat-spacing-11">
         <div className="container">
           <div className="row">

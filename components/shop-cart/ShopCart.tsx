@@ -88,7 +88,10 @@ export default function ShopCart() {
                           }}
                         >
                           <Image
-                            src={item.productImage || "/images/placeholder.png"}
+                            src={
+                              item.productImage ||
+                              "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=200&auto=format&fit=crop"
+                            }
                             alt={item.productTitle || "Product"}
                             fill
                             className="object-fit-cover rounded-3"

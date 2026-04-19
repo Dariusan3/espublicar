@@ -37,16 +37,21 @@ const useSeller = () => {
         let totalReviews = 0;
 
         if (productIds.length > 0) {
-          const reviewsRes = await db.listDocuments(
-            DB_ID,
-            COLLECTIONS.REVIEWS,
-            [Query.equal("productId", productIds), Query.limit(500)],
-          );
-          const reviews = reviewsRes.documents.map(toReview);
-          totalReviews = reviews.length;
-          if (totalReviews > 0) {
-            averageRating =
-              reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
+          try {
+            const reviewsRes = await db.listDocuments(
+              DB_ID,
+              COLLECTIONS.REVIEWS,
+              [Query.equal("productId", productIds), Query.limit(500)],
+            );
+            const reviews = reviewsRes.documents.map(toReview);
+            totalReviews = reviews.length;
+            if (totalReviews > 0) {
+              averageRating =
+                reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
+            }
+          } catch (e: any) {
+            if (e?.code !== 404) throw e;
+            // Reviews collection not created yet — skip silently
           }
         }
 

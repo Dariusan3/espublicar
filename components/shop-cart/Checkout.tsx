@@ -1,438 +1,484 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useCart from "@/hooks/useCart";
 import useOrders, { OrderItem, ShippingAddress } from "@/hooks/useOrders";
 import { toast } from "react-toastify";
 
+type Delivery = "shipping" | "pickup";
+type Payment = "card" | "bizum" | "paypal";
+
+const SHIPPING_FEE = 4.5;
+const SERVICE_FEE_RATE = 0.03; // 3% comisión de servicio
+
+function formatPrice(p: number) {
+  return p.toLocaleString("es-ES", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 export default function Checkout() {
   const router = useRouter();
   const { cart, clearMyCart } = useCart();
   const { createOrder } = useOrders();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form state
-  const [contact, setContact] = useState("");
-  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [delivery, setDelivery] = useState<Delivery>("shipping");
+  const [payment, setPayment] = useState<Payment>("card");
+
+  const [address, setAddress] = useState<ShippingAddress>({
     firstName: "",
     lastName: "",
     address: "",
     city: "",
     state: "",
     zipCode: "",
-    country: "",
+    country: "España",
   });
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [orderNotes, setOrderNotes] = useState("");
+  const [phone, setPhone] = useState("");
+  const [addressExtra, setAddressExtra] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardExp, setCardExp] = useState("");
+  const [cardCvc, setCardCvc] = useState("");
 
-  const cartProducts = cart.items;
-  const totalPrice = cart.totalAmount;
+  const items = cart.items;
+  const mainItem = items[0];
+  const itemsSubtotal = cart.totalAmount;
+  const serviceFee = itemsSubtotal * SERVICE_FEE_RATE;
+  const shippingCost = delivery === "shipping" ? SHIPPING_FEE : 0;
+  const totalPrice = itemsSubtotal + serviceFee + shippingCost;
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ) => {
-    const { name, value } = e.target;
-    setShippingAddress((prev) => ({ ...prev, [name]: value }));
-  };
+  const isShippingValid =
+    delivery !== "shipping" ||
+    (address.firstName &&
+      address.lastName &&
+      address.address &&
+      address.city &&
+      address.zipCode &&
+      phone);
 
-  const handlePlaceOrder = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const isPaymentValid =
+    payment !== "card" || (cardNumber && cardExp && cardCvc);
 
-    if (cartProducts.length === 0) {
-      toast.error("¡Tu carrito está vacío!");
-      return;
-    }
+  const canSubmit = items.length > 0 && isShippingValid && isPaymentValid;
 
-    // Validate required fields
-    if (
-      !contact ||
-      !shippingAddress.firstName ||
-      !shippingAddress.lastName ||
-      !shippingAddress.address ||
-      !shippingAddress.city ||
-      !shippingAddress.zipCode
-    ) {
-      toast.error("Por favor, rellena todos los campos obligatorios");
+  const handleSubmit = async () => {
+    if (!canSubmit) {
+      toast.error("Completa los datos de entrega y pago");
       return;
     }
 
     setIsSubmitting(true);
-
     try {
-      // Prepare order items
-      const orderItems: OrderItem[] = cartProducts.map((item) => ({
+      const orderItems: OrderItem[] = items.map((item) => ({
         productId: item.productId,
-        title: item.productTitle || "Product",
+        title: item.productTitle || "Artículo",
         price: item.productPrice || 0,
         quantity: item.quantity,
         imgSrc: item.productImage,
       }));
 
-      // Create order
       const result = await createOrder(
         orderItems,
         totalPrice,
-        shippingAddress,
-        paymentMethod,
-        orderNotes,
+        address,
+        payment,
+        "",
       );
 
       if (result.success) {
-        // Clear cart after successful order
         await clearMyCart();
-
-        // Redirect to order confirmation
         router.push(`/order-details?orderId=${result.data.id}`);
       }
-    } catch (error) {
-      console.error("Order error:", error);
-      toast.error("Algo salió mal. Por favor, inténtalo de nuevo.");
+    } catch {
+      toast.error("Algo salió mal. Inténtalo de nuevo.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  return (
-    <section className="tf-sp-2">
-      <div className="container">
-        <div className="checkout-status tf-sp-2 pt-0">
-          <div className="checkout-wrap">
-            <span className="checkout-bar next" />
-            <div className="step-payment">
-              <span className="icon">
-                <i className="icon-shop-cart-1" />
-              </span>
-              <Link href={`/shop-cart`} className="link body-text-3">
-                Carrito
-              </Link>
-            </div>
-            <div className="step-payment">
-              <span className="icon">
-                <i className="icon-shop-cart-2" />
-              </span>
-              <Link
-                href={`/checkout`}
-                className="text-secondary link body-text-3"
-              >
-                Envío y Pago
-              </Link>
-            </div>
-            <div className="step-payment">
-              <span className="icon">
-                <i className="icon-shop-cart-3" />
-              </span>
-              <span className="link body-text-3">Confirmación</span>
-            </div>
-          </div>
+  if (items.length === 0) {
+    return (
+      <section className="checkout-v2-empty">
+        <div className="checkout-v2-container">
+          <h1 className="checkout-v2-title">No hay artículos para reservar</h1>
+          <p className="text-ink-3 mb-4">
+            Añade un artículo desde cualquier anuncio para completar tu compra.
+          </p>
+          <button
+            className="btn-brand btn-lg"
+            onClick={() => router.push("/shop-default")}
+          >
+            Explorar artículos
+          </button>
         </div>
-        <form
-          onSubmit={handlePlaceOrder}
-          className="tf-checkout-wrap flex-lg-nowrap"
-        >
-          <div className="page-checkout">
-            <div className="wrap">
-              <h5 className="title has-account">
-                <span className="fw-semibold">Contacto</span>
-                <span className="body-text-3">
-                  ¿Ya tienes cuenta?
-                  <a
-                    href="#login"
-                    data-bs-toggle="modal"
-                    className="body-text-3 text-secondary link"
-                  >
-                    Inicia sesión
-                  </a>
-                </span>
-              </h5>
-              <div className="form-checkout-contact">
-                <label className="body-md-2 fw-semibold">
-                  Email o Teléfono
-                </label>
-                <input
-                  className="def"
-                  type="text"
-                  placeholder="Tu contacto"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  required
-                />
-                <p className="caption text-main-2 font-2">
-                  La información del pedido se enviará a tu correo electrónico
+      </section>
+    );
+  }
+
+  return (
+    <section className="checkout-v2">
+      <div className="checkout-v2-container">
+        <h1 className="checkout-v2-title">Completa tu compra</h1>
+
+        <div className="checkout-v2-grid">
+          {/* Left column */}
+          <div className="checkout-v2-main">
+            {/* Card 1 — Artículo */}
+            <div className="checkout-v2-card">
+              <div className="checkout-v2-item">
+                <div className="checkout-v2-item-thumb">
+                  {mainItem?.productImage && (
+                    <Image
+                      src={mainItem.productImage}
+                      alt={mainItem.productTitle || ""}
+                      fill
+                      className="checkout-v2-item-img"
+                    />
+                  )}
+                </div>
+                <div className="checkout-v2-item-info">
+                  <p className="checkout-v2-item-title">
+                    {mainItem?.productTitle || "Artículo"}
+                  </p>
+                  <p className="checkout-v2-item-meta">
+                    Cantidad: {mainItem?.quantity || 1}
+                  </p>
+                </div>
+                <p className="checkout-v2-item-price num">
+                  {formatPrice(itemsSubtotal)} €
                 </p>
               </div>
             </div>
-            <div className="wrap">
-              <h5 className="title fw-semibold">Entrega</h5>
-              <div className="def">
-                <fieldset>
-                  <label>País/Región</label>
-                  <div className="tf-select">
-                    <select
-                      name="country"
-                      value={shippingAddress.country}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Selecciona tu País/Región</option>
-                      <option value="ES">España</option>
-                      <option value="US">Estados Unidos</option>
-                      <option value="UK">Reino Unido</option>
-                      <option value="CA">Canadá</option>
-                      <option value="AU">Australia</option>
-                      <option value="DE">Alemania</option>
-                      <option value="FR">Francia</option>
-                    </select>
-                  </div>
-                </fieldset>
-                <div className="cols">
-                  <fieldset>
-                    <label>Nombre *</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      placeholder="ej. Juan"
-                      value={shippingAddress.firstName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </fieldset>
-                  <fieldset>
-                    <label>Apellidos *</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      placeholder="ej. Pérez"
-                      value={shippingAddress.lastName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </fieldset>
-                </div>
-                <div className="cols">
-                  <fieldset>
-                    <label>Ciudad *</label>
-                    <input
-                      type="text"
-                      name="city"
-                      placeholder="ej. Madrid"
-                      value={shippingAddress.city}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </fieldset>
-                  <fieldset>
-                    <label>Provincia</label>
-                    <div className="tf-select">
-                      <select
-                        name="state"
-                        value={shippingAddress.state}
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Selecciona</option>
-                        <option value="M">Madrid</option>
-                        <option value="B">Barcelona</option>
-                        <option value="V">Valencia</option>
-                        <option value="S">Sevilla</option>
-                        <option value="Z">Zaragoza</option>
-                        <option value="MA">Málaga</option>
-                      </select>
-                    </div>
-                  </fieldset>
-                  <fieldset>
-                    <label>Código Postal *</label>
-                    <input
-                      type="text"
-                      name="zipCode"
-                      placeholder="ej. 28001"
-                      value={shippingAddress.zipCode}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </fieldset>
-                </div>
-                <fieldset>
-                  <label>Dirección *</label>
-                  <input
-                    type="text"
-                    name="address"
-                    placeholder="Tu dirección detallada"
-                    value={shippingAddress.address}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </fieldset>
-                <fieldset>
-                  <label>Nota del pedido</label>
-                  <textarea
-                    placeholder="Nota sobre tu pedido"
-                    value={orderNotes}
-                    onChange={(e) => setOrderNotes(e.target.value)}
-                  />
-                </fieldset>
-              </div>
+
+            {/* Card 2 — Entrega */}
+            <div className="checkout-v2-card">
+              <h2 className="checkout-v2-section-title">
+                ¿Cómo quieres recibirlo?
+              </h2>
+              <button
+                type="button"
+                className={`delivery-option ${delivery === "shipping" ? "is-selected" : ""}`}
+                onClick={() => setDelivery("shipping")}
+              >
+                <span className="delivery-radio" aria-hidden="true" />
+                <span className="delivery-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="1" y="3" width="15" height="13" />
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                </span>
+                <span className="delivery-info">
+                  <span className="delivery-title">Envío con espublicar</span>
+                  <span className="delivery-sub">
+                    Llega en 2–3 días con seguimiento
+                  </span>
+                </span>
+                <span className="delivery-cost num">
+                  {formatPrice(SHIPPING_FEE)} €
+                </span>
+              </button>
+              <button
+                type="button"
+                className={`delivery-option ${delivery === "pickup" ? "is-selected" : ""}`}
+                onClick={() => setDelivery("pickup")}
+              >
+                <span className="delivery-radio" aria-hidden="true" />
+                <span className="delivery-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 11V7a5 5 0 0 0-10 0v4" />
+                    <rect x="5" y="11" width="14" height="10" rx="2" />
+                  </svg>
+                </span>
+                <span className="delivery-info">
+                  <span className="delivery-title">Recogida en mano</span>
+                  <span className="delivery-sub">
+                    Acuerda el punto de encuentro por chat
+                  </span>
+                </span>
+                <span className="delivery-cost">Gratis</span>
+              </button>
             </div>
-            <div className="wrap">
-              <h5 className="title">Pago</h5>
-              <div className="form-payment">
-                <div className="payment-box" id="payment-box">
-                  <div
-                    className={`payment-item ${paymentMethod === "card" ? "active" : ""}`}
-                  >
-                    <label
-                      htmlFor="credit-card-method"
-                      className="payment-header"
-                      onClick={() => setPaymentMethod("card")}
-                    >
-                      <span className="body-md-2 fw-semibold title">
-                        Tarjeta de Crédito/Débito
-                      </span>
+
+            {/* Card 3 — Dirección (shipping only) */}
+            {delivery === "shipping" && (
+              <div className="checkout-v2-card">
+                <h2 className="checkout-v2-section-title">
+                  Dirección de envío
+                </h2>
+                <div className="checkout-v2-address">
+                  <div className="checkout-v2-row-2">
+                    <div className="publicar-v2-field">
+                      <label className="publicar-v2-label">
+                        Nombre completo
+                      </label>
                       <input
-                        type="radio"
-                        name="payment-method"
-                        className="d-none tf-check-rounded"
-                        id="credit-card-method"
-                        checked={paymentMethod === "card"}
-                        onChange={() => setPaymentMethod("card")}
+                        className="input-field"
+                        value={`${address.firstName}${address.lastName ? " " + address.lastName : ""}`}
+                        onChange={(e) => {
+                          const parts = e.target.value.split(" ");
+                          setAddress((p) => ({
+                            ...p,
+                            firstName: parts[0] || "",
+                            lastName: parts.slice(1).join(" ") || "",
+                          }));
+                        }}
+                        placeholder="María Gómez"
                       />
-                    </label>
-                    {paymentMethod === "card" && (
-                      <div className="payment-body">
-                        <fieldset>
-                          <label>Número de Tarjeta</label>
-                          <input
-                            type="text"
-                            className="number-credit-card"
-                            placeholder="xxxx xxxx xxxx xxxx"
-                          />
-                        </fieldset>
-                        <div className="cols">
-                          <fieldset>
-                            <label>Fecha de expiración</label>
-                            <input type="text" placeholder="MM/AA" />
-                          </fieldset>
-                          <fieldset>
-                            <label>CVV</label>
-                            <input type="text" placeholder="xxx" />
-                          </fieldset>
-                        </div>
-                        <fieldset>
-                          <label>Nombre en la tarjeta</label>
-                          <input type="text" placeholder="ej. JUAN PÉREZ" />
-                        </fieldset>
-                      </div>
-                    )}
+                    </div>
+                    <div className="publicar-v2-field">
+                      <label className="publicar-v2-label">Teléfono</label>
+                      <input
+                        className="input-field"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="+34 600 000 000"
+                      />
+                    </div>
                   </div>
-                  <div
-                    className={`payment-item ${paymentMethod === "cash" ? "active" : ""}`}
-                  >
-                    <label
-                      htmlFor="delivery-method"
-                      className="payment-header radio-item"
-                      onClick={() => setPaymentMethod("cash")}
-                    >
-                      <span className="body-text-3">Pago contra reembolso</span>
-                    </label>
+                  <div className="publicar-v2-field">
+                    <label className="publicar-v2-label">Dirección</label>
+                    <input
+                      className="input-field"
+                      value={address.address}
+                      onChange={(e) =>
+                        setAddress((p) => ({ ...p, address: e.target.value }))
+                      }
+                      placeholder="Calle Mayor 10"
+                    />
                   </div>
-                </div>
-                <div className="box-btn">
-                  <button
-                    type="submit"
-                    className="tf-btn w-100"
-                    disabled={isSubmitting || cartProducts.length === 0}
-                  >
-                    <span className="text-white">
-                      {isSubmitting
-                        ? "Tramitando Pedido..."
-                        : "Realizar Pedido"}
-                    </span>
-                  </button>
+                  <div className="publicar-v2-field">
+                    <label className="publicar-v2-label">
+                      Piso / escalera / puerta (opcional)
+                    </label>
+                    <input
+                      className="input-field"
+                      value={addressExtra}
+                      onChange={(e) => setAddressExtra(e.target.value)}
+                      placeholder="3º B"
+                    />
+                  </div>
+                  <div className="checkout-v2-row-3">
+                    <div className="publicar-v2-field">
+                      <label className="publicar-v2-label">Código postal</label>
+                      <input
+                        className="input-field"
+                        value={address.zipCode}
+                        onChange={(e) =>
+                          setAddress((p) => ({ ...p, zipCode: e.target.value }))
+                        }
+                        placeholder="28001"
+                      />
+                    </div>
+                    <div className="publicar-v2-field">
+                      <label className="publicar-v2-label">Ciudad</label>
+                      <input
+                        className="input-field"
+                        value={address.city}
+                        onChange={(e) =>
+                          setAddress((p) => ({ ...p, city: e.target.value }))
+                        }
+                        placeholder="Madrid"
+                      />
+                    </div>
+                    <div className="publicar-v2-field">
+                      <label className="publicar-v2-label">Provincia</label>
+                      <input
+                        className="input-field"
+                        value={address.state}
+                        onChange={(e) =>
+                          setAddress((p) => ({ ...p, state: e.target.value }))
+                        }
+                        placeholder="Madrid"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="flat-sidebar-checkout">
-            <div className="sidebar-checkout-content">
-              <h5 className="fw-semibold">Resumen del Pedido</h5>
-              {cartProducts.length ? (
-                <ul className="list-product">
-                  {cartProducts.map((item, i) => (
-                    <li key={i} className="item-product">
-                      <a href="#" className="img-product">
-                        <Image
-                          alt=""
-                          src={item.productImage || "/images/placeholder.jpg"}
-                          width={500}
-                          height={500}
-                        />
-                      </a>
-                      <div className="content-box">
-                        <a
-                          href="#"
-                          className="link-secondary body-md-2 fw-semibold"
-                        >
-                          {item.productTitle || "Producto"}
-                        </a>
-                        <p className="price-quantity price-text fw-semibold">
-                          {item.productPrice
-                            ? `${item.productPrice.toFixed(2)}€`
-                            : "0.00€"}
-                          <span className="body-md-2 text-main-2 fw-normal">
-                            {" "}
-                            x{item.quantity}
-                          </span>
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <div className="p-4">
-                  <div className="col-4">
-                    Tu carrito está vacío. ¡Empieza a añadir tus productos
-                    favoritos!
+            )}
+
+            {/* Card 4 — Pago */}
+            <div className="checkout-v2-card">
+              <h2 className="checkout-v2-section-title">¿Cómo pagas?</h2>
+
+              {/* Card */}
+              <button
+                type="button"
+                className={`delivery-option payment-option ${payment === "card" ? "is-selected" : ""}`}
+                onClick={() => setPayment("card")}
+              >
+                <span className="delivery-radio" aria-hidden="true" />
+                <span className="payment-logos">
+                  <span className="payment-chip">VISA</span>
+                  <span className="payment-chip">MC</span>
+                </span>
+                <span className="delivery-info">
+                  <span className="delivery-title">
+                    Tarjeta de crédito o débito
+                  </span>
+                </span>
+              </button>
+              {payment === "card" && (
+                <div className="checkout-v2-card-fields">
+                  <div className="publicar-v2-field">
+                    <label className="publicar-v2-label">
+                      Número de tarjeta
+                    </label>
+                    <input
+                      className="input-field"
+                      value={cardNumber}
+                      onChange={(e) => setCardNumber(e.target.value)}
+                      placeholder="1234 5678 9012 3456"
+                      maxLength={19}
+                    />
                   </div>
-                  <Link
-                    className="tf-btn mt-2 mb-3 text-white"
-                    style={{ width: "fit-content" }}
-                    href="/product-grid"
-                  >
-                    Explorar Productos
-                  </Link>
+                  <div className="checkout-v2-row-2">
+                    <div className="publicar-v2-field">
+                      <label className="publicar-v2-label">Fecha</label>
+                      <input
+                        className="input-field"
+                        value={cardExp}
+                        onChange={(e) => setCardExp(e.target.value)}
+                        placeholder="MM/AA"
+                        maxLength={5}
+                      />
+                    </div>
+                    <div className="publicar-v2-field">
+                      <label className="publicar-v2-label">CVC</label>
+                      <input
+                        className="input-field"
+                        value={cardCvc}
+                        onChange={(e) => setCardCvc(e.target.value)}
+                        placeholder="123"
+                        maxLength={4}
+                      />
+                    </div>
+                  </div>
                 </div>
               )}
-              <div className="">
-                <p className="body-md-2 fw-semibold sub-type">
-                  Código de descuento
-                </p>
-                <div className="ip-discount-code style-2">
-                  <input type="text" className="def" placeholder="Tu código" />
-                  <button type="button" className="tf-btn btn-gray-2">
-                    <span>Aplicar</span>
-                  </button>
+
+              {/* Bizum */}
+              <button
+                type="button"
+                className={`delivery-option payment-option ${payment === "bizum" ? "is-selected" : ""}`}
+                onClick={() => setPayment("bizum")}
+              >
+                <span className="delivery-radio" aria-hidden="true" />
+                <span className="payment-logos">
+                  <span className="payment-chip payment-chip-bizum">Bizum</span>
+                </span>
+                <span className="delivery-info">
+                  <span className="delivery-title">Bizum</span>
+                  <span className="delivery-sub">
+                    Usaremos tu número registrado en Bizum.
+                  </span>
+                </span>
+              </button>
+
+              {/* PayPal */}
+              <button
+                type="button"
+                className={`delivery-option payment-option ${payment === "paypal" ? "is-selected" : ""}`}
+                onClick={() => setPayment("paypal")}
+              >
+                <span className="delivery-radio" aria-hidden="true" />
+                <span className="payment-logos">
+                  <span className="payment-chip payment-chip-paypal">
+                    PayPal
+                  </span>
+                </span>
+                <span className="delivery-info">
+                  <span className="delivery-title">PayPal</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Right column — Summary */}
+          <aside className="checkout-v2-summary">
+            <div className="checkout-v2-summary-inner">
+              <h2 className="checkout-v2-summary-title">Resumen</h2>
+
+              <div className="checkout-v2-summary-lines">
+                <div className="checkout-v2-summary-line">
+                  <span>Artículo</span>
+                  <span className="num">{formatPrice(itemsSubtotal)} €</span>
+                </div>
+                <div className="checkout-v2-summary-line">
+                  <span>Comisión de servicio</span>
+                  <span className="num">{formatPrice(serviceFee)} €</span>
+                </div>
+                <div className="checkout-v2-summary-line">
+                  <span>Envío</span>
+                  <span className="num">
+                    {shippingCost === 0 ? "Gratis" : `${formatPrice(shippingCost)} €`}
+                  </span>
                 </div>
               </div>
-              <ul className="sec-total-price">
+
+              <div className="divider" />
+
+              <div className="checkout-v2-summary-total">
+                <span>Total a pagar</span>
+                <span className="num">{formatPrice(totalPrice)} €</span>
+              </div>
+
+              <button
+                type="button"
+                className="btn-brand btn-lg btn-block checkout-v2-pay"
+                onClick={handleSubmit}
+                disabled={!canSubmit || isSubmitting}
+              >
+                {isSubmitting
+                  ? "Procesando…"
+                  : `Pagar ${formatPrice(totalPrice)} € →`}
+              </button>
+
+              <ul className="checkout-v2-trust">
                 <li>
-                  <span className="body-text-3">Subtotal</span>
-                  <span className="body-text-3">{totalPrice.toFixed(2)}€</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                  <span>Pago retenido hasta que confirmes recibir el artículo</span>
                 </li>
                 <li>
-                  <span className="body-text-3">Envío</span>
-                  <span className="body-text-3">Gratis</span>
-                </li>
-                <li>
-                  <span className="body-md-2 fw-semibold">Total</span>
-                  <span className="body-md-2 fw-semibold text-primary">
-                    {totalPrice.toFixed(2)}€
-                  </span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="1 4 1 10 7 10" />
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                  </svg>
+                  <span>Reembolso íntegro si no llega o no es como se describe</span>
                 </li>
               </ul>
             </div>
-          </div>
-        </form>
+          </aside>
+        </div>
+
+        <p className="checkout-v2-legal">
+          Al pulsar &ldquo;Pagar&rdquo; aceptas los Términos y la Política de
+          privacidad. Pagos procesados de forma segura.
+        </p>
+      </div>
+
+      {/* Sticky mobile pay bar */}
+      <div className="checkout-v2-sticky-bar glass">
+        <div className="checkout-v2-sticky-total">
+          <span className="checkout-v2-sticky-total-label">Total</span>
+          <span className="checkout-v2-sticky-total-value num">
+            {formatPrice(totalPrice)} €
+          </span>
+        </div>
+        <button
+          type="button"
+          className="btn-brand"
+          onClick={handleSubmit}
+          disabled={!canSubmit || isSubmitting}
+        >
+          {isSubmitting ? "Procesando…" : "Pagar"}
+        </button>
       </div>
     </section>
   );

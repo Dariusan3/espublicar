@@ -1,7 +1,7 @@
 import Features2 from "@/components/common/Features2";
 import RecentProducts from "@/components/common/RecentProducts";
 import Footer1 from "@/components/footers/Footer1";
-import Header4 from "@/components/headers/Header4";
+import Header1 from "@/components/headers/Header1";
 
 import OrderDetails from "@/components/shop-cart/OrderDetails";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header4 />
+      <Header1 />
       <div className="tf-sp-3 pb-0">
         <div className="container">
           <ul className="breakcrumbs">

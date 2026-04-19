@@ -25,8 +25,11 @@ const useChat = () => {
           data: response.documents.map(toConversation),
         };
       } catch (error: any) {
+        if (error?.code === 404) {
+          return { success: true, message: "Collection not found", data: [] };
+        }
         console.error("Error fetching conversations:", error);
-        return { success: false, message: error.message };
+        return { success: false, message: error.message, data: [] };
       } finally {
         setLoading(false);
       }

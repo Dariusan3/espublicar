@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Header4 from "@/components/headers/Header4";
+import Header1 from "@/components/headers/Header1";
 import Footer1 from "@/components/footers/Footer1";
 import SellerProfileCard from "@/components/seller/SellerProfileCard";
 import SellerListings from "@/components/seller/SellerListings";
@@ -30,7 +30,7 @@ export default function SellerProfilePage() {
 
   return (
     <>
-      <Header4 />
+      <Header1 />
       <div className="tf-sp-1">
         <div className="container">
           <ul className="breakcrumbs">

@@ -8,7 +8,6 @@ import { products7 } from "@/data/products";
 import AddToCart from "../common/AddToCart";
 import AddToWishlist from "../common/AddToWishlist";
 import AddToQuickview from "../common/AddToQuickview";
-import AddToCompare from "../common/AddToCompare";
 export default function Search() {
   return (
     <div className="offcanvas offcanvas-top offcanvas-search" id="search">
@@ -160,10 +159,7 @@ export default function Search() {
                                 />
                               </li>
                               <li className="d-none d-sm-block">
-                                <AddToCompare
-                                  productId={product.id}
-                                  tooltipClass="tooltip-left"
-                                />
+                                
                               </li>
                             </ul>
                           </div>

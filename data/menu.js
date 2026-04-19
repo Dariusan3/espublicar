@@ -24,8 +24,7 @@ export const shopPages = [
     id: 2,
     heading: "MI CUENTA",
     items: [
-      { id: 1, href: "/compare", text: "Comparar" },
-      { id: 2, href: "/wishlist", text: "Favoritos" },
+      { id: 1, href: "/wishlist", text: "Favoritos" },
       { id: 3, href: "/checkout", text: "Finalizar compra" },
       { id: 4, href: "/track-your-order", text: "Rastrear pedido" },
       { id: 5, href: "/my-account", text: "Mi cuenta" },

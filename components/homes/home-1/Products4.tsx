@@ -8,7 +8,6 @@ import Image from "next/image";
 import AddToCart from "@/components/common/AddToCart";
 import AddToWishlist from "@/components/common/AddToWishlist";
 import AddToQuickview from "@/components/common/AddToQuickview";
-import AddToCompare from "@/components/common/AddToCompare";
 export default function Products4() {
   return (
     <section className="tf-sp-2">
@@ -102,10 +101,7 @@ export default function Products4() {
                       />
                     </li>
                     <li className="d-none d-sm-block">
-                      <AddToCompare
-                        productId={product.id}
-                        tooltipClass="tooltip-left"
-                      />
+                      
                     </li>
                   </ul>
                 </div>

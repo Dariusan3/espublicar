@@ -1,0 +1,314 @@
+// =============================================================================
+// Dashboard V2 Minimal — Sidebar + MyAccount + Chat
+// =============================================================================
+
+// --- Layout wrapper ---------------------------------------------------------
+.dashboard-v2-layout {
+  background: var(--surface-2);
+  min-height: calc(100vh - 72px);
+  padding: var(--space-7) 0;
+
+  @media (max-width: 767px) {
+    padding: var(--space-5) 0;
+  }
+}
+
+.dashboard-v2-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+
+  @media (max-width: 767px) {
+    padding: 0 var(--space-4);
+  }
+}
+
+.dashboard-v2-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--space-7);
+  align-items: start;
+
+  @media (max-width: 991px) {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+}
+
+.dashboard-v2-sidebar-wrap {
+  position: sticky;
+  top: 88px;
+
+  @media (max-width: 991px) {
+    position: static;
+  }
+}
+
+.dashboard-v2-content-wrap {
+  min-width: 0;
+}
+
+// --- Sidebar ----------------------------------------------------------------
+.account-sidebar {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+}
+
+.account-user-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--space-2);
+}
+
+.account-user-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--brand-50);
+  color: var(--brand);
+  font: 700 18px/1 "Inter", sans-serif;
+  flex-shrink: 0;
+}
+
+.account-user-info {
+  min-width: 0;
+}
+
+.account-user-name {
+  margin: 0;
+  font: 600 15px/1.3 "Inter", sans-serif;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-user-email {
+  margin: 0;
+  font: 400 13px/1.3 "Inter", sans-serif;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-sidebar-cta {
+  margin: 0 var(--space-2) var(--space-3);
+  width: calc(100% - var(--space-4));
+}
+
+.account-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.account-nav-sep {
+  height: 1px;
+  background: var(--line);
+  margin: var(--space-2) var(--space-3);
+}
+
+.account-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  height: 44px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 0;
+  color: var(--ink-2);
+  font: 500 14px/1 "Inter", sans-serif;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-std);
+
+  &:hover {
+    background: var(--surface-3);
+    color: var(--ink);
+  }
+
+  &.is-active {
+    background: var(--brand-50);
+    color: var(--brand);
+
+    .account-nav-icon {
+      color: var(--brand);
+    }
+  }
+}
+
+.account-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink-3);
+  flex-shrink: 0;
+}
+
+.account-nav-label {
+  flex: 1;
+}
+
+.account-nav-count {
+  margin-left: auto;
+  font: 600 12px/1 "Inter", sans-serif;
+  background: var(--surface-3);
+  color: var(--ink-2);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-variant-numeric: tabular-nums;
+
+  .is-active & {
+    background: var(--brand);
+    color: #fff;
+  }
+
+  &.is-brand {
+    background: var(--brand);
+    color: #fff;
+  }
+}
+
+.account-nav-item-logout {
+  color: var(--ink-2);
+
+  &:hover {
+    background: var(--danger-bg);
+    color: var(--danger);
+
+    .account-nav-icon {
+      color: var(--danger);
+    }
+  }
+}
+
+// --- Dashboard content (MyAccount) ------------------------------------------
+.dashboard-v2-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+.dashboard-v2-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.dashboard-v2-greeting {
+  margin: 0;
+  font: 700 28px/1.2 "Inter", sans-serif;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+
+  @media (max-width: 575px) {
+    font-size: 24px;
+  }
+}
+
+.dashboard-v2-subtitle {
+  margin: var(--space-2) 0 0;
+  font: 400 15px/1.5 "Inter", sans-serif;
+  color: var(--ink-3);
+}
+
+// Stat tiles ------------------------------------------------------------------
+.dashboard-v2-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-tile {
+  padding: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.stat-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--brand-50);
+  color: var(--brand);
+  margin-bottom: var(--space-3);
+}
+
+.stat-value {
+  font: 700 28px/1 "Inter", sans-serif;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+
+  @media (max-width: 575px) {
+    font-size: 22px;
+  }
+}
+
+.stat-label {
+  margin-top: 2px;
+  font: 500 14px/1.3 "Inter", sans-serif;
+  color: var(--ink-3);
+}
+
+// Activity cards --------------------------------------------------------------
+.dashboard-v2-activity {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dashboard-v2-activity-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+
+.dashboard-v2-activity-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+
+  h2 {
+    margin: 0;
+    font: 600 16px/1.2 "Inter", sans-serif;
+    color: var(--ink);
+  }
+}
+
+.dashboard-v2-empty-inline {
+  padding: var(--space-5) 0;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font: 400 14px/1.4 "Inter", sans-serif;
+    color: var(--ink-4);
+  }
+}

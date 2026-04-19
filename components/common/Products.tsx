@@ -8,7 +8,6 @@ import { Navigation, Pagination } from "swiper/modules";
 import AddToCart from "./AddToCart";
 import AddToWishlist from "./AddToWishlist";
 import AddToQuickview from "./AddToQuickview";
-import AddToCompare from "./AddToCompare";
 export default function Products({ parentClass = "tf-sp-2" }) {
   return (
     <section className={parentClass}>
@@ -105,7 +104,7 @@ export default function Products({ parentClass = "tf-sp-2" }) {
                                   />
                                 </li>
                                 <li>
-                                  <AddToCompare productId={product.id} />
+                                  
                                 </li>
                               </ul>
                             </div>
@@ -183,7 +182,7 @@ export default function Products({ parentClass = "tf-sp-2" }) {
                                   />
                                 </li>
                                 <li>
-                                  <AddToCompare productId={product.id} />
+                                  
                                 </li>
                               </ul>
                             </div>
@@ -289,7 +288,7 @@ export default function Products({ parentClass = "tf-sp-2" }) {
                                   />
                                 </li>
                                 <li>
-                                  <AddToCompare productId={product.id} />
+                                  
                                 </li>
                               </ul>
                             </div>
@@ -366,7 +365,7 @@ export default function Products({ parentClass = "tf-sp-2" }) {
                                   />
                                 </li>
                                 <li>
-                                  <AddToCompare productId={product.id} />
+                                  
                                 </li>
                               </ul>
                             </div>
@@ -471,7 +470,7 @@ export default function Products({ parentClass = "tf-sp-2" }) {
                                   />
                                 </li>
                                 <li>
-                                  <AddToCompare productId={product.id} />
+                                  
                                 </li>
                               </ul>
                             </div>
@@ -549,7 +548,7 @@ export default function Products({ parentClass = "tf-sp-2" }) {
                                   />
                                 </li>
                                 <li>
-                                  <AddToCompare productId={product.id} />
+                                  
                                 </li>
                               </ul>
                             </div>
@@ -655,7 +654,7 @@ export default function Products({ parentClass = "tf-sp-2" }) {
                                   />
                                 </li>
                                 <li>
-                                  <AddToCompare productId={product.id} />
+                                  
                                 </li>
                               </ul>
                             </div>
@@ -732,7 +731,7 @@ export default function Products({ parentClass = "tf-sp-2" }) {
                                   />
                                 </li>
                                 <li>
-                                  <AddToCompare productId={product.id} />
+                                  
                                 </li>
                               </ul>
                             </div>

@@ -1,0 +1,386 @@
+// =============================================================================
+// Mobile V2 Minimal — TabBar + MobileMenu drawer + responsive overrides
+// =============================================================================
+
+@use "../abstracts/mixins-extra" as *;
+
+// ---------------------------------------------------------------------------
+// Mobile tab bar (fixed bottom, only <768px)
+// ---------------------------------------------------------------------------
+.mobile-tabbar {
+  display: none;
+
+  @media (max-width: 767px) {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(64px + env(safe-area-inset-bottom, 0));
+    padding: 0 var(--space-2) env(safe-area-inset-bottom, 0);
+    @include glass($blur: 16px);
+    border-top: 1px solid var(--line);
+    z-index: 90;
+    align-items: stretch;
+    justify-content: space-around;
+  }
+}
+
+.mobile-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--ink-3);
+  font: 500 11px/1 "Inter", sans-serif;
+  text-decoration: none;
+  min-height: 64px;
+  transition: color var(--dur-fast) var(--ease-std);
+
+  &:hover,
+  &.is-active {
+    color: var(--brand);
+  }
+}
+
+.mobile-tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.mobile-tab-fab {
+  position: relative;
+  top: -16px;
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  box-shadow: var(--elev-3);
+  min-height: 56px;
+
+  &:hover,
+  &.is-active {
+    color: #fff;
+    background: var(--brand-600);
+  }
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// Push page content above the fixed bar on mobile so it's not occluded
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0));
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Mobile menu drawer (offcanvas)
+// ---------------------------------------------------------------------------
+.mobile-menu-v2.offcanvas {
+  width: 88vw;
+  max-width: 360px;
+  @include glass($blur: 20px);
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+}
+
+.mobile-menu-v2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.mobile-menu-v2-logo {
+  display: inline-flex;
+
+  img {
+    // Logo is already styled with brand colors
+  }
+}
+
+.mobile-menu-v2-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-std);
+
+  &:hover {
+    background: var(--surface-3);
+  }
+}
+
+.mobile-menu-v2-body {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  overflow-y: auto;
+  flex: 1;
+}
+
+// User block
+.mobile-menu-v2-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface-3);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-4);
+  }
+}
+
+.mobile-menu-v2-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font: 700 22px/1 "Inter", sans-serif;
+  flex-shrink: 0;
+}
+
+.mobile-menu-v2-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mobile-menu-v2-user-name {
+  margin: 0;
+  font: 600 15px/1.3 "Inter", sans-serif;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-menu-v2-user-email {
+  margin: 2px 0 0;
+  font: 400 12px/1.3 "Inter", sans-serif;
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-menu-v2-user-link {
+  flex-shrink: 0;
+  font: 500 13px/1 "Inter", sans-serif;
+  color: var(--brand);
+}
+
+.mobile-menu-v2-auth {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.mobile-menu-v2-search {
+  .input-search {
+    height: 44px;
+  }
+}
+
+// Primary tiles grid
+.mobile-menu-v2-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.mobile-menu-v2-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  min-height: 80px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-std);
+
+  &:hover {
+    background: var(--surface-2);
+    border-color: var(--line-2);
+  }
+
+  &.is-brand {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+
+    .mobile-menu-v2-tile-icon,
+    .mobile-menu-v2-tile-label {
+      color: #fff;
+    }
+
+    &:hover {
+      background: var(--brand-600);
+    }
+  }
+}
+
+.mobile-menu-v2-tile-icon {
+  color: var(--ink);
+  display: inline-flex;
+}
+
+.mobile-menu-v2-tile-label {
+  font: 500 13px/1 "Inter", sans-serif;
+  color: var(--ink);
+  text-align: center;
+}
+
+// Categories list
+.mobile-menu-v2-section-head {
+  margin: 0 0 var(--space-2);
+  font: 600 12px/1 "Inter", sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.mobile-menu-v2-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.mobile-menu-v2-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  height: 44px;
+  padding: 0 var(--space-4);
+  color: var(--ink);
+  text-decoration: none;
+  font: 500 14px/1 "Inter", sans-serif;
+  border-bottom: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover {
+    background: var(--surface-2);
+  }
+
+  svg {
+    color: var(--ink-4);
+  }
+}
+
+.mobile-menu-v2-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-4) 0 0;
+  border-top: 1px solid var(--line);
+  font: 400 13px/1 "Inter", sans-serif;
+  color: var(--ink-4);
+
+  a {
+    color: var(--ink-3);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--ink);
+    }
+  }
+}
+
+.mobile-menu-v2-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  color: var(--danger);
+  font: 500 14px/1 "Inter", sans-serif;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-std);
+
+  &:hover {
+    background: var(--danger-bg);
+    border-color: var(--danger);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Responsive overrides (global fixes for <768px)
+// ---------------------------------------------------------------------------
+@media (max-width: 767px) {
+  // Prevent iOS zoom on input focus
+  .input-field,
+  .input-search,
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  // Product grid: 2-col with tighter gap on small screens
+  .tf-grid-product {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .card-v2-title {
+    font-size: 14px;
+  }
+
+  .card-v2-price {
+    font-size: 18px;
+  }
+}

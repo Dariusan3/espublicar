@@ -1,72 +1,63 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import ProductCard1 from "@/components/productCards/ProductCard1";
-import { products1 } from "@/data/products";
-import React from "react";
-import { Navigation, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import useProducts from "@/hooks/useProducts";
+import { Product } from "@/types/Types";
 
 export default function Products1() {
+  const { searchProducts } = useProducts();
+  const [items, setItems] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      const res = await searchProducts({ limit: 8, sortBy: "newest" });
+      if (res.success && res.data) {
+        setItems(res.data.products);
+      }
+      setLoading(false);
+    };
+    load();
+  }, [searchProducts]);
+
   return (
-    <section className="tf-sp-2 pt-0">
-      <div className="container">
-        <div className="flat-title pb-8 wow fadeInUp" data-wow-delay={0}>
-          <h5 className="fw-semibold text-primary flat-title-has-icon">
-            <span className="icon">
-              <i className="icon-fire tf-ani-tada" />
-            </span>
-            Deal Of The Day
-          </h5>
-          <div className="box-btn-slide relative">
-            <div className="swiper-button-prev nav-swiper nav-prev-products snbp14">
-              <i className="icon-arrow-left-lg" />
-            </div>
-            <div className="swiper-button-next nav-swiper nav-next-products snbn14">
-              <i className="icon-arrow-right-lg" />
-            </div>
+    <section className="section-products">
+      <div className="section-products-container">
+        <header className="section-head">
+          <div>
+            <h2>Cerca de ti</h2>
+            <p className="section-head-sub">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span>Descubre artículos publicados recientemente</span>
+            </p>
           </div>
-        </div>
-        <div className="box-btn-slide-2 sw-nav-effect">
-          <Swiper
-            className="swiper tf-sw-products slider-thumb-deal"
-            spaceBetween={15}
-            breakpoints={{
-              0: { slidesPerView: 1 },
-              575: {
-                slidesPerView: 2,
-              },
-              768: {
-                slidesPerView: 3,
-                spaceBetween: 20,
-              },
-              992: {
-                slidesPerView: 4,
-                spaceBetween: 30,
-              },
-            }}
-            modules={[Navigation, Pagination]}
-            pagination={{
-              clickable: true,
-              el: ".spd14",
-            }}
-            navigation={{
-              prevEl: ".snbp14",
-              nextEl: ".snbn14",
-            }}
-          >
-            {products1.map((product, index) => (
-              <SwiperSlide className="swiper-slide" key={index}>
-                <ProductCard1 index={index} product={product} />
-              </SwiperSlide>
+          <Link href="/shop-default" className="link-more">
+            Ver más →
+          </Link>
+        </header>
+
+        {loading ? (
+          <div className="section-products-loading">
+            <div className="spinner-border text-primary" role="status" />
+          </div>
+        ) : items.length === 0 ? (
+          <div className="section-products-empty">
+            <p>Aún no hay publicaciones. ¡Sé el primero en publicar!</p>
+            <Link href="/add-product" className="btn-brand">
+              Publicar anuncio
+            </Link>
+          </div>
+        ) : (
+          <div className="tf-grid-product">
+            {items.map((product) => (
+              <ProductCard1 key={String(product.id)} product={product} />
             ))}
-            <div className="sw-dot-default sw-pagination-products justify-content-center spd14" />
-          </Swiper>
-          <div className="d-none d-xl-flex swiper-button-prev nav-swiper nav-prev-products-2 snbp14">
-            <i className="icon-arrow-left-lg" />
           </div>
-          <div className="d-none d-xl-flex swiper-button-next nav-swiper nav-next-products-2 snbn14">
-            <i className="icon-arrow-right-lg" />
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );

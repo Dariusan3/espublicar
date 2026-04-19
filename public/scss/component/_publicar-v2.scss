@@ -1,0 +1,376 @@
+// =============================================================================
+// Publicar V2 Minimal — espublicar redesign
+// =============================================================================
+
+.publicar-v2-page {
+  background: var(--surface-2);
+  min-height: calc(100vh - 72px);
+}
+
+.publicar-v2 {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-9) var(--space-6) 120px;
+
+  @media (max-width: 767px) {
+    padding: var(--space-7) var(--space-4) 120px;
+  }
+}
+
+// --- Header ------------------------------------------------------------------
+.publicar-v2-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.publicar-v2-title {
+  margin: 0;
+  font: 700 28px/1.2 "Inter", sans-serif;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+
+  @media (max-width: 575px) {
+    font-size: 24px;
+  }
+}
+
+.publicar-v2-subtitle {
+  margin: var(--space-2) 0 0;
+  font: 400 15px/1.5 "Inter", sans-serif;
+  color: var(--ink-3);
+}
+
+.publicar-v2-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.publicar-v2-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line-2);
+  transition: background var(--dur-base) var(--ease-std);
+
+  &.is-active {
+    background: var(--brand);
+  }
+}
+
+// --- Section -----------------------------------------------------------------
+.publicar-v2-section {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-5);
+
+  @media (max-width: 575px) {
+    padding: var(--space-5) var(--space-4);
+  }
+}
+
+.publicar-v2-section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-5);
+  font: 600 18px/1.3 "Inter", sans-serif;
+  color: var(--ink);
+}
+
+.publicar-v2-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brand-50);
+  color: var(--brand);
+  font: 600 14px/1 "Inter", sans-serif;
+  flex-shrink: 0;
+}
+
+// --- Dropzone ---------------------------------------------------------------
+.dropzone {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: var(--space-9);
+  min-height: 240px;
+  border: 2px dashed var(--line-2);
+  border-radius: var(--radius-xl);
+  background: var(--surface-2);
+  text-align: center;
+  transition: all var(--dur-base) var(--ease-std);
+  cursor: pointer;
+
+  &:hover,
+  &.is-dragover {
+    border-color: var(--brand);
+    background: var(--brand-50);
+  }
+
+  .dropzone-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .dropzone-icon {
+    color: var(--ink-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .dropzone-title {
+    margin: 0;
+    font: 600 18px/1.3 "Inter", sans-serif;
+    color: var(--ink);
+  }
+
+  .dropzone-sub {
+    margin: var(--space-1) 0 var(--space-4);
+    font: 400 14px/1.3 "Inter", sans-serif;
+    color: var(--ink-3);
+  }
+
+  .dropzone-btn {
+    position: relative;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  @media (max-width: 575px) {
+    padding: var(--space-6);
+    min-height: 200px;
+  }
+}
+
+// --- Thumbs grid -------------------------------------------------------------
+.publicar-v2-thumbs {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+
+  @media (max-width: 767px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.publicar-v2-thumb {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--elev-1);
+  background: var(--surface-3);
+
+  &:hover .publicar-v2-thumb-remove,
+  &:hover .publicar-v2-thumb-cover-set {
+    opacity: 1;
+  }
+}
+
+.publicar-v2-thumb-img {
+  object-fit: cover;
+}
+
+.publicar-v2-thumb-cover {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  background: var(--brand);
+  color: var(--surface);
+  font: 600 10px/1 "Inter", sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  z-index: 2;
+}
+
+.publicar-v2-thumb-remove {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-std);
+  z-index: 2;
+
+  &:hover {
+    background: var(--danger);
+  }
+}
+
+.publicar-v2-thumb-cover-set {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  border: 0;
+  padding: 6px;
+  font: 500 11px/1 "Inter", sans-serif;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-std);
+  z-index: 2;
+}
+
+// --- Fields ------------------------------------------------------------------
+.publicar-v2-field {
+  display: block;
+}
+
+.publicar-v2-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font: 600 14px/1 "Inter", sans-serif;
+  color: var(--ink);
+}
+
+.publicar-v2-hint {
+  margin: var(--space-2) 0 0;
+  font: 400 13px/1.4 "Inter", sans-serif;
+  color: var(--ink-3);
+}
+
+.publicar-v2-char-count {
+  margin-top: var(--space-1);
+  text-align: right;
+  font: 400 12px/1 "Inter", sans-serif;
+  color: var(--ink-4);
+  font-variant-numeric: tabular-nums;
+}
+
+// Chip group (for estado + entrega)
+.publicar-v2-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+// Price row (input + checkbox)
+.publicar-v2-price-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.publicar-v2-price-input {
+  position: relative;
+  flex: 1;
+  min-width: 160px;
+
+  .input-field {
+    padding-left: var(--space-7);
+    font-weight: 600;
+    font-size: 16px;
+  }
+}
+
+.publicar-v2-price-prefix {
+  position: absolute;
+  top: 50%;
+  left: var(--space-4);
+  transform: translateY(-50%);
+  font: 600 16px/1 "Inter", sans-serif;
+  color: var(--ink-3);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.publicar-v2-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  font: 500 14px/1 "Inter", sans-serif;
+  color: var(--ink);
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--brand);
+    cursor: pointer;
+  }
+}
+
+// --- Upload progress ---------------------------------------------------------
+.publicar-v2-progress-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--brand-50);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  font: 500 13px/1 "Inter", sans-serif;
+  color: var(--brand);
+
+  span {
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.publicar-v2-progress-track {
+  flex: 1;
+  height: 6px;
+  background: var(--surface);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.publicar-v2-progress-fill {
+  height: 100%;
+  background: var(--brand);
+  transition: width var(--dur-base) var(--ease-std);
+}
+
+// --- Sticky footer -----------------------------------------------------------
+.publicar-v2-sticky-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--line);
+
+  @media (max-width: 575px) {
+    padding: var(--space-3) var(--space-4);
+
+    .btn-ghost {
+      display: none; // hide "Guardar borrador" on small screens
+    }
+
+    .btn-brand {
+      flex: 1;
+    }
+  }
+}

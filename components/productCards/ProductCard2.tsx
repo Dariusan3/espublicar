@@ -7,7 +7,6 @@ import { type Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import AddToWishlist from "../common/AddToWishlist";
 import AddToQuickview from "../common/AddToQuickview";
-import AddToCompare from "../common/AddToCompare";
 import { useState } from "react";
 import CountdownTimer from "../common/Countdown";
 
@@ -160,7 +159,7 @@ const ProductCard2 = ({
                 <AddToQuickview productId={product.id} />
               </li>
               <li>
-                <AddToCompare productId={product.id} />
+                
               </li>
             </ul>
           </div>

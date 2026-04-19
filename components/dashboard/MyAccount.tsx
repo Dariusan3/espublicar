@@ -5,7 +5,10 @@ import { useAuth } from "@/context/AuthContext";
 import useProducts from "@/hooks/useProducts";
 import useWishlist from "@/hooks/useWishlist";
 import useOrders from "@/hooks/useOrders";
-import { useAppSelector } from "@/store/store";
+
+function formatCurrency(value: number) {
+  return value.toLocaleString("es-ES", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
 
 export default function MyAccount() {
   const { user } = useAuth();
@@ -13,181 +16,137 @@ export default function MyAccount() {
   const { getMyWishlist, wishlist } = useWishlist();
   const { getMyOrders } = useOrders();
 
-  // Local state for stats
   const [listingCount, setListingCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
+  const [salesTotal, setSalesTotal] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
-      if (user) {
-        setLoading(true);
-        // Fetch listings count
-        const productRes = await getMyProducts(user.$id);
-        if (productRes.success && Array.isArray(productRes.data)) {
-          setListingCount(productRes.data.length);
-        }
+      if (!user) return;
+      setLoading(true);
 
-        // Fetch wishlist
-        await getMyWishlist();
-
-        // Fetch orders
-        const orderRes = await getMyOrders();
-        if (orderRes.success && Array.isArray(orderRes.data)) {
-          setOrderCount(orderRes.data.length);
-        }
-
-        setLoading(false);
+      const productRes = await getMyProducts(user.$id);
+      if (productRes.success && Array.isArray(productRes.data)) {
+        setListingCount(productRes.data.length);
       }
+
+      await getMyWishlist();
+
+      const orderRes = await getMyOrders();
+      if (orderRes.success && Array.isArray(orderRes.data)) {
+        setOrderCount(orderRes.data.length);
+        const total = orderRes.data.reduce(
+          (sum: number, o: any) => sum + (o.totalAmount || 0),
+          0,
+        );
+        setSalesTotal(total);
+      }
+
+      setLoading(false);
     }
     fetchData();
   }, [user, getMyProducts, getMyWishlist, getMyOrders]);
 
-  const stats = [
+  const tiles = [
     {
-      title: "Total Listings",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+        </svg>
+      ),
       value: listingCount,
-      icon: "icon-layers",
-      color: "text-primary",
+      label: "Anuncios activos",
     },
     {
-      title: "Total Orders",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+      ),
+      value: 0,
+      label: "Mensajes sin leer",
+    },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      ),
+      value: `${formatCurrency(salesTotal)} €`,
+      label: "Ventas totales",
+    },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+      ),
       value: orderCount,
-      icon: "icon-shopping-bag",
-      color: "text-success",
-    },
-    {
-      title: "Wishlist",
-      value: wishlist.items.length,
-      icon: "icon-heart",
-      color: "text-danger",
-    },
-  ];
-
-  const quickActions = [
-    {
-      title: "Sell Item",
-      icon: "icon-plus",
-      href: "/add-product",
-      desc: "List a new product",
-    },
-    {
-      title: "My Listings",
-      icon: "icon-layers",
-      href: "/my-account-listings",
-      desc: "Manage your items",
-    },
-    {
-      title: "Orders",
-      icon: "icon-package",
-      href: "/my-account-orders",
-      desc: "Track purchases",
-    },
-    {
-      title: "Profile",
-      icon: "icon-user",
-      href: "/my-account-edit",
-      desc: "Edit details",
+      label: "Pedidos",
     },
   ];
 
   return (
-    <div className="my-account-content account-dashboard">
-      <div className="mb-4">
-        <h2 className="fw-bold mb-1">
-          Welcome back, {user?.name || "User"}! 👋
-        </h2>
-        <p className="text-muted">
-          Here's what's happening with your account today.
-        </p>
+    <div className="dashboard-v2-content">
+      {/* Header greeting */}
+      <div className="dashboard-v2-header">
+        <div>
+          <h1 className="dashboard-v2-greeting">
+            Hola, {user?.name?.split(" ")[0] || "usuario"}
+          </h1>
+          <p className="dashboard-v2-subtitle">
+            Esto es lo que está pasando con tu cuenta.
+          </p>
+        </div>
+        <Link href="/add-product" className="btn-brand">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          Publicar
+        </Link>
       </div>
 
-      {/* Stats Grid */}
-      <div className="row mb-5">
-        {stats.map((stat, index) => (
-          <div key={index} className="col-md-4 mb-3 mb-md-0">
-            <div
-              className="card border-0 shadow-sm h-100 p-4 rounded-4"
-              style={{
-                background: "rgba(255, 255, 255, 0.8)",
-                backdropFilter: "blur(10px)",
-              }}
-            >
-              <div className="d-flex align-items-center justify-content-between">
-                <div>
-                  <p
-                    className="text-muted mb-1 text-uppercase fw-semibold"
-                    style={{ fontSize: "0.85rem" }}
-                  >
-                    {stat.title}
-                  </p>
-                  <h3 className="fw-bold mb-0">
-                    {loading ? "..." : stat.value}
-                  </h3>
-                </div>
-                <div
-                  className={`icon-box rounded-circle bg-light d-flex align-items-center justify-content-center ${stat.color}`}
-                  style={{ width: "50px", height: "50px", fontSize: "1.5rem" }}
-                >
-                  <i className={stat.icon}></i>
-                </div>
-              </div>
+      {/* Stat tiles */}
+      <div className="dashboard-v2-stats">
+        {tiles.map((tile, i) => (
+          <div key={i} className="stat-tile">
+            <div className="stat-icon">{tile.icon}</div>
+            <div className="stat-value num">
+              {loading ? "…" : tile.value}
             </div>
+            <div className="stat-label">{tile.label}</div>
           </div>
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <h4 className="fw-bold mb-3">Quick Actions</h4>
-      <div className="row mb-5">
-        {quickActions.map((action, index) => (
-          <div key={index} className="col-6 col-md-3 mb-3">
-            <Link href={action.href} className="text-decoration-none">
-              <div
-                className="card h-100 border-0 shadow-sm rounded-4 p-3 text-center transition-all hover-lift"
-                style={{ background: "#ffffff" }}
-              >
-                <div
-                  className="mb-3 mx-auto rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center"
-                  style={{ width: "60px", height: "60px", fontSize: "1.5rem" }}
-                >
-                  <i className={action.icon}></i>
-                </div>
-                <h6 className="fw-bold text-dark mb-1">{action.title}</h6>
-                <span className="text-muted small">{action.desc}</span>
-              </div>
+      {/* Two-col cards */}
+      <div className="dashboard-v2-activity">
+        <div className="dashboard-v2-activity-card">
+          <header className="dashboard-v2-activity-head">
+            <h2>Últimos mensajes</h2>
+            <Link href="/my-account-messages" className="link-more">
+              Ver todos →
             </Link>
-          </div>
-        ))}
-      </div>
-
-      {/* Recent Activity Section Placeholder */}
-      <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div className="card-header bg-white border-0 p-4">
-          <h5 className="fw-bold mb-0">Recent Activity</h5>
-        </div>
-        <div className="card-body p-0">
-          <div className="text-center py-5 text-muted">
-            <i className="icon-clock mb-2" style={{ fontSize: "2rem" }}></i>
-            <p>No recent activity to show.</p>
+          </header>
+          <div className="dashboard-v2-empty-inline">
+            <p>Aún no tienes mensajes.</p>
           </div>
         </div>
-      </div>
 
-      <style jsx global>{`
-        .hover-lift {
-          transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
-        }
-        .hover-lift:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
-        }
-        .bg-primary-subtle {
-          background-color: rgba(59, 130, 246, 0.1);
-        }
-      `}</style>
+        <div className="dashboard-v2-activity-card">
+          <header className="dashboard-v2-activity-head">
+            <h2>Últimas compras</h2>
+            <Link href="/my-account-orders" className="link-more">
+              Ver todas →
+            </Link>
+          </header>
+          <div className="dashboard-v2-empty-inline">
+            <p>Aún no has comprado nada.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
