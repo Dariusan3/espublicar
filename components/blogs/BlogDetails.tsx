@@ -120,7 +120,7 @@ export default function BlogDetails() {
                   in the fourth quarter of 2022 with Wi-Fi 6 and 6E support.
                   Kuo's prediction is corroborated by earlier reports that
                   Apple's headset might be coming in 2022, with smart glasses
-                  around 2025, and maybe AR contact lenses after that.
+                  around 2026, and maybe AR contact lenses after that.
                 </p>
                 <p className="text">
                   Apple could blend AR and VR with two headsets in the near
@@ -388,19 +388,11 @@ export default function BlogDetails() {
                     <form action="#" className="form-add-comment">
                       <fieldset>
                         <label>Name:</label>
-                        <input
-                          type="text"
-                          placeholder="Your name"
-                          required
-                        />
+                        <input type="text" placeholder="Your name" required />
                       </fieldset>
                       <fieldset>
                         <label>Email:</label>
-                        <input
-                          type="text"
-                          placeholder="Your email"
-                          required
-                        />
+                        <input type="text" placeholder="Your email" required />
                       </fieldset>
                       <fieldset className="align-items-sm-start">
                         <label>Comment:</label>

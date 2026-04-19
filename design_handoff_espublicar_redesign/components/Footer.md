@@ -17,7 +17,7 @@
 │ App store badges │ Links…   │ Links…   │ Links…   │
 └──────────────────┴──────────┴──────────┴──────────┘
 ┌───────────────────────────────────────────────────┐
-│ © 2025 espublicar   [Visa][MC][Bizum][PayPal]     │
+│ © 2026 espublicar   [Visa][MC][Bizum][PayPal]     │
 └───────────────────────────────────────────────────┘
 ```
 
@@ -46,7 +46,7 @@ Link: 14px Inter 400 `--ink-4`, height 36px (click area), hover `--surface` / un
 - Top border: `1px solid rgba(255,255,255,0.08)`
 - Padding-top: `var(--space-5)`
 - Flex row, space-between
-- Left: `© 2025 espublicar · Todos los derechos reservados` + `Privacidad · Términos · Cookies` (separated by `·`, all `--ink-4` 13px)
+- Left: `© 2026 espublicar · Todos los derechos reservados` + `Privacidad · Términos · Cookies` (separated by `·`, all `--ink-4` 13px)
 - Right: payment method icons, monochrome white, 28px tall, gap `var(--space-4)`: Visa, Mastercard, **Bizum**, PayPal
 
 On mobile: stacked, `gap: var(--space-4)`.

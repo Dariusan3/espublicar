@@ -1,35 +1,27 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
-import Wishlist from "@/components/shop-cart/Wishlist";
 import React from "react";
 import Link from "next/link";
+import Header1 from "@/components/headers/Header1";
+import Footer1 from "@/components/footers/Footer1";
+import Wishlist from "@/components/shop-cart/Wishlist";
+
 export const metadata = {
-  title: "Wishlist || Onsus - Multipurpose React Nextjs eCommerce",
-  description: "Onsus - Multipurpose React Nextjs eCommerce",
+  title: "Mis favoritos | espublicar",
+  description: "Tus artículos guardados en espublicar.",
 };
-export default function page() {
+
+export default function Page() {
   return (
     <>
       <Header1 />
-      <div className="tf-sp-3 pb-0">
-        <div className="container">
-          <ul className="breakcrumbs">
-            <li>
-              <Link href={`/`} className="body-small link">
-                {" "}
-                Home{" "}
-              </Link>
-            </li>
-            <li className="d-flex align-items-center">
-              <i className="icon icon-arrow-right" />
-            </li>
-            <li>
-              <span className="body-small"> Wishlist</span>
-            </li>
-          </ul>
+      <div className="pd-v2" style={{ paddingBottom: 0 }}>
+        <div className="pd-v2-container">
+          <nav className="pd-v2-breadcrumb" aria-label="Navegación">
+            <Link href="/">Inicio</Link>
+            <span className="pd-v2-breadcrumb-sep">›</span>
+            <span>Favoritos</span>
+          </nav>
         </div>
       </div>
-
       <Wishlist />
       <Footer1 />
     </>

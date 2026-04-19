@@ -1,141 +1,140 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { useContextElement } from "@/context/Context";
-import { allProducts } from "@/data/products";
-interface Product {
-  id: number;
-  imgSrc: string;
-  title: string;
-  price: number;
-  oldprice?: number;
-}
+import { useAuth } from "@/context/AuthContext";
+import useWishlist from "@/hooks/useWishlist";
+import useProducts from "@/hooks/useProducts";
+import ProductCard1 from "@/components/productCards/ProductCard1";
+import { Product } from "@/types/Types";
+import { toast } from "react-toastify";
 
 export default function Wishlist() {
-  const {
-    wishList,
-    removeFromWishlist,
-    addProductToCart,
-    isAddedToCartProducts,
-  } = useContextElement();
-  const [items, setItems] = useState<Product[]>(
-    allProducts as unknown as Product[],
-  );
+  const { user } = useAuth();
+  const { wishlist, getMyWishlist, clearMyWishlist } = useWishlist();
+  const { getProductById } = useProducts();
+
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isClearing, setIsClearing] = useState(false);
+
   useEffect(() => {
-    setItems([
-      ...(allProducts as unknown as Product[]).filter((elm) =>
-        wishList.includes(elm.id),
-      ),
-    ]);
-  }, [wishList]);
-  return (
-    <div className="tf-sp-2">
-      <div className="container">
-        <div className="tf-wishlist">
-          {items.length ? (
-            <table className="tf-table-wishlist">
-              <thead>
-                <tr>
-                  <th className="wishlist-item_remove" />
-                  <th className="wishlist-item_image" />
-                  <th className="wishlist-item_info">
-                    <p className="product-title fw-semibold">Product Name</p>
-                  </th>
-                  <th className="wishlist-item_price">
-                    <p className="product-title fw-semibold">Unit Price</p>
-                  </th>
-                  <th className="wishlist-item_stock">
-                    <p className="product-title fw-semibold">Stock Status</p>
-                  </th>
-                  <th className="wishlist-item_action" />
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((product, i) => (
-                  <tr key={i} className="wishlist-item">
-                    <td
-                      className="wishlist-item_remove"
-                      onClick={() => removeFromWishlist(product.id)}
-                    >
-                      <i className="icon-close remove link cs-pointer" />
-                    </td>
-                    <td className="wishlist-item_image">
-                      <Link href={`/product/${product.id}`}>
-                        <Image
-                          src={product.imgSrc}
-                          alt="Image"
-                          className="lazyload"
-                          width={500}
-                          height={500}
-                        />
-                      </Link>
-                    </td>
-                    <td className="wishlist-item_info">
-                      <Link
-                        className="text-line-clamp-2 body-md-2 fw-semibold text-secondary link"
-                        href={`/product/${product.id}`}
-                      >
-                        {product.title}
-                      </Link>
-                    </td>
-                    <td className="wishlist-item_price">
-                      <p className="price-wrap fw-medium flex-nowrap">
-                        <span className="new-price price-text fw-medium mb-0">
-                          €{product.price.toFixed(3)}
-                        </span>
-                        {product.oldprice && (
-                          <span className="old-price body-md-2 text-main-2 fw-normal">
-                            €{product.oldprice.toFixed(3)}
-                          </span>
-                        )}
-                      </p>
-                    </td>
-                    <td className="wishlist-item_stock">
-                      <span className="wishlist-stock-status">In Stock</span>
-                    </td>
-                    <td className="wishlist-item_action">
-                      <a
-                        href="#shoppingCart"
-                        data-bs-toggle="offcanvas"
-                        className="tf-btn btn-gray"
-                        onClick={() => addProductToCart(product.id)}
-                      >
-                        <span className="text-white">
-                          {isAddedToCartProducts(product.id)
-                            ? "Already Added"
-                            : "Add to Cart"}
-                        </span>
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot className="d-none">
-                <tr>
-                  <td colSpan={6} className="text-center">
-                    No products added to the wishlist
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          ) : (
-            <div className="p-4">
-              <div className="col-4">
-                Your wishlist is empty. Start adding favorite products to
-                wishlist!{" "}
-              </div>
-              <Link
-                className="tf-btn mt-2 mb-3 text-white"
-                style={{ width: "fit-content" }}
-                href="/shop-default"
-              >
-                Explore Products
-              </Link>
-            </div>
-          )}
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+    getMyWishlist();
+  }, [user, getMyWishlist]);
+
+  useEffect(() => {
+    if (!wishlist.items || wishlist.items.length === 0) {
+      setProducts([]);
+      setLoading(false);
+      return;
+    }
+
+    const load = async () => {
+      setLoading(true);
+      const loaded: Product[] = [];
+      await Promise.all(
+        wishlist.items.map(async (productId) => {
+          try {
+            const res = await getProductById(String(productId));
+            if (res.success && res.data) {
+              loaded.push(res.data);
+            }
+          } catch {
+            // Product may have been deleted — skip silently
+          }
+        }),
+      );
+      setProducts(loaded);
+      setLoading(false);
+    };
+    load();
+  }, [wishlist.items, getProductById]);
+
+  const handleClearAll = async () => {
+    if (!window.confirm("¿Eliminar todos tus favoritos?")) return;
+    setIsClearing(true);
+    const res = await clearMyWishlist();
+    if (res.success) {
+      setProducts([]);
+      toast.success("Favoritos vaciados");
+    }
+    setIsClearing(false);
+  };
+
+  if (!user) {
+    return (
+      <section className="section-products">
+        <div
+          className="section-products-container text-center"
+          style={{ padding: "80px 0" }}
+        >
+          <h2 className="fw-bold mb-3">Inicia sesión para ver tus favoritos</h2>
+          <p className="text-ink-3 mb-4">
+            Guarda los artículos que te interesan y accede a ellos desde
+            cualquier dispositivo.
+          </p>
+          <a href="#log" data-bs-toggle="modal" className="btn-brand btn-lg">
+            Iniciar sesión
+          </a>
         </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="section-products">
+      <div className="section-products-container">
+        <header className="section-head">
+          <div>
+            <h2>Mis favoritos</h2>
+            {products.length > 0 && (
+              <p className="section-head-sub">
+                <span>
+                  {products.length}{" "}
+                  {products.length === 1
+                    ? "artículo guardado"
+                    : "artículos guardados"}
+                </span>
+              </p>
+            )}
+          </div>
+          {products.length > 0 && (
+            <button
+              type="button"
+              className="btn-ghost btn-sm"
+              onClick={handleClearAll}
+              disabled={isClearing}
+            >
+              {isClearing ? "Eliminando…" : "Vaciar favoritos"}
+            </button>
+          )}
+        </header>
+
+        {loading ? (
+          <div className="section-products-loading">
+            <div className="spinner-border text-primary" role="status" />
+          </div>
+        ) : products.length === 0 ? (
+          <div className="section-products-empty">
+            <p>Aún no tienes favoritos guardados.</p>
+            <p className="text-ink-3 mb-4" style={{ fontSize: "14px" }}>
+              Toca el corazón en cualquier anuncio para guardarlo aquí.
+            </p>
+            <Link href="/shop-default" className="btn-brand">
+              Explorar productos
+            </Link>
+          </div>
+        ) : (
+          <div className="tf-grid-product">
+            {products.map((product) => (
+              <ProductCard1 key={String(product.id)} product={product} />
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </section>
   );
 }
