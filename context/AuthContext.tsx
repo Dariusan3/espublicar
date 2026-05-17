@@ -11,6 +11,9 @@ interface AuthContextType {
   register: (email: string, password: string, name: string) => Promise<{ success: boolean; error?: string }>;
   loginWithGoogle: () => void;
   loginWithFacebook: () => void;
+  updatePhone: (phone: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  sendPhoneVerification: () => Promise<{ success: boolean; error?: string }>;
+  confirmPhoneVerification: (secret: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<{ success: boolean; error?: string }>;
   updateProfile: (name: string) => Promise<{ success: boolean; error?: string }>;
   updateEmail: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
@@ -91,6 +94,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const updatePhone = async (phone: string, password: string) => {
+    try {
+      await account.updatePhone(phone, password);
+      const updated = await account.get();
+      setUser(updated);
+      return { success: true };
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  };
+
+  const sendPhoneVerification = async () => {
+    try {
+      await account.createPhoneVerification();
+      return { success: true };
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  };
+
+  const confirmPhoneVerification = async (secret: string) => {
+    try {
+      if (!user) throw new Error("No user");
+      await account.updatePhoneVerification(user.$id, secret);
+      const updated = await account.get();
+      setUser(updated);
+      return { success: true };
+    } catch (error: any) {
+      return { success: false, error: error.message };
+    }
+  };
+
   const logout = async () => {
     try {
       await account.deleteSession('current');
@@ -139,6 +174,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     register,
     loginWithGoogle,
     loginWithFacebook,
+    updatePhone,
+    sendPhoneVerification,
+    confirmPhoneVerification,
     logout,
     updateProfile,
     updateEmail,

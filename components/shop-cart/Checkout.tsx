@@ -80,21 +80,56 @@ export default function Checkout() {
         imgSrc: item.productImage,
       }));
 
-      const result = await createOrder(
+      // 1. Create the order (status: pending) in Appwrite
+      const orderResult = await createOrder(
         orderItems,
         totalPrice,
         address,
         payment,
         "",
       );
-
-      if (result.success) {
-        await clearMyCart();
-        router.push(`/order-details?orderId=${result.data.id}`);
+      if (!orderResult.success) {
+        toast.error("No se pudo crear el pedido");
+        setIsSubmitting(false);
+        return;
       }
-    } catch {
+      const orderId = orderResult.data.id;
+
+      // 2. Create Stripe Checkout session and redirect
+      const origin = window.location.origin;
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: orderItems,
+          shippingCost,
+          delivery,
+          payment,
+          orderId,
+          successUrl: `${origin}/checkout/success`,
+          cancelUrl: `${origin}/checkout/cancel?order_id=${orderId}`,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.url) {
+        // Fallback: if Stripe isn't configured, just complete the order locally
+        if (data.error?.includes("Stripe no está configurado")) {
+          toast.warning("Pagos en modo demo. Pedido registrado sin cobro.");
+          await clearMyCart();
+          router.push(`/order-details?orderId=${orderId}`);
+          return;
+        }
+        toast.error(data.error || "Error al iniciar el pago");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // 3. Redirect to Stripe Checkout (out of our app)
+      window.location.href = data.url;
+    } catch (err) {
+      console.error(err);
       toast.error("Algo salió mal. Inténtalo de nuevo.");
-    } finally {
       setIsSubmitting(false);
     }
   };

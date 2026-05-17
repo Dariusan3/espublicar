@@ -7,6 +7,7 @@ import useProducts from "@/hooks/useProducts";
 import ProductCard1 from "@/components/productCards/ProductCard1";
 import { Product } from "@/types/Types";
 import { toast } from "react-toastify";
+import { SkeletonGrid, EmptyState } from "@/components/common/Skeleton";
 
 export default function Wishlist() {
   const { user } = useAuth();
@@ -114,19 +115,14 @@ export default function Wishlist() {
         </header>
 
         {loading ? (
-          <div className="section-products-loading">
-            <div className="spinner-border text-primary" role="status" />
-          </div>
+          <SkeletonGrid count={4} />
         ) : products.length === 0 ? (
-          <div className="section-products-empty">
-            <p>Aún no tienes favoritos guardados.</p>
-            <p className="text-ink-3 mb-4" style={{ fontSize: "14px" }}>
-              Toca el corazón en cualquier anuncio para guardarlo aquí.
-            </p>
-            <Link href="/shop-default" className="btn-brand">
-              Explorar productos
-            </Link>
-          </div>
+          <EmptyState
+            illustration="heart"
+            title="Aún no tienes favoritos guardados"
+            description="Toca el corazón en cualquier anuncio para guardarlo aquí y volver más tarde."
+            action={{ label: "Explorar productos", href: "/shop-default" }}
+          />
         ) : (
           <div className="tf-grid-product">
             {products.map((product) => (

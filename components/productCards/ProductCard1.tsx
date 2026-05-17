@@ -1,8 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import useWishlist from "@/hooks/useWishlist";
+
+const FALLBACK_IMG =
+  "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=600&auto=format&fit=crop";
 
 function timeAgo(dateStr?: string) {
   if (!dateStr) return "";
@@ -38,6 +41,13 @@ export default function ProductCard1({
   const productIdStr = String(product.id);
   const inWishlist = isInWishlist(productIdStr);
 
+  // Use fallback immediately if imgSrc is missing/empty; swap if it fails to load
+  const initialSrc =
+    product.imgSrc && product.imgSrc.trim().length > 0
+      ? product.imgSrc
+      : FALLBACK_IMG;
+  const [imgSrc, setImgSrc] = useState(initialSrc);
+
   const handleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -51,10 +61,12 @@ export default function ProductCard1({
       <Link href={`/product/${product.id}`} className="card-v2-image">
         <Image
           alt={product.title}
-          src={product.imgSrc}
+          src={imgSrc}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
           className="card-v2-img"
+          onError={() => setImgSrc(FALLBACK_IMG)}
+          unoptimized
         />
         <button
           type="button"

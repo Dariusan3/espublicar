@@ -4,6 +4,7 @@ import Link from "next/link";
 import ProductCard1 from "@/components/productCards/ProductCard1";
 import useProducts from "@/hooks/useProducts";
 import { Product } from "@/types/Types";
+import { SkeletonGrid } from "@/components/common/Skeleton";
 
 export default function Products3() {
   const { searchProducts } = useProducts();
@@ -34,9 +35,7 @@ export default function Products3() {
         </header>
 
         {loading ? (
-          <div className="section-products-loading">
-            <div className="spinner-border text-primary" role="status" />
-          </div>
+          <SkeletonGrid count={4} />
         ) : (
           <div className="tf-grid-product">
             {items.map((product) => (

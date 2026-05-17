@@ -116,9 +116,16 @@ export default function RootLayout({
     });
     wow.init();
   }, [pathname]);
+  // Register service worker
+  useEffect(() => {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+    navigator.serviceWorker
+      .register("/sw.js")
+      .catch((err) => console.warn("SW registration failed", err));
+  }, []);
+
   return (
-    <html lang="en">
-      {/* Google Fonts - Inter only (V2 Minimal) */}
+    <html lang="es">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -130,6 +137,15 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
           rel="stylesheet"
         />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#2563EB" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="default"
+        />
+        <meta name="apple-mobile-web-app-title" content="espublicar" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
       </head>
       <body>
         <div id="wrapper">

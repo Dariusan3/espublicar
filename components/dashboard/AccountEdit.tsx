@@ -1,73 +1,62 @@
+"use client";
 import React from "react";
+import { useAuth } from "@/context/AuthContext";
+import PhoneVerification from "./PhoneVerification";
 
 export default function AccountEdit() {
+  const { user } = useAuth();
+
   return (
-    <div className="my-account-content account-details">
-      <div className="wrap">
-        <h4 className="fw-semibold mb-20">Information</h4>
-        <form action="#" className="form-account-details">
-          <div className="form-content">
-            <div className="cols">
-              <fieldset>
-                <input
-                  type="text"
-                  placeholder="First Name"
-                  defaultValue="Mas"
-                />
-              </fieldset>
-              <fieldset>
-                <input
-                  type="text"
-                  placeholder="Last Name"
-                  defaultValue="Shin"
-                />
-              </fieldset>
-            </div>
-            <div className="cols">
-              <fieldset>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  defaultValue="onsus@support.com"
-                />
-              </fieldset>
-              <fieldset>
-                <input
-                  type="number"
-                  placeholder="Phone"
-                  defaultValue={"08801234567"}
-                />
-              </fieldset>
-            </div>
-            <fieldset>
-              <input
-                type="text"
-                placeholder="Address"
-                defaultValue="Australia"
-              />
-            </fieldset>
+    <div className="dashboard-v2-content">
+      <header className="dashboard-v2-header">
+        <div>
+          <h1 className="dashboard-v2-greeting">Configuración</h1>
+          <p className="dashboard-v2-subtitle">
+            Gestiona tu cuenta y verificaciones.
+          </p>
+        </div>
+      </header>
+
+      <section className="dashboard-v2-activity-card">
+        <header className="dashboard-v2-activity-head">
+          <h2>Información personal</h2>
+        </header>
+        <div className="stack-4">
+          <div className="publicar-v2-field">
+            <label className="publicar-v2-label">Nombre</label>
+            <input
+              type="text"
+              className="input-field"
+              defaultValue={user?.name || ""}
+              placeholder="Tu nombre"
+            />
           </div>
-        </form>
-      </div>
-      <div className="wrap">
-        <h4 className="fw-semibold mb-20">Change Password</h4>
-        <form action="#" className="def form-reset-password">
-          <fieldset>
-            <input type="password" placeholder="Password*" required />
-          </fieldset>
-          <fieldset>
-            <input type="password" placeholder="New Password*" required />
-          </fieldset>
-          <fieldset>
-            <input type="password" placeholder="Confirm Password*" required />
-          </fieldset>
-          <div className="box-btn">
-            <button type="submit" className="tf-btn btn-large">
-              <span className="text-white">Update Account</span>
-            </button>
+          <div className="publicar-v2-field">
+            <label className="publicar-v2-label">Correo electrónico</label>
+            <input
+              type="email"
+              className="input-field"
+              defaultValue={user?.email || ""}
+              disabled
+            />
+            {user?.emailVerification && (
+              <p
+                className="text-ink-3"
+                style={{ fontSize: 12, marginTop: 6 }}
+              >
+                ✓ Correo verificado
+              </p>
+            )}
           </div>
-        </form>
-      </div>
+        </div>
+      </section>
+
+      <section className="dashboard-v2-activity-card">
+        <header className="dashboard-v2-activity-head">
+          <h2>Verificación de teléfono</h2>
+        </header>
+        <PhoneVerification />
+      </section>
     </div>
   );
 }

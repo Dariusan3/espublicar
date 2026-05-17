@@ -45,9 +45,11 @@ export interface ProductDB {
   sold?: number;
   available?: number;
   userId?: string;
-  condition?: string; // New, Like New, etc.
-  location?: string; // City/Town
-  isNegotiable?: boolean; // If price can be negotiated
+  condition?: string;
+  location?: string;
+  isNegotiable?: boolean;
+  status?: "active" | "paused" | "sold";
+  views?: number;
 }
 
 export interface Product extends ProductDB {
@@ -258,6 +260,25 @@ export interface NotificationDB {
 }
 
 export interface Notification extends NotificationDB {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Report (listing/user flag) interface
+ * Collection ID: reports
+ */
+export interface ReportDB {
+  reporterId: string;
+  targetId: string;
+  targetType: "product" | "user";
+  reason: string;
+  description?: string;
+  status: "pending" | "reviewed" | "resolved" | "dismissed";
+}
+
+export interface Report extends ReportDB {
   id: string;
   createdAt: string;
   updatedAt: string;

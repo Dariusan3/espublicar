@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import useProducts from "@/hooks/useProducts";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { uploadProductImage, getProductImageUrl } from "@/lib/storage";
 import Image from "next/image";
 
@@ -38,14 +38,19 @@ const DELIVERY_OPTIONS = [
 
 export default function AddProduct() {
   const { user } = useAuth();
-  const { addProduct } = useProducts();
+  const { addProduct, updateProduct, getProductById } = useProducts();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("edit");
+  const isEditMode = !!editId;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isDragover, setIsDragover] = useState(false);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [loadingProduct, setLoadingProduct] = useState(isEditMode);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -61,8 +66,39 @@ export default function AddProduct() {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
+  // Load existing product data in edit mode
+  useEffect(() => {
+    if (!editId) return;
+    const load = async () => {
+      const res = await getProductById(editId);
+      if (res.success && res.data) {
+        const p = res.data;
+        setFormData({
+          title: p.title || "",
+          price: String(p.price ?? ""),
+          category: p.category || "",
+          condition: p.condition || "",
+          description: p.description || "",
+          location: p.location || "",
+          isNegotiable: p.isNegotiable || false,
+          delivery: "both",
+        });
+        const imgs = p.thumbImages && p.thumbImages.length > 0
+          ? p.thumbImages
+          : p.imgSrc ? [p.imgSrc] : [];
+        setExistingImages(imgs);
+        setImagePreviews(imgs);
+      } else {
+        toast.error("No se pudo cargar el anuncio");
+        router.push("/my-account-listings");
+      }
+      setLoadingProduct(false);
+    };
+    load();
+  }, [editId, getProductById, router]);
+
   // Progress calculation (3 steps)
-  const step1Done = imageFiles.length > 0;
+  const step1Done = imageFiles.length > 0 || existingImages.length > 0;
   const step2Done = !!(formData.title && formData.category && formData.condition && formData.price);
   const step3Done = !!formData.location;
   const steps = [step1Done, step2Done, step3Done];
@@ -110,7 +146,13 @@ export default function AddProduct() {
   };
 
   const removeImage = (index: number) => {
-    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    // Index might point into the existingImages portion of imagePreviews
+    if (index < existingImages.length) {
+      setExistingImages((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      const fileIndex = index - existingImages.length;
+      setImageFiles((prev) => prev.filter((_, i) => i !== fileIndex));
+    }
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -162,7 +204,7 @@ export default function AddProduct() {
 
     setIsLoading(true);
     try {
-      let allImageUrls: string[] = [];
+      let newImageUrls: string[] = [];
 
       if (imageFiles.length > 0) {
         setIsUploading(true);
@@ -174,7 +216,7 @@ export default function AddProduct() {
             urls.push(getProductImageUrl(uploadResult.$id));
             setUploadProgress(Math.round(((i + 1) / imageFiles.length) * 100));
           }
-          allImageUrls = urls;
+          newImageUrls = urls;
         } catch (uploadError: any) {
           const msg =
             uploadError?.message ||
@@ -189,7 +231,10 @@ export default function AddProduct() {
         setIsUploading(false);
       }
 
-      const productData = {
+      // Combine existing (kept) + newly uploaded images
+      const allImageUrls = [...existingImages, ...newImageUrls];
+
+      const productData: any = {
         title: formData.title,
         price: parseFloat(formData.price),
         category: formData.category,
@@ -197,19 +242,28 @@ export default function AddProduct() {
         imgSrc: allImageUrls[0],
         imgHover: allImageUrls[1] || "",
         thumbImages: allImageUrls,
-        userId: user.$id,
-        rating: 0,
-        sold: 0,
-        available: 1,
-        inStock: true,
         condition: formData.condition,
         location: formData.location,
         isNegotiable: formData.isNegotiable,
       };
 
-      const result = await addProduct(productData);
+      let result;
+      if (isEditMode && editId) {
+        result = await updateProduct(editId, productData);
+      } else {
+        result = await addProduct({
+          ...productData,
+          userId: user.$id,
+          rating: 0,
+          sold: 0,
+          available: 1,
+          inStock: true,
+          status: "active",
+        });
+      }
+
       if (result.success) {
-        toast.success("¡Anuncio publicado!");
+        toast.success(isEditMode ? "¡Anuncio actualizado!" : "¡Anuncio publicado!");
         router.push("/my-account-listings");
       } else {
         toast.error(result.message || "Error al publicar");
@@ -221,14 +275,27 @@ export default function AddProduct() {
     }
   };
 
+  if (loadingProduct) {
+    return (
+      <div className="publicar-v2" style={{ textAlign: "center", padding: "80px 0" }}>
+        <div className="spinner-border text-primary" role="status" />
+        <p className="text-ink-3 mt-3">Cargando anuncio…</p>
+      </div>
+    );
+  }
+
   return (
     <div className="publicar-v2">
       {/* Header */}
       <div className="publicar-v2-header">
         <div>
-          <h1 className="publicar-v2-title">Publica tu anuncio</h1>
+          <h1 className="publicar-v2-title">
+            {isEditMode ? "Editar anuncio" : "Publica tu anuncio"}
+          </h1>
           <p className="publicar-v2-subtitle">
-            Lleva menos de un minuto. Es gratis.
+            {isEditMode
+              ? "Actualiza los detalles de tu anuncio."
+              : "Lleva menos de un minuto. Es gratis."}
           </p>
         </div>
         <div className="publicar-v2-progress" aria-label="Progreso">
@@ -478,7 +545,13 @@ export default function AddProduct() {
           onClick={handleSubmit}
           disabled={!canPublish || isLoading}
         >
-          {isLoading ? "Publicando…" : "Publicar →"}
+          {isLoading
+            ? isEditMode
+              ? "Guardando…"
+              : "Publicando…"
+            : isEditMode
+              ? "Guardar cambios"
+              : "Publicar →"}
         </button>
       </div>
     </div>

@@ -50,6 +50,8 @@ export const toProduct = (doc: DocumentData): Product => ({
   condition: doc.condition,
   location: doc.location,
   isNegotiable: doc.isNegotiable ?? false,
+  status: doc.status ?? "active",
+  views: doc.views ?? 0,
 });
 
 /**

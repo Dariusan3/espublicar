@@ -10,6 +10,7 @@ import useSeller from "@/hooks/useSeller";
 import { SellerProfile } from "@/hooks/useSeller";
 import { useRouter } from "next/navigation";
 import MakeOfferModal from "@/components/modals/MakeOfferModal";
+import ReportModal from "@/components/modals/ReportModal";
 import Slider1 from "./sliders/Slider1";
 
 function timeAgo(dateStr?: string) {
@@ -37,6 +38,7 @@ export default function Details1({ product }: { product: any }) {
   const { getSellerProfile } = useSeller();
   const router = useRouter();
   const [showOfferModal, setShowOfferModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [seller, setSeller] = useState<SellerProfile | null>(null);
 
   const productIdStr = String((product as any).$id || product.id);
@@ -275,6 +277,32 @@ export default function Details1({ product }: { product: any }) {
                 <span>Reembolso si no llega</span>
               </div>
             </div>
+
+            {/* Report link */}
+            {!isOwner && (
+              <button
+                type="button"
+                onClick={() => setShowReportModal(true)}
+                style={{
+                  marginTop: "var(--space-3)",
+                  background: "transparent",
+                  border: 0,
+                  color: "var(--ink-4)",
+                  font: "500 13px/1 'Inter', sans-serif",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  textUnderlineOffset: 2,
+                  alignSelf: "flex-start",
+                  padding: 0,
+                }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 4, verticalAlign: "-2px" }}>
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                  <line x1="4" y1="22" x2="4" y2="15" />
+                </svg>
+                Reportar este anuncio
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -308,6 +336,15 @@ export default function Details1({ product }: { product: any }) {
           currentPrice={product.price}
           productTitle={product.title}
           onClose={() => setShowOfferModal(false)}
+        />
+      )}
+
+      {showReportModal && (
+        <ReportModal
+          targetId={productIdStr}
+          targetType="product"
+          targetTitle={product.title}
+          onClose={() => setShowReportModal(false)}
         />
       )}
     </section>

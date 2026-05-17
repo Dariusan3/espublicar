@@ -58,6 +58,12 @@ const useProducts = () => {
           if (filters.userId) {
             queries.push(Query.equal("userId", filters.userId));
           }
+          // Hide paused/sold listings from the public shop, unless filtering
+          // by a specific seller (My Listings, Seller Profile) — they should
+          // still see their full inventory.
+          if (!filters.userId) {
+            queries.push(Query.equal("status", "active"));
+          }
           if (filters.inStock !== undefined) {
             queries.push(Query.equal("inStock", filters.inStock));
           }
@@ -304,6 +310,37 @@ const useProducts = () => {
     [],
   );
 
+  const updateProduct = useCallback(
+    async (
+      productId: string,
+      data: Partial<Product>,
+    ): Promise<HookResponse> => {
+      try {
+        // Strip readonly fields that Appwrite rejects
+        const { id, createdAt, updatedAt, ...payload } = data as any;
+        const result = await db.updateDocument(
+          DB_ID,
+          COLLECTIONS.PRODUCTS,
+          productId,
+          payload,
+        );
+        const updated = toProduct(result);
+        setProducts((prev) =>
+          prev.map((p) => (String(p.id) === productId ? updated : p)),
+        );
+        return {
+          success: true,
+          message: "Product updated successfully",
+          data: updated,
+        };
+      } catch (error: any) {
+        console.error("Error updating product:", error);
+        return { success: false, message: error.message, data: null };
+      }
+    },
+    [],
+  );
+
   return {
     products,
     isLoading,
@@ -316,6 +353,7 @@ const useProducts = () => {
     getMyProducts,
     addProduct,
     deleteProduct,
+    updateProduct,
   };
 };
 

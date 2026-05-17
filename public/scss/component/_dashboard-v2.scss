@@ -312,3 +312,258 @@
     color: var(--ink-4);
   }
 }
+
+// =============================================================================
+// My Listings V2 — card grid with status pill and overflow menu
+// =============================================================================
+
+.my-listings-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.my-listings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+
+  @media (max-width: 991px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 575px) {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+}
+
+.my-listing-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: visible;
+  transition: box-shadow var(--dur-fast) var(--ease-std),
+    transform var(--dur-fast) var(--ease-out);
+
+  &:hover {
+    box-shadow: var(--elev-2);
+    transform: translateY(-2px);
+  }
+}
+
+.my-listing-image {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  overflow: hidden;
+  background: var(--surface-3);
+  text-decoration: none;
+}
+
+.my-listing-img {
+  object-fit: cover;
+}
+
+.my-listing-status {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  height: 24px !important;
+  padding: 0 var(--space-3) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  z-index: 2;
+}
+
+.my-listing-body {
+  padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
+.my-listing-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.my-listing-title {
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font: 600 15px/1.35 "Inter", sans-serif;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  min-height: calc(15px * 1.35 * 2);
+
+  &:hover {
+    color: var(--brand);
+  }
+}
+
+.my-listing-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.my-listing-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-3);
+  border: 0;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-std);
+
+  &:hover {
+    background: var(--surface-3);
+    color: var(--ink);
+  }
+}
+
+.my-listing-menu-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 180px;
+  padding: var(--space-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-3);
+  z-index: 20;
+}
+
+.my-listing-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  font: 500 13px/1 "Inter", sans-serif;
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-std);
+
+  svg {
+    color: var(--ink-3);
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: var(--surface-3);
+
+    svg {
+      color: var(--ink);
+    }
+  }
+}
+
+.my-listing-menu-item-danger {
+  color: var(--danger);
+
+  svg {
+    color: var(--danger);
+  }
+
+  &:hover {
+    background: var(--danger-bg);
+
+    svg {
+      color: var(--danger);
+    }
+  }
+}
+
+.my-listing-menu-divider {
+  height: 1px;
+  background: var(--line);
+  margin: var(--space-1) 0;
+}
+
+.my-listing-price {
+  margin-top: var(--space-2);
+  font: 700 20px/1 "Inter", sans-serif;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.my-listing-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  font: 500 12px/1 "Inter", sans-serif;
+  color: var(--ink-3);
+}
+
+.my-listing-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+// --- Phone verification card ------------------------------------------------
+.phone-verify-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.phone-verify-head {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.phone-verify-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--brand-50);
+  color: var(--brand);
+  flex-shrink: 0;
+}
+
+.phone-verify-icon-ok {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.phone-verify-title {
+  margin: 0;
+  font: 600 15px/1.3 "Inter", sans-serif;
+  color: var(--ink);
+}
+
+.phone-verify-sub {
+  margin: 2px 0 0;
+  font: 400 13px/1.5 "Inter", sans-serif;
+  color: var(--ink-3);
+}
+
+.phone-verify-done {
+  flex-direction: row;
+  align-items: center;
+  padding: var(--space-4);
+  background: var(--success-bg);
+  border-radius: var(--radius-md);
+}
