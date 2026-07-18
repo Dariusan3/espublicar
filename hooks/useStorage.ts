@@ -1,9 +1,9 @@
 "use client";
 import { useCallback } from "react";
-import { storage, BUCKETS, ID } from "@/lib/appwrite";
+import { storage, BUCKETS, ID } from "@/lib/supabase";
 
 /**
- * Custom hook for storage operations with Appwrite
+ * Custom hook for storage operations with Supabase
  */
 const useStorage = () => {
   /**

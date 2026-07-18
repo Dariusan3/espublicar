@@ -1,6 +1,6 @@
 "use client";
 import { useCallback } from "react";
-import { db, DB_ID, COLLECTIONS, ID } from "@/lib/appwrite";
+import { db, DB_ID, COLLECTIONS, ID } from "@/lib/supabase";
 import { HookResponse, ReportDB } from "@/types/Types";
 
 const useReports = () => {

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
-    "appwrite": "^21.5.0",
+    "@supabase/supabase-js": "^2.110.7",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
     "drift-zoom": "^1.5.1",

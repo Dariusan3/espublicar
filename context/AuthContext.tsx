@@ -1,11 +1,25 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { account, ID } from '@/lib/appwrite';
-import { OAuthProvider } from 'appwrite';
-import { Models } from 'appwrite';
+import { account, supabase } from '@/lib/supabase';
+
+/**
+ * Normalized user shape exposed to the app. Mirrors the fields the UI reads
+ * from the old Appwrite user object ($id, name, emailVerification, ...).
+ */
+export interface AuthUser {
+  $id: string;
+  id: string;
+  email: string;
+  name: string;
+  phone: string;
+  emailVerification: boolean;
+  phoneVerification: boolean;
+  prefs: Record<string, any>;
+  [key: string]: any;
+}
 
 interface AuthContextType {
-  user: Models.User<Models.Preferences> | null;
+  user: AuthUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (email: string, password: string, name: string) => Promise<{ success: boolean; error?: string }>;
@@ -32,17 +46,12 @@ export const useAuth = () => {
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
-
-  // Check if user is logged in on mount
-  useEffect(() => {
-    checkUser();
-  }, []);
 
   const checkUser = async () => {
     try {
-      const session = await account.get();
+      const session = (await account.get()) as AuthUser;
       setUser(session);
     } catch (error) {
       setUser(null);
@@ -51,10 +60,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Check the session on mount and keep it in sync with Supabase auth events.
+  useEffect(() => {
+    checkUser();
+    const { data: sub } = supabase.auth.onAuthStateChange(() => {
+      checkUser();
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
   const login = async (email: string, password: string) => {
     try {
       await account.createEmailPasswordSession(email, password);
-      const session = await account.get();
+      const session = (await account.get()) as AuthUser;
       setUser(session);
       return { success: true };
     } catch (error: any) {
@@ -64,10 +82,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (email: string, password: string, name: string) => {
     try {
-      await account.create(ID.unique(), email, password, name);
-      // Auto-login after registration
+      await account.create(email, password, name);
+      // Auto-login after registration (requires email confirmation to be off).
       await account.createEmailPasswordSession(email, password);
-      const session = await account.get();
+      const session = (await account.get()) as AuthUser;
       setUser(session);
       return { success: true };
     } catch (error: any) {
@@ -77,27 +95,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loginWithGoogle = () => {
     const origin = window.location.origin;
-    // Appwrite redirects to successUrl after approval, or failureUrl on error
-    account.createOAuth2Session(
-      OAuthProvider.Google,
-      `${origin}/auth/callback`,
-      `${origin}/?oauth_error=1`,
-    );
+    account.createOAuth2Session('google', `${origin}/auth/callback`);
   };
 
   const loginWithFacebook = () => {
     const origin = window.location.origin;
-    account.createOAuth2Session(
-      OAuthProvider.Facebook,
-      `${origin}/auth/callback`,
-      `${origin}/?oauth_error=1`,
-    );
+    account.createOAuth2Session('facebook', `${origin}/auth/callback`);
   };
 
   const updatePhone = async (phone: string, password: string) => {
     try {
-      await account.updatePhone(phone, password);
-      const updated = await account.get();
+      await account.updatePhone(phone);
+      const updated = (await account.get()) as AuthUser;
       setUser(updated);
       return { success: true };
     } catch (error: any) {
@@ -118,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       if (!user) throw new Error("No user");
       await account.updatePhoneVerification(user.$id, secret);
-      const updated = await account.get();
+      const updated = (await account.get()) as AuthUser;
       setUser(updated);
       return { success: true };
     } catch (error: any) {
@@ -139,7 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateProfile = async (name: string) => {
     try {
       await account.updateName(name);
-      const updatedUser = await account.get();
+      const updatedUser = (await account.get()) as AuthUser;
       setUser(updatedUser);
       return { success: true };
     } catch (error: any) {
@@ -149,8 +158,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateEmail = async (email: string, password: string) => {
     try {
-      await account.updateEmail(email, password);
-      const updatedUser = await account.get();
+      await account.updateEmail(email);
+      const updatedUser = (await account.get()) as AuthUser;
       setUser(updatedUser);
       return { success: true };
     } catch (error: any) {
@@ -160,7 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updatePassword = async (newPassword: string, oldPassword: string) => {
     try {
-      await account.updatePassword(newPassword, oldPassword);
+      await account.updatePassword(newPassword);
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message };

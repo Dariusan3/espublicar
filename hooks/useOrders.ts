@@ -1,6 +1,6 @@
 "use client";
 import { useCallback } from "react";
-import { db, DB_ID, ORDERS_COLLECTION_ID, id, Query } from "@/lib/appwrite";
+import { db, DB_ID, ORDERS_COLLECTION_ID, id, Query } from "@/lib/supabase";
 import { OrderDB, HookResponse } from "@/types/Types";
 import { toOrder } from "@/helpers/dbHelpers";
 import { toast } from "react-toastify";
@@ -33,7 +33,7 @@ const useOrders = () => {
       notes?: string,
     ): Promise<HookResponse> => {
       try {
-        const { account } = await import("@/lib/appwrite");
+        const { account } = await import("@/lib/supabase");
         const currentUser = await account.get();
 
         const orderData: OrderDB = {
@@ -67,7 +67,7 @@ const useOrders = () => {
 
   const getMyOrders = useCallback(async (): Promise<HookResponse> => {
     try {
-      const { account } = await import("@/lib/appwrite");
+      const { account } = await import("@/lib/supabase");
       const currentUser = await account.get();
 
       const response = await db.listDocuments(

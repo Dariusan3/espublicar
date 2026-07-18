@@ -1,6 +1,6 @@
 "use client";
 import { useCallback } from "react";
-import { account, db, DB_ID, USERS_COLLECTION_ID, id } from "../lib/appwrite";
+import { account, db, DB_ID, USERS_COLLECTION_ID, id } from "../lib/supabase";
 import { UserDB, HookResponse } from "../types/Types";
 import { useAppDispatch } from "store/store";
 import {

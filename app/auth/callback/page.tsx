@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { account, db, DB_ID, COLLECTIONS, ID } from "@/lib/appwrite";
+import { supabase, db, DB_ID, COLLECTIONS } from "@/lib/supabase";
 import { toast } from "react-toastify";
 
 export default function AuthCallbackPage() {
@@ -10,27 +10,35 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const finalize = async () => {
       try {
-        const session = await account.get();
+        // Supabase (detectSessionInUrl) exchanges the OAuth `code` for a
+        // session automatically once the client boots. Wait for it to land.
+        let user = null;
+        for (let attempt = 0; attempt < 10; attempt++) {
+          const { data } = await supabase.auth.getUser();
+          if (data?.user) {
+            user = data.user;
+            break;
+          }
+          await new Promise((r) => setTimeout(r, 300));
+        }
 
-        // Ensure a user doc exists in the `user` collection
+        if (!user) throw new Error("No se pudo obtener la sesión");
+
+        // Ensure a profile row exists in the `user` table. A DB trigger also
+        // creates it, so treat "already exists" as success.
         try {
-          await db.getDocument(DB_ID, COLLECTIONS.USERS, session.$id);
-          // Already exists — nothing to do
+          await db.getDocument(DB_ID, COLLECTIONS.USERS, user.id);
         } catch {
-          // Create it (first time they log in via OAuth)
           try {
-            await db.createDocument(
-              DB_ID,
-              COLLECTIONS.USERS,
-              session.$id,
-              {
-                name: session.name || session.email?.split("@")[0] || "Usuario",
-                email: session.email,
-              },
-            );
+            await db.createDocument(DB_ID, COLLECTIONS.USERS, user.id, {
+              name:
+                user.user_metadata?.name ||
+                user.email?.split("@")[0] ||
+                "Usuario",
+              email: user.email,
+            });
           } catch (e) {
-            // If permissions don't allow — just log and continue
-            console.warn("Could not create user doc:", e);
+            console.warn("Could not create user profile row:", e);
           }
         }
 

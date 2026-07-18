@@ -7,7 +7,7 @@ import {
   id,
   Query,
   COLLECTIONS,
-} from "@/lib/appwrite";
+} from "@/lib/supabase";
 import { CartDB, HookResponse } from "@/types/Types";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
@@ -26,7 +26,7 @@ const useCart = () => {
 
   const getMyCart = useCallback(async (): Promise<HookResponse> => {
     try {
-      const { account } = await import("@/lib/appwrite");
+      const { account } = await import("@/lib/supabase");
       const currentUser = await account.get();
 
       const response = await db.listDocuments(
@@ -68,7 +68,7 @@ const useCart = () => {
   const addCartItem = useCallback(
     async (productId: string, quantity: number = 1): Promise<HookResponse> => {
       try {
-        const { account } = await import("@/lib/appwrite");
+        const { account } = await import("@/lib/supabase");
         const currentUser = await account.get();
 
         const existingItems = await db.listDocuments(
@@ -166,7 +166,7 @@ const useCart = () => {
 
   const clearMyCart = useCallback(async (): Promise<HookResponse> => {
     try {
-      const { account } = await import("@/lib/appwrite");
+      const { account } = await import("@/lib/supabase");
       const currentUser = await account.get();
 
       const response = await db.listDocuments(

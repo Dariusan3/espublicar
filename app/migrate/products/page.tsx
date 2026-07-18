@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { db, DB_ID, COLLECTIONS } from "@/lib/appwrite";
+import { db, DB_ID, COLLECTIONS } from "@/lib/supabase";
 import { toast } from "react-toastify";
 
 export default function MigrateProducts() {
@@ -22,13 +22,13 @@ export default function MigrateProducts() {
       // 2. Loop and update each
       for (const doc of response.documents) {
         try {
-          await db.updateDocument(DB_ID, COLLECTIONS.PRODUCTS, doc.$id, {
+          await db.updateDocument(DB_ID, COLLECTIONS.PRODUCTS, doc.id, {
             userId: TARGET_USER_ID,
           });
           updatedCount++;
           setStatus(`Updated ${updatedCount}/${total} products...`);
         } catch (err) {
-          console.error(`Failed to update product ${doc.$id}`, err);
+          console.error(`Failed to update product ${doc.id}`, err);
           errors++;
         }
       }

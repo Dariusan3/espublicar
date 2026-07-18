@@ -1,9 +1,9 @@
 "use client";
 import { useCallback } from "react";
-import { databases, DATABASE_ID, COLLECTIONS, Query, ID } from "@/lib/appwrite";
+import { databases, DATABASE_ID, COLLECTIONS, Query, ID } from "@/lib/supabase";
 
 /**
- * Custom hook for database operations with Appwrite
+ * Custom hook for database operations with Supabase
  */
 const useDatabase = () => {
   /**

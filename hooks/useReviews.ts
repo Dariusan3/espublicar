@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useState } from "react";
-import { db, DB_ID, COLLECTIONS, Query, ID, account } from "@/lib/appwrite";
+import { db, DB_ID, COLLECTIONS, Query, ID, account } from "@/lib/supabase";
 import { toast } from "react-toastify";
 
 import { HookResponse, Review } from "@/types/Types";
@@ -21,18 +21,18 @@ const useReviews = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   /**
-   * Convert Appwrite document to Review type
+   * Convert Supabase row to Review type
    */
   const toReview = (doc: any): Review => ({
-    id: doc.$id,
+    id: doc.id,
     productId: doc.productId,
     userId: doc.userId,
     userName: doc.userName,
     rating: doc.rating,
     title: doc.title || "",
     content: doc.content,
-    createdAt: doc.$createdAt,
-    updatedAt: doc.$updatedAt,
+    createdAt: doc.created_at,
+    updatedAt: doc.updated_at,
     verified: doc.verified || false,
   });
 

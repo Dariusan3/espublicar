@@ -1,6 +1,6 @@
 "use client";
 import { useCallback } from "react";
-import { db, DB_ID, WISHLISTS_COLLECTION_ID, id, Query } from "@/lib/appwrite";
+import { db, DB_ID, WISHLISTS_COLLECTION_ID, id, Query } from "@/lib/supabase";
 import { WishlistDB, HookResponse } from "@/types/Types";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {
@@ -17,7 +17,7 @@ const useWishlist = () => {
 
   const getMyWishlist = useCallback(async (): Promise<HookResponse> => {
     try {
-      const { account } = await import("@/lib/appwrite");
+      const { account } = await import("@/lib/supabase");
       const currentUser = await account.get();
       const response = await db.listDocuments(
         DB_ID,
@@ -36,7 +36,7 @@ const useWishlist = () => {
   const addToWishlist = useCallback(
     async (productId: string): Promise<HookResponse> => {
       try {
-        const { account } = await import("@/lib/appwrite");
+        const { account } = await import("@/lib/supabase");
         const currentUser = await account.get();
 
         const existing = await db.listDocuments(
@@ -76,7 +76,7 @@ const useWishlist = () => {
   const removeFromWishlist = useCallback(
     async (productId: string): Promise<HookResponse> => {
       try {
-        const { account } = await import("@/lib/appwrite");
+        const { account } = await import("@/lib/supabase");
         const currentUser = await account.get();
 
         const response = await db.listDocuments(
@@ -125,7 +125,7 @@ const useWishlist = () => {
 
   const clearMyWishlist = useCallback(async (): Promise<HookResponse> => {
     try {
-      const { account } = await import("@/lib/appwrite");
+      const { account } = await import("@/lib/supabase");
       const currentUser = await account.get();
       const response = await db.listDocuments(
         DB_ID,

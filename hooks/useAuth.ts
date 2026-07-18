@@ -1,12 +1,12 @@
 "use client";
 import { useCallback } from "react";
-import { account, ID } from "@/lib/appwrite";
+import { account, ID } from "@/lib/supabase";
 import { HookResponse } from "@/types/Types";
 import { useAppDispatch } from "@/store/store";
 import { setAuthState } from "@/store/slices/authSlice";
 
 /**
- * Custom hook for authentication operations with Appwrite
+ * Custom hook for authentication operations with Supabase
  */
 const useAuth = () => {
   const dispatch = useAppDispatch();

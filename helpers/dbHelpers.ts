@@ -1,4 +1,3 @@
-import { Models } from "appwrite";
 import {
   Product,
   Blog,
@@ -17,19 +16,22 @@ import {
 } from "@/types/Types";
 
 /**
- * Helper type for Appwrite Documents with dynamic properties
+ * Helper type for Supabase rows with dynamic properties.
  */
-type DocumentData = Models.Document & {
+type DocumentData = {
+  id: string;
+  created_at: string;
+  updated_at: string;
   [key: string]: any;
 };
 
 /**
- * Convert Appwrite Document to Product type
+ * Convert Supabase row to Product type
  */
 export const toProduct = (doc: DocumentData): Product => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   title: doc.title,
   price: doc.price,
   oldprice: doc.oldprice,
@@ -55,12 +57,12 @@ export const toProduct = (doc: DocumentData): Product => ({
 });
 
 /**
- * Convert Appwrite Document to Blog type
+ * Convert Supabase row to Blog type
  */
 export const toBlog = (doc: DocumentData): Blog => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   title: doc.title,
   content: doc.content,
   description: doc.description,
@@ -71,12 +73,12 @@ export const toBlog = (doc: DocumentData): Blog => ({
 });
 
 /**
- * Convert Appwrite Document to Collection type
+ * Convert Supabase row to Collection type
  */
 export const toCollection = (doc: DocumentData): Collection => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   title: doc.title,
   imgSrc: doc.imgSrc,
   sale: doc.sale,
@@ -85,12 +87,12 @@ export const toCollection = (doc: DocumentData): Collection => ({
 });
 
 /**
- * Convert Appwrite Document to Testimonial type
+ * Convert Supabase row to Testimonial type
  */
 export const toTestimonial = (doc: DocumentData): Testimonial => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   name: doc.name,
   imgSrc: doc.imgSrc,
   text: doc.text,
@@ -101,12 +103,12 @@ export const toTestimonial = (doc: DocumentData): Testimonial => ({
 });
 
 /**
- * Convert Appwrite Document to UserProfile type
+ * Convert Supabase row to UserProfile type
  */
 export const toUser = (doc: DocumentData): User => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   name: doc.name,
   email: doc.email,
   phone: doc.phone,
@@ -118,12 +120,12 @@ export const toUser = (doc: DocumentData): User => ({
 });
 
 /**
- * Convert Appwrite Document to Order type
+ * Convert Supabase row to Order type
  */
 export const toOrder = (doc: DocumentData): Order => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   userId: doc.userId,
   items: doc.items,
   totalAmount: doc.totalAmount,
@@ -136,35 +138,35 @@ export const toOrder = (doc: DocumentData): Order => ({
 });
 
 /**
- * Convert Appwrite Document to WishlistItem type
+ * Convert Supabase row to WishlistItem type
  */
 export const toWishlistItem = (doc: DocumentData): Wishlist => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   userId: doc.userId,
   productId: doc.productId,
 });
 
 /**
- * Convert Appwrite Document to Cart type
+ * Convert Supabase row to Cart type
  */
 export const toCart = (doc: DocumentData): Cart => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   userId: doc.userId,
   productId: doc.productId,
   quantity: doc.quantity ?? 1,
 });
 
 /**
- * Convert Appwrite Document to Review type
+ * Convert Supabase row to Review type
  */
 export const toReview = (doc: DocumentData): Review => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   userId: doc.userId,
   userName: doc.userName,
   userAvatar: doc.userAvatar,
@@ -176,12 +178,12 @@ export const toReview = (doc: DocumentData): Review => ({
 });
 
 /**
- * Convert Appwrite Document to Conversation type
+ * Convert Supabase row to Conversation type
  */
 export const toConversation = (doc: DocumentData): Conversation => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   participants: Array.isArray(doc.participants) ? doc.participants : [],
   productId: doc.productId,
   lastMessage: doc.lastMessage,
@@ -190,12 +192,12 @@ export const toConversation = (doc: DocumentData): Conversation => ({
 });
 
 /**
- * Convert Appwrite Document to Message type
+ * Convert Supabase row to Message type
  */
 export const toMessage = (doc: DocumentData): Message => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   conversationId: doc.conversationId,
   senderId: doc.senderId,
   text: doc.text,
@@ -259,12 +261,12 @@ export const toMessages = (docs: DocumentData[]): Message[] =>
   docs.map(toMessage);
 
 /**
- * Convert Appwrite Document to Offer type
+ * Convert Supabase row to Offer type
  */
 export const toOffer = (doc: DocumentData): Offer => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   productId: doc.productId,
   buyerId: doc.buyerId,
   sellerId: doc.sellerId,
@@ -277,12 +279,12 @@ export const toOffer = (doc: DocumentData): Offer => ({
 export const toOffers = (docs: DocumentData[]): Offer[] => docs.map(toOffer);
 
 /**
- * Convert Appwrite Document to Notification type
+ * Convert Supabase row to Notification type
  */
 export const toNotification = (doc: DocumentData): Notification => ({
-  id: doc.$id,
-  createdAt: doc.$createdAt,
-  updatedAt: doc.$updatedAt,
+  id: doc.id,
+  createdAt: doc.created_at,
+  updatedAt: doc.updated_at,
   userId: doc.userId,
   type: doc.type ?? "system",
   title: doc.title,

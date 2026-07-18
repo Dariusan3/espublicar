@@ -136,7 +136,7 @@ export default function Page() {
                 </p>
                 <ul>
                   <li>
-                    <strong>Appwrite</strong>: proveedor de nuestra
+                    <strong>Supabase</strong>: proveedor de nuestra
                     infraestructura (autenticación, base de datos,
                     almacenamiento).
                   </li>

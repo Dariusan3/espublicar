@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useState } from "react";
-import { db, DB_ID, COLLECTIONS, Query, ID } from "@/lib/appwrite";
+import { db, DB_ID, COLLECTIONS, Query, ID } from "@/lib/supabase";
 import { HookResponse, Product } from "@/types/Types";
 import { toProduct } from "@/helpers/dbHelpers";
 
