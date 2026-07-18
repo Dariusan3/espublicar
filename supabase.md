@@ -1,9 +1,30 @@
 # Supabase Backend
 
-The app was migrated from Appwrite to Supabase. The full schema, RLS policies,
-indexes and Storage bucket live in [`supabase/schema.sql`](supabase/schema.sql) —
-run that file in the Supabase SQL editor (or apply it via the Supabase MCP) to
-provision a project.
+The app was migrated from Appwrite to Supabase. To provision a project, run
+these two SQL files in order in the Supabase SQL editor (or via the Management
+API / MCP):
+
+1. [`supabase/schema.sql`](supabase/schema.sql) — tables, RLS policies, indexes,
+   Storage bucket.
+2. [`supabase/002_relations.sql`](supabase/002_relations.sql) — converts the
+   reference columns to `uuid` and adds enforced foreign keys with cascade
+   behaviour, then rewrites the affected RLS policies to compare uuids.
+
+## Relationships
+
+Foreign keys (all `on delete cascade` unless noted):
+
+- `user.id`, `products.userId`, `orders.userId`, `carts.userId`,
+  `wishlists.userId`, `reviews.userId`, `offers.buyerId`, `offers.sellerId`,
+  `messages.senderId`, `notifications.userId`, `reports.reporterId` → `auth.users(id)`
+- `carts.productId`, `wishlists.productId`, `reviews.productId`,
+  `offers.productId` → `products(id)`
+- `messages.conversationId` → `conversations(id)`
+- `conversations.productId`, `conversations.lastMessageAuthorId` → `products` /
+  `auth.users` (**on delete set null**)
+
+Polymorphic columns keep no FK: `notifications.referenceId`,
+`reports.targetId`. `conversations.participants` stays `text[]`.
 
 ## Conventions
 
