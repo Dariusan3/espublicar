@@ -17,12 +17,17 @@ const useWishlist = () => {
 
   const getMyWishlist = useCallback(async (): Promise<HookResponse> => {
     try {
-      const { account } = await import("@/lib/supabase");
-      const currentUser = await account.get();
+      const { supabase } = await import("@/lib/supabase");
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        dispatch(setWishlist([]));
+        return { success: true, message: "No session", data: [] };
+      }
+      const currentUser = session.user;
       const response = await db.listDocuments(
         DB_ID,
         WISHLISTS_COLLECTION_ID,
-        [Query.equal("userId", currentUser.$id)],
+        [Query.equal("userId", currentUser.id)],
       );
       const productIds = response.documents.map((doc) => doc.productId);
       dispatch(setWishlist(productIds));

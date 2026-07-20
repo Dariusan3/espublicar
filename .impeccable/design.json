@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-19T00:00:00Z",
+  "title": "Design System: espublicar",
+  "extensions": {
+    "colorMeta": {
+      "brand": { "role": "primary", "displayName": "Trust Blue", "canonical": "#2563EB", "tonalRamp": ["#0B1B3F", "#12295E", "#1D46B8", "#1E4FD1", "#2563EB", "#5B8DEF", "#93B4F5", "#DBE8FF"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#0F172A", "tonalRamp": ["#0F172A", "#1E293B", "#334155", "#475569", "#64748B", "#94A3B8", "#CBD5E1", "#F1F5F9"] },
+      "surface-2": { "role": "neutral", "displayName": "Surface Raised", "canonical": "#F8FAFC", "tonalRamp": ["#0F172A", "#334155", "#64748B", "#94A3B8", "#CBD5E1", "#E2E8F0", "#F1F5F9", "#FFFFFF"] },
+      "success": { "role": "secondary", "displayName": "Success Green", "canonical": "#16A34A", "tonalRamp": ["#052E16", "#14532D", "#166534", "#15803D", "#16A34A", "#4ADE80", "#86EFAC", "#DCFCE7"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only; text-wrap: balance." },
+      "body": { "displayName": "Body", "purpose": "Descriptions and copy; cap 65-75ch." },
+      "label": { "displayName": "Label", "purpose": "Single hero eyebrow, chips, badges; uppercase, sparse." }
+    },
+    "shadows": [
+      { "name": "rest-lift", "value": "0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06)", "purpose": "Cards at rest." },
+      { "name": "hover-lift", "value": "0 4px 12px rgba(15,23,42,0.06), 0 2px 4px rgba(15,23,42,0.04)", "purpose": "Card hover." },
+      { "name": "float", "value": "0 12px 32px rgba(15,23,42,0.08), 0 4px 12px rgba(15,23,42,0.06)", "purpose": "Hero floating cards, popovers." },
+      { "name": "modal", "value": "0 24px 64px rgba(15,23,42,0.12), 0 8px 24px rgba(15,23,42,0.08)", "purpose": "Dialogs, sheets." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default entrance/hover easing (exponential out)." },
+      { "name": "dur-fast", "value": "150ms", "purpose": "Color/border state changes." },
+      { "name": "dur-base", "value": "250ms", "purpose": "Transforms, hovers." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "575px" },
+      { "name": "tablet", "value": "767px" },
+      { "name": "laptop", "value": "991px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one loud action per view (Buscar, Publicar).",
+      "html": "<button class=\"ds-btn-primary\">Buscar</button>",
+      "css": ".ds-btn-primary { background: #2563EB; color: #fff; font: 600 15px 'Inter', sans-serif; height: 48px; padding: 0 20px; border: none; border-radius: 12px; cursor: pointer; transition: background 150ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background: #1E4FD1; } .ds-btn-primary:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; }"
+    },
+    {
+      "name": "Suggestion Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Pill for search suggestions, condition tags, filters.",
+      "html": "<button class=\"ds-chip\">iPhone</button>",
+      "css": ".ds-chip { background: #fff; color: #334155; font: 500 13px 'Inter', sans-serif; padding: 6px 14px; border: 1px solid #E2E8F0; border-radius: 999px; cursor: pointer; transition: border-color 150ms, background 150ms; } .ds-chip:hover { border-color: #2563EB; background: #EFF5FF; } .ds-chip:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Hero search pill with docked CTA.",
+      "html": "<input class=\"ds-input-search\" type=\"search\" placeholder=\"¿Qué buscas? iPhone, sofá, bici…\" />",
+      "css": ".ds-input-search { width: 100%; height: 56px; padding: 0 20px; font: 400 16px 'Inter', sans-serif; color: #0F172A; background: #fff; border: 1px solid #E2E8F0; border-radius: 999px; } .ds-input-search::placeholder { color: #334155; } .ds-input-search:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; }"
+    },
+    {
+      "name": "Product Card",
+      "kind": "card",
+      "refersTo": "card-product",
+      "description": "The atom of the marketplace: photo-first, tabular blue price.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-media\"><span class=\"ds-card-chip\">Como nuevo</span></div><div class=\"ds-card-body\"><p class=\"ds-card-title\">iPhone 13 Pro</p><div class=\"ds-card-meta\"><span class=\"ds-card-price\">620 €</span><span class=\"ds-card-loc\">Madrid</span></div></div></article>",
+      "css": ".ds-card { background: #fff; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06); transition: box-shadow 250ms cubic-bezier(0.16,1,0.3,1), transform 250ms cubic-bezier(0.16,1,0.3,1); } .ds-card:hover { box-shadow: 0 4px 12px rgba(15,23,42,0.06), 0 2px 4px rgba(15,23,42,0.04); transform: translateY(-2px); } .ds-card-media { position: relative; aspect-ratio: 4/3; background: linear-gradient(135deg,#F1F5F9,#E2E8F0); } .ds-card-chip { position: absolute; top: 8px; left: 8px; background: #fff; color: #334155; font: 600 11px 'Inter',sans-serif; padding: 2px 8px; border-radius: 999px; } .ds-card-body { padding: 12px; } .ds-card-title { margin: 0; font: 600 14px 'Inter',sans-serif; color: #0F172A; } .ds-card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; } .ds-card-price { font: 700 16px 'Inter',sans-serif; color: #2563EB; font-variant-numeric: tabular-nums; } .ds-card-loc { font: 500 11px 'Inter',sans-serif; color: #64748B; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Trusted Corner Shop",
+    "overview": "espublicar is a marketplace between strangers, so its whole job is to make a stranger feel safe. It reads like a clean, well-lit local shop: familiar layout, honest photos, prices you can trust. Warmth comes from clarity and spacing, not decoration. Blue is the badge of safety and earns its saturation by being scarce. A product system: comfortable mobile-first density on a 4px rhythm, real photography leading, chrome quiet.",
+    "keyCharacteristics": [
+      "Trust rendered as UI (secure-pay, tracked-shipping, ratings), not slogans",
+      "One scarce brand blue for action + safety; neutrals do the rest",
+      "Comfortable, mobile-first density on a 4px rhythm",
+      "Real product photography is the hero; chrome stays quiet",
+      "Familiar marketplace patterns over novelty"
+    ],
+    "rules": [
+      { "name": "The Scarce Blue Rule", "body": "Trust Blue covers <=10% of any screen; its rarity makes it read as safe action, not decoration.", "section": "colors" },
+      { "name": "The Muted Floor Rule", "body": "Body text is Ink or Ink Muted, never Ink Soft (#64748B) on a tinted surface; light-gray-for-elegance is forbidden.", "section": "colors" },
+      { "name": "The One Family Rule", "body": "Inter only; hierarchy is weight + size + color, never a second face.", "section": "typography" },
+      { "name": "The Tabular Price Rule", "body": "Prices use tabular-nums so columns of euro align; misaligned prices read as sloppy, and sloppy reads as scam.", "section": "typography" },
+      { "name": "The Flat-At-Rest Rule", "body": "Depth is a response, not a default; a card earns a shadow by hover or floating.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep Trust Blue (#2563EB) scarce - actions and trust signals only, <=10% of a screen.",
+      "Do render trust as UI: secure-payment, tracked-shipping, ratings, Negociable badges.",
+      "Do use Ink (#0F172A) / Ink Muted (#334155) for all body text; verify >=4.5:1.",
+      "Do give every interactive element a visible :focus-visible outline and honor prefers-reduced-motion.",
+      "Do lead with real product photography; let images carry the color.",
+      "Do use tabular numerals for every price.",
+      "Do design mobile-first - large tap targets, bottom-reachable primary actions."
+    ],
+    "donts": [
+      "Don't ship the generic SaaS template - no gradient hero, no wall of identical icon cards, no eyebrow above every section.",
+      "Don't use gradient text or glassmorphism as decoration.",
+      "Don't drift toward a luxury boutique - no hairline high-fashion minimalism.",
+      "Don't go cold corporate/bank - no grey enterprise stiffness, no form-first screens.",
+      "Don't become cheap spammy classifieds - no ad clutter, no low-contrast gray body, no cramped listings.",
+      "Don't add a second font family, side-stripe borders, or 01/02/03 markers on non-sequential sections."
+    ]
+  }
+}

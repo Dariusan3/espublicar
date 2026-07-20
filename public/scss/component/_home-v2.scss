@@ -17,6 +17,7 @@
     font: 700 var(--fs-h2) "Inter", sans-serif;
     color: var(--ink);
     letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 
   .section-head-sub {
@@ -25,17 +26,23 @@
     align-items: center;
     gap: var(--space-2);
     font: 400 14px/1 "Inter", sans-serif;
-    color: var(--ink-3);
+    color: var(--ink-2);
   }
 
   .link-more {
     font: 500 15px/1 "Inter", sans-serif;
     color: var(--brand);
     text-decoration: none;
+    border-radius: var(--radius-sm);
     transition: color var(--dur-fast) var(--ease-std);
 
     &:hover {
       color: var(--brand-600);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 3px;
     }
   }
 }
@@ -86,6 +93,7 @@
   letter-spacing: -0.02em;
   line-height: 1.05;
   max-width: 14ch;
+  text-wrap: balance;
 }
 
 .hero-v2-sub {
@@ -93,6 +101,7 @@
   font: 400 18px/1.55 "Inter", sans-serif;
   color: var(--ink-2);
   max-width: 44ch;
+  text-wrap: pretty;
 
   @media (max-width: 767px) {
     font-size: 16px;
@@ -113,6 +122,11 @@
       padding-right: 110px;
       font-size: 14px;
     }
+
+    &:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
   }
 
   .hero-v2-cta {
@@ -126,6 +140,11 @@
       font-size: 14px;
       padding: 0 var(--space-4);
     }
+
+    &:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 2px;
+    }
   }
 }
 
@@ -137,6 +156,18 @@
   .chip {
     border: 1px solid var(--line);
     background: var(--surface);
+    transition: border-color var(--dur-fast) var(--ease-std),
+      background var(--dur-fast) var(--ease-std);
+
+    &:hover {
+      border-color: var(--brand);
+      background: var(--brand-50);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
   }
 }
 
@@ -155,7 +186,7 @@
   align-items: center;
   gap: var(--space-2);
   font: 500 13px/1.3 "Inter", sans-serif;
-  color: var(--ink-3);
+  color: var(--ink-2);
 
   svg {
     color: var(--brand);
@@ -335,7 +366,7 @@
 .hero-v2-stat-label {
   margin-top: var(--space-2);
   font: 500 13px/1.3 "Inter", sans-serif;
-  color: var(--ink-3);
+  color: var(--ink-2);
 }
 
 // Legacy collage styles retained for backward compat (can be removed later)
@@ -452,6 +483,15 @@
     color: var(--surface);
     transform: scale(1.04);
   }
+
+  &:focus-visible {
+    outline: none;
+
+    .cat-icon {
+      outline: 2px solid var(--brand);
+      outline-offset: 3px;
+    }
+  }
 }
 
 // --- HowItWorks --------------------------------------------------------------
@@ -514,8 +554,9 @@
 .how-step-caption {
   margin: var(--space-2) auto 0;
   font: 400 15px/1.55 "Inter", sans-serif;
-  color: var(--ink-3);
+  color: var(--ink-2);
   max-width: 28ch;
+  text-wrap: pretty;
 }
 
 // --- Product sections --------------------------------------------------------
@@ -568,5 +609,18 @@
     margin: 0 0 var(--space-4);
     font: 400 16px/1.5 "Inter", sans-serif;
     color: var(--ink-3);
+  }
+}
+
+// --- Reduced motion ----------------------------------------------------------
+// Kill the always-on hero animations for users who ask for less motion.
+@media (prefers-reduced-motion: reduce) {
+  .hero-v2-blob,
+  .hero-v2-floating-card {
+    animation: none;
+  }
+
+  .hero-v2-floating-card:hover {
+    transform: none !important;
   }
 }

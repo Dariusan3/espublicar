@@ -98,3 +98,14 @@ All features are documented in `docs/` — see `docs/README.md` for the index.
 - `_legacy/` directory is excluded from TypeScript compilation
 - Note: utilities directory is named `utlis/` (misspelled)
 - UI language is Spanish (labels, toasts, breadcrumbs)
+
+## Design Context
+
+Strategic + visual design system captured in `PRODUCT.md` (register, users, principles) and `DESIGN.md` (tokens, colors, typography, components). Read both before UI work; `/impeccable <command>` reads them automatically.
+
+- **Register:** product (design serves the app; homepage is a front door). **Platform:** web, mobile-first.
+- **North Star:** "The Trusted Corner Shop" — warm, local, safe. Trust rendered as UI, not slogans.
+- **Brand color:** Trust Blue `#2563EB`, kept scarce (≤10% of a screen) for actions + trust signals. Neutrals (`--ink*`, `--surface*`) carry the rest. Tokens live in `public/scss/abstracts/_variable.scss`.
+- **Type:** Inter only; hierarchy via weight + size (no second family). Prices use `tabular-nums`.
+- **A11y target:** WCAG AA + honor `prefers-reduced-motion`; visible `:focus-visible` on all interactive elements.
+- **Anti-references (never look like):** generic SaaS template, luxury boutique, cold corporate/bank, cheap spammy classifieds.
