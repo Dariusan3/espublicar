@@ -13,9 +13,12 @@ export default function Products3() {
 
   useEffect(() => {
     const load = async () => {
-      const res = await searchProducts({ limit: 8, offset: 8, sortBy: "newest" });
+      // Fetch the first 16 and drop the 8 already shown above instead of
+      // asking for offset 8 directly: a Range past the last row makes
+      // PostgREST answer 416 whenever the catalogue has 8 items or fewer.
+      const res = await searchProducts({ limit: 16, sortBy: "newest" });
       if (res.success && res.data) {
-        setItems(res.data.products);
+        setItems(res.data.products.slice(8));
       }
       setLoading(false);
     };

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Product } from "@/types/Types";
+import { formatPrice } from "@/helpers/common";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -55,7 +56,7 @@ export default function SellerListings({
                     {product.title}
                   </h6>
                   <p className="text-primary fw-bold mb-1">
-                    €{product.price.toFixed(2)}
+                    {formatPrice(product.price)}
                   </p>
                   {product.location && (
                     <small className="text-muted d-flex align-items-center gap-1">

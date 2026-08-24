@@ -115,9 +115,21 @@ export default function RootLayout({
     });
     wow.init();
   }, [pathname]);
-  // Register service worker
+  // Register service worker (production only: in dev its cache would serve
+  // stale chunks and edits would never reach the browser).
   useEffect(() => {
     if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+
+    if (process.env.NODE_ENV !== "production") {
+      navigator.serviceWorker.getRegistrations().then((regs) => {
+        regs.forEach((reg) => reg.unregister());
+      });
+      if ("caches" in window) {
+        caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
+      }
+      return;
+    }
+
     navigator.serviceWorker
       .register("/sw.js")
       .catch((err) => console.warn("SW registration failed", err));

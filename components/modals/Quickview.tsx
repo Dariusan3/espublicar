@@ -9,26 +9,22 @@ import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
 export default function Quickview() {
-  const [quickviewImages, setQuickviewImages] = useState([
-    "/images/product/product-thumb/quickview-1.jpg",
-    "/images/product/product-thumb/quickview-2.jpg",
-    "/images/product/product-thumb/quickview-3.jpg",
-    "/images/product/product-thumb/quickview-4.jpg",
-    "/images/product/product-thumb/quickview-5.jpg",
-  ]);
+  const [quickviewImages, setQuickviewImages] = useState<string[]>([]);
   const [thumbSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
   const [quantity, setQuantity] = useState(1); // Initial quantity is 1
   const { quickViewItem, addProductToCart, isAddedToCartProducts } =
     useContextElement();
   useEffect(() => {
-    setQuickviewImages((pre) => {
-      const prevImages = [...pre];
-      if (quickViewItem.imgSrc) {
-        prevImages[0] = quickViewItem.imgSrc;
-      }
-      return prevImages;
-    });
+    if (!quickViewItem) return;
+    const images = (quickViewItem.thumbImages?.length
+      ? quickViewItem.thumbImages
+      : [quickViewItem.imgSrc, quickViewItem.imgHover]
+    ).filter(Boolean);
+    setQuickviewImages(images);
   }, [quickViewItem]);
+
+  // Nothing to preview until a card opens the modal.
+  if (!quickViewItem) return null;
 
   return (
     <div

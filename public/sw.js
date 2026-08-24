@@ -42,18 +42,37 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Cache-first for static assets
+  // Cache-first only for assets whose contents never change behind a stable
+  // URL. Build output must NOT go here: a cached chunk would outlive every
+  // later deploy and freeze the app on an old version.
+  const isImmutableAsset = /^\/(images|icons|fonts)\//.test(url.pathname) ||
+    url.pathname === "/manifest.json";
+
+  if (isImmutableAsset) {
+    event.respondWith(
+      caches.match(request).then(
+        (cached) =>
+          cached ||
+          fetch(request).then((res) => {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(request, copy));
+            return res;
+          }),
+      ),
+    );
+    return;
+  }
+
+  // Everything else (scripts, styles, data): network-first, cache only as an
+  // offline fallback.
   event.respondWith(
-    caches.match(request).then((cached) => {
-      return (
-        cached ||
-        fetch(request).then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(request, copy));
-          return res;
-        })
-      );
-    }),
+    fetch(request)
+      .then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(request, copy));
+        return res;
+      })
+      .catch(() => caches.match(request)),
   );
 });
 

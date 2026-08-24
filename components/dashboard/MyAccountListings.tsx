@@ -6,14 +6,10 @@ import useProducts from "@/hooks/useProducts";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import { EmptyState, SkeletonGrid } from "@/components/common/Skeleton";
+import { formatPrice } from "@/helpers/common";
 
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&auto=format&fit=crop";
-
-function formatPrice(p: number) {
-  if (p < 100) return p.toFixed(2);
-  return Math.round(p).toString();
-}
 
 function ListingImage({ src, alt }: { src?: string; alt: string }) {
   const initial = src && src.trim().length > 0 ? src : FALLBACK_IMG;
@@ -55,7 +51,14 @@ export default function MyAccountListings() {
   }, [user, getMyProducts]);
 
   useEffect(() => {
-    const handleClickOutside = () => setOpenMenuId(null);
+    // React (App Router) also listens on `document`, so stopPropagation inside
+    // the menu cannot keep this handler from firing on the same click that
+    // opens it. Ignore clicks that land inside a menu instead.
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Element | null;
+      if (target?.closest?.(".my-listing-menu")) return;
+      setOpenMenuId(null);
+    };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
@@ -182,9 +185,7 @@ export default function MyAccountListings() {
                       <button
                         type="button"
                         className="my-listing-menu-btn"
-                        onClick={() =>
-                          setOpenMenuId(isOpen ? null : idStr)
-                        }
+                        onClick={() => setOpenMenuId(isOpen ? null : idStr)}
                         aria-label="Acciones"
                       >
                         <svg
@@ -284,7 +285,7 @@ export default function MyAccountListings() {
                   </div>
 
                   <div className="my-listing-price num">
-                    {formatPrice(item.price)} €
+                    {formatPrice(item.price)}
                   </div>
 
                   <div className="my-listing-meta">

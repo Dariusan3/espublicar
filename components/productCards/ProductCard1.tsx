@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import useWishlist from "@/hooks/useWishlist";
+import { formatPrice } from "@/helpers/common";
 
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=600&auto=format&fit=crop";
@@ -20,11 +21,6 @@ function timeAgo(dateStr?: string) {
   const months = Math.floor(days / 30);
   if (months < 12) return `hace ${months}mes`;
   return `hace ${Math.floor(months / 12)}a`;
-}
-
-function formatPrice(price: number) {
-  if (price < 100) return price.toFixed(2);
-  return Math.round(price).toString();
 }
 
 interface ProductCardProps {
@@ -111,11 +107,11 @@ export default function ProductCard1({
 
         <div className="card-v2-price num">
           <span className="card-v2-price-now">
-            {formatPrice(product.price)} €
+            {formatPrice(product.price)}
           </span>
           {product.oldprice && product.oldprice > product.price && (
             <span className="card-v2-price-was">
-              {formatPrice(product.oldprice)} €
+              {formatPrice(product.oldprice)}
             </span>
           )}
         </div>

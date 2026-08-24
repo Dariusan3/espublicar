@@ -49,7 +49,9 @@ export default function Context({ children }: { children: ReactNode }) {
   const [compareItem, setCompareItem] = useState<(string | number)[]>([
     1, 2, 3, 4,
   ]);
-  const [quickViewItem, setQuickViewItem] = useState(allProducts[0]);
+  // Starts empty on purpose: seeding it with a demo product made the hidden
+  // quickview modal request placeholder images that no longer ship.
+  const [quickViewItem, setQuickViewItem] = useState<any>(null);
   const [quickAddItem, setQuickAddItem] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
