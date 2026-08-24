@@ -37,6 +37,25 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/**
+ * Accounts created before the name was stored in the auth metadata only have
+ * it on their `user` profile row. Fall back to that so the UI never shows the
+ * generic "Usuario" placeholder for a user who does have a name.
+ */
+async function withProfileName(session: AuthUser): Promise<AuthUser> {
+  if (!session || session.name) return session;
+  try {
+    const { data } = await supabase
+      .from("user")
+      .select("name")
+      .eq("id", session.$id)
+      .maybeSingle();
+    return data?.name ? { ...session, name: data.name } : session;
+  } catch {
+    return session;
+  }
+}
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -52,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const checkUser = async () => {
     try {
       const session = (await account.get()) as AuthUser;
-      setUser(session);
+      setUser(await withProfileName(session));
     } catch (error) {
       setUser(null);
     } finally {
@@ -73,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await account.createEmailPasswordSession(email, password);
       const session = (await account.get()) as AuthUser;
-      setUser(session);
+      setUser(await withProfileName(session));
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message };
@@ -82,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (email: string, password: string, name: string) => {
     try {
-      await account.create(email, password, name);
+      await account.create({ email, password, name });
       // Auto-login after registration (requires email confirmation to be off).
       await account.createEmailPasswordSession(email, password);
       const session = (await account.get()) as AuthUser;

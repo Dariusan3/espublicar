@@ -15,7 +15,6 @@ import MobileMenu from "@/components/modals/MobileMenu";
 import Toolbar from "@/components/modals/Toolbar";
 import Search from "@/components/modals/Search";
 import AddParallax from "@/utlis/AddParallax";
-import NewsLetter from "@/components/modals/NewsLetter";
 import MobileTabBar from "@/components/common/MobileTabBar";
 import ReduxProvider from "@/store/ReduxProvider";
 import { ToastContainer } from "react-toastify";
@@ -162,7 +161,6 @@ export default function RootLayout({
                 <ScrollTop />
                 <Toolbar />
                 <Search />
-                <NewsLetter />
                 <AddParallax />
               </Context>
             </AuthProvider>

@@ -15,12 +15,17 @@ const useAuth = () => {
    * Sign up a new user
    */
   const signUserUp = useCallback(
-    async (email: string, password: string): Promise<HookResponse> => {
+    async (
+      email: string,
+      password: string,
+      name?: string,
+    ): Promise<HookResponse> => {
       try {
         const response = await account.create({
           userId: ID.unique(),
           email: email,
           password: password,
+          name: name,
         });
 
         return {

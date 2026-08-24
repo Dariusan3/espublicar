@@ -47,7 +47,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const signUpResult = await signUserUp(email, password);
+      const signUpResult = await signUserUp(email, password, name);
       if (!signUpResult.success) {
         setError(signUpResult.message);
         setLoading(false);

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import useChat from "@/hooks/useChat";
 import useProducts from "@/hooks/useProducts";
+import useUser from "@/hooks/useUser";
 import { Conversation, Message, Product } from "@/types/Types";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
@@ -37,6 +38,7 @@ export default function ChatInbox() {
   const { user } = useAuth();
   const { getMyConversations, getMessages, sendMessage } = useChat();
   const { getProductById } = useProducts();
+  const { getUserById } = useUser();
   const searchParams = useSearchParams();
   const initialConvId = searchParams.get("conversationId");
 
@@ -47,6 +49,7 @@ export default function ChatInbox() {
   const [isSending, setIsSending] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [productCache, setProductCache] = useState<Record<string, Product>>({});
+  const [nameCache, setNameCache] = useState<Record<string, string>>({});
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -73,13 +76,32 @@ export default function ChatInbox() {
       );
       setProductCache(cache);
 
+      // Resolve the display name of the other participant in each conversation.
+      const otherIds = Array.from(
+        new Set(
+          res.data
+            .map((c: Conversation) =>
+              c.participants.find((p: string) => p !== user.$id),
+            )
+            .filter(Boolean),
+        ),
+      );
+      const names: Record<string, string> = {};
+      await Promise.all(
+        otherIds.map(async (uid: any) => {
+          const u = await getUserById(uid);
+          if (u.success && u.data?.name) names[uid] = u.data.name;
+        }),
+      );
+      setNameCache(names);
+
       if (initialConvId) {
         const found = res.data.find((c: Conversation) => c.id === initialConvId);
         if (found) setSelected(found);
       }
     };
     load();
-  }, [user, getMyConversations, getProductById, initialConvId]);
+  }, [user, getMyConversations, getProductById, getUserById, initialConvId]);
 
   useEffect(() => {
     if (!selected) return;
@@ -119,7 +141,10 @@ export default function ChatInbox() {
   };
 
   const getOtherId = (conv: Conversation) =>
-    conv.participants.find((p) => p !== user?.$id) || "Usuario";
+    conv.participants.find((p) => p !== user?.$id) || "";
+
+  const getOtherName = (conv: Conversation) =>
+    nameCache[getOtherId(conv)] || "Usuario";
 
   const filteredConvs = conversations.filter((c) => {
     if (!searchQuery) return true;
@@ -171,9 +196,9 @@ export default function ChatInbox() {
         ) : (
           <ul className="chat-v2-conv-list">
             {filteredConvs.map((conv) => {
-              const otherId = getOtherId(conv);
+              const otherName = getOtherName(conv);
               const product = productCache[conv.productId];
-              const initial = otherId.charAt(0).toUpperCase();
+              const initial = otherName.charAt(0).toUpperCase();
               const active = selected?.id === conv.id;
 
               return (
@@ -185,7 +210,7 @@ export default function ChatInbox() {
                   <div className="chat-v2-conv-avatar">{initial}</div>
                   <div className="chat-v2-conv-body">
                     <div className="chat-v2-conv-row-top">
-                      <span className="chat-v2-conv-name">Usuario</span>
+                      <span className="chat-v2-conv-name">{otherName}</span>
                       <span className="chat-v2-conv-time">
                         {timeShort(conv.lastMessageAt)}
                       </span>
@@ -228,10 +253,10 @@ export default function ChatInbox() {
                 </svg>
               </button>
               <div className="chat-v2-thread-avatar">
-                {getOtherId(selected).charAt(0).toUpperCase()}
+                {getOtherName(selected).charAt(0).toUpperCase()}
               </div>
               <div className="chat-v2-thread-info">
-                <p className="chat-v2-thread-name">Usuario</p>
+                <p className="chat-v2-thread-name">{getOtherName(selected)}</p>
                 {selectedProduct && (
                   <Link
                     href={`/product/${selected.productId}`}
