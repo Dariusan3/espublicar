@@ -17,7 +17,7 @@ export interface ProductFilters {
   location?: string;
   condition?: string;
   userId?: string;
-  sortBy?: "price_asc" | "price_desc" | "newest" | "rating";
+  sortBy?: "price_asc" | "price_desc" | "newest" | "oldest" | "rating";
   limit?: number;
   offset?: number;
 }
@@ -86,6 +86,9 @@ const useProducts = () => {
               break;
             case "newest":
               queries.push(Query.orderDesc("$createdAt"));
+              break;
+            case "oldest":
+              queries.push(Query.orderAsc("$createdAt"));
               break;
             case "rating":
               queries.push(Query.orderDesc("rating"));

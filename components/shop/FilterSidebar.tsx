@@ -1,486 +1,368 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useProducts, { ProductFilters } from "@/hooks/useProducts";
 
-const CONDITIONS = [
-  "Nuevo",
-  "Como nuevo",
-  "Muy bueno",
-  "Bueno",
-  "Aceptable",
+const CONDITIONS = ["Nuevo", "Como nuevo", "Muy bueno", "Bueno", "Aceptable"];
+
+const PRICE_PRESETS = [
+  { label: "Hasta 25 €", min: 0, max: 25 },
+  { label: "25 – 50 €", min: 25, max: 50 },
+  { label: "50 – 100 €", min: 50, max: 100 },
+  { label: "Más de 100 €", min: 100, max: undefined },
 ];
+
+const FEATURES: { key: keyof ProductFilters; label: string; hint: string }[] = [
+  { key: "isNew", label: "Sin estrenar", hint: "Artículos nuevos, con etiqueta" },
+  { key: "isTodaysDeals", label: "Ofertas del día", hint: "Precio rebajado hoy" },
+  { key: "hotSale", label: "Rebajados", hint: "Bajaron de precio" },
+  { key: "inStock", label: "Disponible", hint: "Aún no está reservado" },
+];
+
+/** Keys that count as an applied filter (sorting and paging do not). */
+const FILTER_KEYS: (keyof ProductFilters)[] = [
+  "category",
+  "location",
+  "condition",
+  "minPrice",
+  "maxPrice",
+  "isNew",
+  "isTodaysDeals",
+  "hotSale",
+  "inStock",
+];
+
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      className={`fs-chevron ${open ? "is-open" : ""}`}
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
+function Check() {
+  return (
+    <svg
+      className="fs-check"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
 
 interface FilterSidebarProps {
   onFiltersChange: (filters: ProductFilters) => void;
   currentFilters: ProductFilters;
   className?: string;
+  /** Rendered inside the mobile drawer as the closing action. */
+  onApply?: () => void;
+  resultCount?: number;
 }
 
 export default function FilterSidebar({
   onFiltersChange,
   currentFilters,
   className = "",
+  onApply,
+  resultCount,
 }: FilterSidebarProps) {
-  const { getCategories, getBrands, getLocations } = useProducts();
+  const { getCategories, getLocations } = useProducts();
   const [categories, setCategories] = useState<string[]>([]);
-  const [brands, setBrands] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [localFilters, setLocalFilters] =
     useState<ProductFilters>(currentFilters);
-  const [expandedSections, setExpandedSections] = useState({
+  const [expanded, setExpanded] = useState({
     category: true,
     price: true,
-    location: true,
     condition: true,
-    brands: false,
+    location: false,
     features: false,
   });
 
   useEffect(() => {
     const loadFilters = async () => {
-      const [cats, brs, locs] = await Promise.all([
-        getCategories(),
-        getBrands(),
-        getLocations(),
-      ]);
+      const [cats, locs] = await Promise.all([getCategories(), getLocations()]);
       setCategories(cats);
-      setBrands(brs);
       setLocations(locs);
     };
     loadFilters();
-  }, [getCategories, getBrands, getLocations]);
+  }, [getCategories, getLocations]);
 
   useEffect(() => {
     setLocalFilters(currentFilters);
   }, [currentFilters]);
 
-  const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
-  };
+  const toggleSection = (section: keyof typeof expanded) =>
+    setExpanded((prev) => ({ ...prev, [section]: !prev[section] }));
 
-  const updateFilter = (key: keyof ProductFilters, value: any) => {
-    const newFilters = { ...localFilters, [key]: value };
-    setLocalFilters(newFilters);
-    onFiltersChange(newFilters);
+  /** Patch several keys at once: setting min and max in two calls would drop
+   *  the first one, since both would build on the same stale state. */
+  const updateFilters = (patch: Partial<ProductFilters>) => {
+    const next = { ...localFilters, ...patch };
+    FILTER_KEYS.forEach((key) => {
+      if (next[key] === undefined) delete next[key];
+    });
+    setLocalFilters(next);
+    onFiltersChange(next);
   };
 
   const clearFilters = () => {
     const cleared: ProductFilters = {};
+    if (localFilters.sortBy) cleared.sortBy = localFilters.sortBy;
+    if (localFilters.search) cleared.search = localFilters.search;
     setLocalFilters(cleared);
     onFiltersChange(cleared);
   };
 
-  const hasActiveFilters = Object.keys(localFilters).some(
-    (key) => localFilters[key as keyof ProductFilters] !== undefined,
+  const activeCount = useMemo(() => {
+    let count = FILTER_KEYS.filter(
+      (key) => key !== "minPrice" && key !== "maxPrice",
+    ).filter((key) => localFilters[key] !== undefined).length;
+    if (
+      localFilters.minPrice !== undefined ||
+      localFilters.maxPrice !== undefined
+    ) {
+      count += 1;
+    }
+    return count;
+  }, [localFilters]);
+
+  const renderChoices = (
+    name: "category" | "location" | "condition",
+    allLabel: string,
+    options: string[],
+  ) => (
+    <div className="fs-options" role="radiogroup" aria-label={allLabel}>
+      <label className={`fs-option ${!localFilters[name] ? "is-active" : ""}`}>
+        <input
+          type="radio"
+          name={name}
+          checked={!localFilters[name]}
+          onChange={() => updateFilters({ [name]: undefined })}
+        />
+        <span className="fs-option-label">{allLabel}</span>
+        {!localFilters[name] && <Check />}
+      </label>
+      {options.map((option) => {
+        const active = localFilters[name] === option;
+        return (
+          <label key={option} className={`fs-option ${active ? "is-active" : ""}`}>
+            <input
+              type="radio"
+              name={name}
+              checked={active}
+              onChange={() => updateFilters({ [name]: option })}
+            />
+            <span className="fs-option-label">{option}</span>
+            {active && <Check />}
+          </label>
+        );
+      })}
+    </div>
   );
 
+  const section = (
+    key: keyof typeof expanded,
+    title: string,
+    body: React.ReactNode,
+    badge?: string,
+  ) => (
+    <div className="fs-section">
+      <button
+        type="button"
+        className="fs-section-head"
+        onClick={() => toggleSection(key)}
+        aria-expanded={expanded[key]}
+      >
+        <span className="fs-section-title">{title}</span>
+        {badge && <span className="fs-section-badge">{badge}</span>}
+        <Chevron open={expanded[key]} />
+      </button>
+      {expanded[key] && <div className="fs-section-body">{body}</div>}
+    </div>
+  );
+
+  const priceBadge =
+    localFilters.minPrice !== undefined || localFilters.maxPrice !== undefined
+      ? `${localFilters.minPrice ?? 0} – ${localFilters.maxPrice ?? "∞"} €`
+      : undefined;
+
   return (
-    <aside className={`filter-sidebar ${className}`}>
-      <div className="filter-header">
-        <h3>Filtros</h3>
-        {hasActiveFilters && (
-          <button onClick={clearFilters} className="clear-btn">
-            Limpiar todo
+    <aside className={`fs ${className}`} aria-label="Filtros">
+      <div className="fs-head">
+        <h3 className="fs-title">
+          Filtros
+          {activeCount > 0 && <span className="fs-count">{activeCount}</span>}
+        </h3>
+        {activeCount > 0 && (
+          <button type="button" onClick={clearFilters} className="fs-clear">
+            Limpiar
           </button>
         )}
       </div>
 
-      {/* Category Section */}
-      <div className="filter-section">
-        <button
-          className="section-header"
-          onClick={() => toggleSection("category")}
-        >
-          <span>Categoría</span>
-          <span
-            className={`arrow ${expandedSections.category ? "up" : "down"}`}
-          >
-            ▾
-          </span>
-        </button>
-        {expandedSections.category && (
-          <div className="section-content">
-            <label className="filter-option">
-              <input
-                type="radio"
-                name="category"
-                checked={!localFilters.category}
-                onChange={() => updateFilter("category", undefined)}
-              />
-              <span>Todas las categorías</span>
-            </label>
-            {categories.map((cat) => (
-              <label key={cat} className="filter-option">
-                <input
-                  type="radio"
-                  name="category"
-                  checked={localFilters.category === cat}
-                  onChange={() => updateFilter("category", cat)}
-                />
-                <span>{cat}</span>
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
+      {section(
+        "category",
+        "Categoría",
+        renderChoices("category", "Todas las categorías", categories),
+        localFilters.category,
+      )}
 
-      {/* Location Section */}
-      <div className="filter-section">
-        <button
-          className="section-header"
-          onClick={() => toggleSection("location")}
-        >
-          <span>Ubicación</span>
-          <span
-            className={`arrow ${expandedSections.location ? "up" : "down"}`}
-          >
-            ▾
-          </span>
-        </button>
-        {expandedSections.location && (
-          <div className="section-content">
-            <label className="filter-option">
-              <input
-                type="radio"
-                name="location"
-                checked={!localFilters.location}
-                onChange={() => updateFilter("location", undefined)}
-              />
-              <span>Todas las ubicaciones</span>
-            </label>
-            {locations.map((loc) => (
-              <label key={loc} className="filter-option">
-                <input
-                  type="radio"
-                  name="location"
-                  checked={localFilters.location === loc}
-                  onChange={() => updateFilter("location", loc)}
-                />
-                <span>{loc}</span>
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Condition Section */}
-      <div className="filter-section">
-        <button
-          className="section-header"
-          onClick={() => toggleSection("condition")}
-        >
-          <span>Estado</span>
-          <span
-            className={`arrow ${expandedSections.condition ? "up" : "down"}`}
-          >
-            ▾
-          </span>
-        </button>
-        {expandedSections.condition && (
-          <div className="section-content">
-            <label className="filter-option">
-              <input
-                type="radio"
-                name="condition"
-                checked={!localFilters.condition}
-                onChange={() => updateFilter("condition", undefined)}
-              />
-              <span>Todos los estados</span>
-            </label>
-            {CONDITIONS.map((cond) => (
-              <label key={cond} className="filter-option">
-                <input
-                  type="radio"
-                  name="condition"
-                  checked={localFilters.condition === cond}
-                  onChange={() => updateFilter("condition", cond)}
-                />
-                <span>{cond}</span>
-              </label>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Price Range Section */}
-      <div className="filter-section">
-        <button
-          className="section-header"
-          onClick={() => toggleSection("price")}
-        >
-          <span>Rango de precio</span>
-          <span className={`arrow ${expandedSections.price ? "up" : "down"}`}>
-            ▾
-          </span>
-        </button>
-        {expandedSections.price && (
-          <div className="section-content price-range">
-            <div className="price-inputs">
-              <input
-                type="number"
-                placeholder="Mín"
-                value={localFilters.minPrice ?? ""}
-                onChange={(e) =>
-                  updateFilter(
-                    "minPrice",
-                    e.target.value ? Number(e.target.value) : undefined,
-                  )
-                }
-                min={0}
-                className="price-input"
-              />
-              <span className="price-separator">-</span>
-              <input
-                type="number"
-                placeholder="Máx"
-                value={localFilters.maxPrice ?? ""}
-                onChange={(e) =>
-                  updateFilter(
-                    "maxPrice",
-                    e.target.value ? Number(e.target.value) : undefined,
-                  )
-                }
-                min={0}
-                className="price-input"
-              />
-            </div>
-            <div className="price-presets">
-              {[
-                { label: "Menos de 25€", min: 0, max: 25 },
-                { label: "25€ - 50€", min: 25, max: 50 },
-                { label: "50€ - 100€", min: 50, max: 100 },
-                { label: "Más de 100€", min: 100, max: undefined },
-              ].map((preset) => (
+      {section(
+        "price",
+        "Precio",
+        <>
+          <div className="fs-price-presets">
+            {PRICE_PRESETS.map((preset) => {
+              const active =
+                localFilters.minPrice === preset.min &&
+                localFilters.maxPrice === preset.max;
+              return (
                 <button
                   key={preset.label}
-                  className={`price-preset ${
-                    localFilters.minPrice === preset.min &&
-                    localFilters.maxPrice === preset.max
-                      ? "active"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    updateFilter("minPrice", preset.min);
-                    updateFilter("maxPrice", preset.max);
-                  }}
+                  type="button"
+                  className={`fs-chip ${active ? "is-active" : ""}`}
+                  aria-pressed={active}
+                  onClick={() =>
+                    updateFilters(
+                      active
+                        ? { minPrice: undefined, maxPrice: undefined }
+                        : { minPrice: preset.min, maxPrice: preset.max },
+                    )
+                  }
                 >
                   {preset.label}
                 </button>
-              ))}
+              );
+            })}
+          </div>
+          <div className="fs-price-inputs">
+            <div className="fs-price-field">
+              <input
+                type="number"
+                inputMode="numeric"
+                min={0}
+                placeholder="Mín"
+                aria-label="Precio mínimo"
+                value={localFilters.minPrice ?? ""}
+                onChange={(e) =>
+                  updateFilters({
+                    minPrice: e.target.value ? Number(e.target.value) : undefined,
+                  })
+                }
+              />
+              <span className="fs-price-unit">€</span>
+            </div>
+            <span className="fs-price-dash" aria-hidden="true">
+              –
+            </span>
+            <div className="fs-price-field">
+              <input
+                type="number"
+                inputMode="numeric"
+                min={0}
+                placeholder="Máx"
+                aria-label="Precio máximo"
+                value={localFilters.maxPrice ?? ""}
+                onChange={(e) =>
+                  updateFilters({
+                    maxPrice: e.target.value ? Number(e.target.value) : undefined,
+                  })
+                }
+              />
+              <span className="fs-price-unit">€</span>
             </div>
           </div>
-        )}
-      </div>
+        </>,
+        priceBadge,
+      )}
 
-      {/* Features Section */}
-      <div className="filter-section">
-        <button
-          className="section-header"
-          onClick={() => toggleSection("features")}
-        >
-          <span>Características</span>
-          <span
-            className={`arrow ${expandedSections.features ? "up" : "down"}`}
-          >
-            ▾
-          </span>
-        </button>
-        {expandedSections.features && (
-          <div className="section-content">
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={localFilters.inStock === true}
-                onChange={(e) =>
-                  updateFilter("inStock", e.target.checked ? true : undefined)
+      {section(
+        "condition",
+        "Estado",
+        <div className="fs-chips" role="group" aria-label="Estado">
+          {CONDITIONS.map((cond) => {
+            const active = localFilters.condition === cond;
+            return (
+              <button
+                key={cond}
+                type="button"
+                className={`fs-chip ${active ? "is-active" : ""}`}
+                aria-pressed={active}
+                onClick={() =>
+                  updateFilters({ condition: active ? undefined : cond })
                 }
-              />
-              <span>En stock</span>
-            </label>
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={localFilters.isNew === true}
-                onChange={(e) =>
-                  updateFilter("isNew", e.target.checked ? true : undefined)
-                }
-              />
-              <span>Nuevos</span>
-            </label>
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={localFilters.isTodaysDeals === true}
-                onChange={(e) =>
-                  updateFilter(
-                    "isTodaysDeals",
-                    e.target.checked ? true : undefined,
-                  )
-                }
-              />
-              <span>Ofertas del día</span>
-            </label>
-            <label className="filter-option">
-              <input
-                type="checkbox"
-                checked={localFilters.hotSale === true}
-                onChange={(e) =>
-                  updateFilter("hotSale", e.target.checked ? true : undefined)
-                }
-              />
-              <span>Rebaja</span>
-            </label>
-          </div>
-        )}
-      </div>
+              >
+                {cond}
+              </button>
+            );
+          })}
+        </div>,
+        localFilters.condition,
+      )}
 
-      {/* Sorting */}
-      <div className="filter-section">
-        <label className="sort-label">Ordenar por</label>
-        <select
-          value={localFilters.sortBy || "newest"}
-          onChange={(e) =>
-            updateFilter("sortBy", e.target.value as ProductFilters["sortBy"])
-          }
-          className="sort-select"
-        >
-          <option value="newest">Más recientes</option>
-          <option value="price_asc">Precio: menor a mayor</option>
-          <option value="price_desc">Precio: mayor a menor</option>
-          <option value="rating">Mejor valorados</option>
-        </select>
-      </div>
+      {section(
+        "location",
+        "Ubicación",
+        renderChoices("location", "Toda España", locations),
+        localFilters.location,
+      )}
 
-      <style jsx>{`
-        .filter-sidebar {
-          background: #fff;
-          border-radius: 12px;
-          padding: 20px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        .filter-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 20px;
-          padding-bottom: 15px;
-          border-bottom: 1px solid #eee;
-        }
-        .filter-header h3 {
-          margin: 0;
-          font-size: 18px;
-          font-weight: 600;
-        }
-        .clear-btn {
-          background: none;
-          border: none;
-          color: var(--primary-color, #c00);
-          font-size: 13px;
-          cursor: pointer;
-          text-decoration: underline;
-        }
-        .filter-section {
-          margin-bottom: 16px;
-          border-bottom: 1px solid #f0f0f0;
-          padding-bottom: 16px;
-        }
-        .filter-section:last-child {
-          border-bottom: none;
-          margin-bottom: 0;
-        }
-        .section-header {
-          width: 100%;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 8px 0;
-          background: none;
-          border: none;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          color: #333;
-        }
-        .arrow {
-          transition: transform 0.2s;
-        }
-        .arrow.up {
-          transform: rotate(180deg);
-        }
-        .section-content {
-          padding-top: 12px;
-          max-height: 250px;
-          overflow-y: auto;
-        }
-        .filter-option {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 8px 0;
-          cursor: pointer;
-          font-size: 14px;
-          color: #555;
-        }
-        .filter-option:hover {
-          color: #000;
-        }
-        .filter-option input {
-          accent-color: var(--primary-color, #000);
-        }
-        .price-inputs {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 12px;
-        }
-        .price-input {
-          flex: 1;
-          padding: 10px 12px;
-          border: 1px solid #ddd;
-          border-radius: 6px;
-          font-size: 14px;
-          min-width: 0;
-          width: 100%;
-        }
-        .price-separator {
-          color: #999;
-        }
-        .price-presets {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-        .price-preset {
-          padding: 6px 12px;
-          border: 1px solid #ddd;
-          border-radius: 20px;
-          background: #fff;
-          font-size: 12px;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-        .price-preset:hover,
-        .price-preset.active {
-          background: var(--primary-color, #000);
-          color: #fff;
-          border-color: var(--primary-color, #000);
-        }
-        .sort-label {
-          display: block;
-          font-size: 14px;
-          font-weight: 600;
-          margin-bottom: 10px;
-        }
-        .sort-select {
-          width: 100%;
-          padding: 10px 12px;
-          border: 1px solid #ddd;
-          border-radius: 6px;
-          font-size: 14px;
-          background: #fff;
-          cursor: pointer;
-        }
-      `}</style>
+      {section(
+        "features",
+        "Más filtros",
+        <div className="fs-switches">
+          {FEATURES.map((feature) => {
+            const active = localFilters[feature.key] === true;
+            return (
+              <label key={String(feature.key)} className="fs-switch">
+                <input
+                  type="checkbox"
+                  checked={active}
+                  onChange={(e) =>
+                    updateFilters({
+                      [feature.key]: e.target.checked ? true : undefined,
+                    } as Partial<ProductFilters>)
+                  }
+                />
+                <span className="fs-switch-text">
+                  <span className="fs-switch-label">{feature.label}</span>
+                  <span className="fs-switch-hint">{feature.hint}</span>
+                </span>
+              </label>
+            );
+          })}
+        </div>,
+      )}
+
+      {onApply && (
+        <div className="fs-apply">
+          <button type="button" className="fs-apply-btn" onClick={onApply}>
+            Ver {resultCount ?? 0}{" "}
+            {resultCount === 1 ? "anuncio" : "anuncios"}
+          </button>
+        </div>
+      )}
+
     </aside>
   );
 }

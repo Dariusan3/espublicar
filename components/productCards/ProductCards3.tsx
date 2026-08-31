@@ -7,6 +7,7 @@ import AddToCart from "../common/AddToCart";
 import AddToWishlist from "../common/AddToWishlist";
 import AddToQuickview from "../common/AddToQuickview";
 import { Product, ProductDB } from "@/types/Types";
+import { formatPrice } from "@/helpers/common";
 
 export default function ProductCards3({ product }: { product: Product }) {
   const {
@@ -98,11 +99,11 @@ export default function ProductCards3({ product }: { product: Product }) {
           </div>
           <p className="price-wrap fw-medium">
             <span className="new-price price-text fw-medium">
-              €{product.price.toFixed(3)}
+              {formatPrice(product.price)}
             </span>
             {product.oldprice && (
               <span className="old-price body-md-2 text-main-2">
-                €{product.oldprice.toFixed(3)}
+                {formatPrice(product.oldprice)}
               </span>
             )}
           </p>

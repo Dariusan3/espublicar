@@ -9,6 +9,7 @@ import AddToWishlist from "../common/AddToWishlist";
 import AddToQuickview from "../common/AddToQuickview";
 import { useState } from "react";
 import CountdownTimer from "../common/Countdown";
+import { formatPrice } from "@/helpers/common";
 
 interface Product {
   id: string | number;
@@ -99,7 +100,7 @@ const ProductCard2 = ({
         {product.discount && (
           <div className="box-sale-wrap style-2 z-5">
             <p className="small-text">Save</p>
-            <p className="title-sidebar-2">€{product.discount.toFixed(3)}</p>
+            <p className="title-sidebar-2">{formatPrice(product.discount)}</p>
           </div>
         )}
       </div>
@@ -142,11 +143,11 @@ const ProductCard2 = ({
           <div className="group-btn">
             <p className="price-wrap fw-medium">
               <span className="new-price h4 fw-normal text-primary mb-0">
-                €{product.price.toFixed(3)}
+                {formatPrice(product.price)}
               </span>
               {product.oldprice && (
                 <span className="old-price price-text text-main-2">
-                  €{product.oldprice.toFixed(3)}
+                  {formatPrice(product.oldprice)}
                 </span>
               )}
             </p>
