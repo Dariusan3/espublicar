@@ -51,6 +51,7 @@ export default function ProductCards3({ product }: { product: Product }) {
           <li>
             <AddToQuickview
               productId={product.id}
+              product={product}
               tooltipClass="tooltip-left"
             />
           </li>

@@ -157,7 +157,7 @@ const ProductCard2 = ({
                 <AddToWishlist productId={product.id} />
               </li>
               <li>
-                <AddToQuickview productId={product.id} />
+                <AddToQuickview productId={product.id} product={product} />
               </li>
               <li>
                 

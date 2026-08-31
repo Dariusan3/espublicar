@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useContextElement } from "@/context/Context";
+import { formatPrice } from "@/helpers/common";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
@@ -11,7 +12,6 @@ import type { Swiper as SwiperType } from "swiper";
 export default function Quickview() {
   const [quickviewImages, setQuickviewImages] = useState<string[]>([]);
   const [thumbSwiper, setThumbSwiper] = useState<SwiperType | null>(null);
-  const [quantity, setQuantity] = useState(1); // Initial quantity is 1
   const { quickViewItem, addProductToCart, isAddedToCartProducts } =
     useContextElement();
   useEffect(() => {
@@ -23,9 +23,9 @@ export default function Quickview() {
     setQuickviewImages(images);
   }, [quickViewItem]);
 
-  // Nothing to preview until a card opens the modal.
-  if (!quickViewItem) return null;
-
+  // The shell always stays mounted: Bootstrap's data-api resolves #quickView on
+  // click, and a missing target throws "Cannot read properties of undefined
+  // (reading 'backdrop')". Only the contents wait for a product.
   return (
     <div
       className="modal fade modalCentered modal-def modal-quick-view"
@@ -37,6 +37,8 @@ export default function Quickview() {
             className="icon-close icon-close-popup link"
             data-bs-dismiss="modal"
           />
+          {!quickViewItem ? null : (
+            <>
           <div className="quickview-image">
             <div className="product-thumb-slider">
               <Swiper
@@ -103,169 +105,131 @@ export default function Quickview() {
             <div className="quickview-info-inner">
               <div className="tf-product-info-content">
                 <div className="infor-heading">
-                  <p className="caption">
-                    Categories:
-                    <Link
-                      href={`/shop-default`}
-                      className="link text-secondary"
-                    >
-                      Consumer Electronics
-                    </Link>
-                  </p>
+                  {quickViewItem.category && (
+                    <p className="caption">
+                      <Link
+                        href={`/shop-default?category=${encodeURIComponent(
+                          quickViewItem.category,
+                        )}`}
+                        className="link text-secondary"
+                      >
+                        {quickViewItem.category}
+                      </Link>
+                    </p>
+                  )}
                   <h5 className="product-info-name fw-semibold">
-                    <Link
-                      href={`/product/${quickViewItem.id}`}
-                      className="link"
-                    >
-                      {quickViewItem.title ??
-                        `Elite Gourmet EKT1001B Electric BPA-Free Glass Kettle,
-                      Cordless 360° Base`}
+                    <Link href={`/product/${quickViewItem.id}`} className="link">
+                      {quickViewItem.title}
                     </Link>
                   </h5>
                   <ul className="product-info-rate-wrap">
-                    <li className="star-review">
-                      <ul className="list-star">
-                        <li>
-                          <i className="icon-star" />
-                        </li>
-                        <li>
-                          <i className="icon-star" />
-                        </li>
-                        <li>
-                          <i className="icon-star" />
-                        </li>
-                        <li>
-                          <i className="icon-star" />
-                        </li>
-                        <li>
-                          <i className="icon-star text-main-4" />
-                        </li>
-                      </ul>
-                      <p className="caption text-main-2">Reviews (1.738)</p>
-                    </li>
-                    <li>
-                      <p className="caption text-main-2">Sold: 349</p>
-                    </li>
-                    <li className="d-flex">
-                      <Link
-                        href={`/shop-default`}
-                        className="caption text-secondary link"
-                      >
-                        View shop
-                      </Link>
-                    </li>
+                    {quickViewItem.rating ? (
+                      <li className="star-review">
+                        <ul className="list-star">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <li key={star}>
+                              <i
+                                className={`icon-star ${
+                                  star <= Math.round(quickViewItem.rating)
+                                    ? ""
+                                    : "text-main-4"
+                                }`}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ) : null}
+                    {quickViewItem.location && (
+                      <li>
+                        <p className="caption text-main-2">
+                          {quickViewItem.location}
+                        </p>
+                      </li>
+                    )}
+                    {quickViewItem.userId && (
+                      <li className="d-flex">
+                        <Link
+                          href={`/seller/${quickViewItem.userId}`}
+                          className="caption text-secondary link"
+                        >
+                          Ver vendedor
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </div>
                 <div className="infor-center">
                   <div className="product-info-price">
                     <h4 className="text-primary">
-                      €{quickViewItem.price.toFixed(2)}
+                      {formatPrice(quickViewItem.price)}
                     </h4>
                     {quickViewItem.oldprice && (
                       <span className="price-text text-main-2 old-price">
-                        €{quickViewItem.oldprice.toFixed(2)}
+                        {formatPrice(quickViewItem.oldprice)}
                       </span>
                     )}
                   </div>
                   <ul className="product-fearture-list">
-                    <li>
-                      <p className="body-md-2 fw-semibold">Brand</p>
-                      <span className="body-text-3">Elite Gourmet</span>
-                    </li>
-                    <li>
-                      <p className="body-md-2 fw-semibold">Capacity</p>
-                      <span className="body-text-3">1 Liters</span>
-                    </li>
-                    <li>
-                      <p className="body-md-2 fw-semibold">Material</p>
-                      <span className="body-text-3">Glass</span>
-                    </li>
-                    <li>
-                      <p className="body-md-2 fw-semibold">Wattage</p>
-                      <span className="body-text-3">1100 watts</span>
-                    </li>
+                    {quickViewItem.condition && (
+                      <li>
+                        <p className="body-md-2 fw-semibold">Estado</p>
+                        <span className="body-text-3">
+                          {quickViewItem.condition}
+                        </span>
+                      </li>
+                    )}
+                    {quickViewItem.location && (
+                      <li>
+                        <p className="body-md-2 fw-semibold">Ubicación</p>
+                        <span className="body-text-3">
+                          {quickViewItem.location}
+                        </span>
+                      </li>
+                    )}
+                    {quickViewItem.isNegotiable && (
+                      <li>
+                        <p className="body-md-2 fw-semibold">Precio</p>
+                        <span className="body-text-3">Negociable</span>
+                      </li>
+                    )}
                   </ul>
                 </div>
-                <div className="infor-bottom">
-                  <h6 className="fw-semibold">About this item</h6>
-                  <ul className="product-about-list">
-                    <li>
-                      <p className="body-text-3">
-                        Here’s the quickest way to enjoy your delicious hot tea
-                        every single day.
-                      </p>
-                    </li>
-                    <li>
-                      <p className="body-text-3">
-                        100% BPA - Free premium design meets excellent
-                      </p>
-                    </li>
-                    <li>
-                      <p className="body-text-3">
-                        So easy convenient that everyone can use it
-                      </p>
-                    </li>
-                    <li>
-                      <p className="body-text-3">
-                        This powerful 900-1100-Watt kettle has convenient
-                        capacity markings on the body lets you accurately
-                      </p>
-                    </li>
-                    <li>
-                      <p className="body-text-3">
-                        1 year limited warranty and us-based customer support
-                        team lets you buy with confidence.
-                      </p>
-                    </li>
-                    <li>
-                      <p className="body-text-3">
-                        It’s very thin—7.45mm / 0.29″—and starts at just 465g /
-                        1.03lbs, thanks to an aluminum chassis that’s both
-                        lightweight and durable.
-                      </p>
-                    </li>
-                  </ul>
-                </div>
+                {quickViewItem.description && (
+                  <div className="infor-bottom">
+                    <h6 className="fw-semibold">Descripción</h6>
+                    <p className="body-text-3">
+                      {String(quickViewItem.description).slice(0, 320)}
+                      {String(quickViewItem.description).length > 320 ? "…" : ""}
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="box-quantity-wrap">
-                <div className="wg-quantity">
-                  <span
-                    className="btn-quantity minus-btn"
-                    onClick={() =>
-                      setQuantity((pre) => (pre == 1 ? pre : pre - 1))
-                    }
-                  >
-                    <i className="icon-minus" />
-                  </span>
-                  <input
-                    className="quantity-product"
-                    type="text"
-                    name="number"
-                    readOnly
-                    value={quantity}
-                  />
-                  <span
-                    className="btn-quantity plus-btn"
-                    onClick={() => setQuantity((pre) => pre + 1)}
-                  >
-                    <i className="icon-plus" />
-                  </span>
-                </div>
+                <Link
+                  href={`/product/${quickViewItem.id}`}
+                  className="tf-btn"
+                  data-bs-dismiss="modal"
+                >
+                  <span className="text-white">Ver anuncio</span>
+                </Link>
                 <a
                   href="#shoppingCart"
                   className="tf-btn btn-gray"
                   data-bs-toggle="offcanvas"
-                  onClick={() => addProductToCart(quickViewItem.id, quantity)}
+                  onClick={() => addProductToCart(quickViewItem.id, 1)}
                 >
                   <span className="text-white">
                     {isAddedToCartProducts(quickViewItem.id)
-                      ? "Already Added"
-                      : "Add To Cart"}
+                      ? "Ya está en el carrito"
+                      : "Añadir al carrito"}
                   </span>
                 </a>
               </div>
             </div>
           </div>
+            </>
+          )}
         </div>
       </div>
     </div>
