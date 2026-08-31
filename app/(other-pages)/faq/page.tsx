@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Header1 from "@/components/headers/Header1";
 import Footer1 from "@/components/footers/Footer1";
+import BackLink from "@/components/common/BackLink";
 
 type FAQ = { q: string; a: React.ReactNode };
 
@@ -182,11 +183,7 @@ export default function Page() {
       <Header1 />
       <section className="legal-v2">
         <div className="legal-v2-container">
-          <nav className="pd-v2-breadcrumb" aria-label="Navegación" style={{ marginBottom: "var(--space-6)" }}>
-            <Link href="/">Inicio</Link>
-            <span className="pd-v2-breadcrumb-sep">›</span>
-            <span>Preguntas frecuentes</span>
-          </nav>
+          <BackLink />
 
           <header className="legal-v2-header">
             <span className="legal-v2-eyebrow">Centro de ayuda</span>

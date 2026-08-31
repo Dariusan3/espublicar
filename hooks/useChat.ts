@@ -67,13 +67,22 @@ const useChat = () => {
       conversationId: string,
       senderId: string,
       text: string,
+      /** "offer" renders as a card in the thread and links back to the offer. */
+      options?: { type?: "text" | "offer"; offerId?: string },
     ): Promise<HookResponse> => {
       try {
         const result = await db.createDocument(
           DB_ID,
           COLLECTIONS.MESSAGES,
           ID.unique(),
-          { conversationId, senderId, text, isRead: false },
+          {
+            conversationId,
+            senderId,
+            text,
+            isRead: false,
+            type: options?.type ?? "text",
+            ...(options?.offerId ? { offerId: options.offerId } : {}),
+          },
         );
 
         await db.updateDocument(

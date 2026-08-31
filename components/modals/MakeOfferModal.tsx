@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import useOffers from "@/hooks/useOffers";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import useChat from "@/hooks/useChat";
 
 interface MakeOfferModalProps {
   productId: string;
@@ -23,6 +24,7 @@ export default function MakeOfferModal({
 }: MakeOfferModalProps) {
   const { user } = useAuth();
   const { makeOffer } = useOffers();
+  const { startConversation, sendMessage } = useChat();
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,6 +52,27 @@ export default function MakeOfferModal({
         message,
       );
       if (result.success) {
+        // Mirror the offer into the chat thread so the seller sees the amount
+        // where the conversation happens, not only in the offers list.
+        try {
+          const conversation = await startConversation(
+            user.$id,
+            sellerId,
+            productId,
+          );
+          if (conversation.success && conversation.data) {
+            const body = message.trim()
+              ? `Oferta de ${offerAmount} € por ${productTitle}. ${message.trim()}`
+              : `Oferta de ${offerAmount} € por ${productTitle}`;
+            await sendMessage(conversation.data.id, user.$id, body, {
+              type: "offer",
+              offerId: (result.data as any)?.id,
+            });
+          }
+        } catch (chatError) {
+          console.error("Offer sent but chat message failed:", chatError);
+        }
+
         toast.success("¡Oferta enviada al vendedor!");
         onSuccess?.();
         onClose();

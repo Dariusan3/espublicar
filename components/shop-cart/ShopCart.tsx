@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import useCart from "@/hooks/useCart";
 import { useAuth } from "@/context/AuthContext";
-import { formatCurrency } from "@/helpers/common";
+import { formatPrice } from "@/helpers/common";
 
 export default function ShopCart() {
   const { user } = useAuth();
@@ -164,12 +164,12 @@ export default function ShopCart() {
                             {/* Price */}
                             <div className="text-end">
                               <div className="fw-bold text-dark fs-5">
-                                {formatCurrency(
+                                {formatPrice(
                                   (item.productPrice || 0) * item.quantity,
                                 )}
                               </div>
                               <div className="text-muted small">
-                                {formatCurrency(item.productPrice || 0)} / unid.
+                                {formatPrice(item.productPrice || 0)} / unid.
                               </div>
                             </div>
                           </div>
@@ -213,7 +213,7 @@ export default function ShopCart() {
 
                 <div className="d-flex justify-content-between mb-3 text-muted">
                   <span>Subtotal ({cart.items.length} items)</span>
-                  <span>{formatCurrency(cartTotal)}</span>
+                  <span>{formatPrice(cartTotal)}</span>
                 </div>
                 <div className="d-flex justify-content-between mb-4 text-muted">
                   <span>Envío estimado</span>
@@ -226,7 +226,7 @@ export default function ShopCart() {
                 <div className="d-flex justify-content-between mb-4 pt-2">
                   <span className="fw-bold fs-5 text-dark">Total</span>
                   <span className="fw-bold fs-4 text-primary">
-                    {formatCurrency(cartTotal)}
+                    {formatPrice(cartTotal)}
                   </span>
                 </div>
 

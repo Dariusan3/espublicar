@@ -451,3 +451,115 @@
     cursor: not-allowed;
   }
 }
+
+/* ---------- Offer card inside a thread ---------- */
+
+.chat-offer {
+  min-width: 220px;
+  max-width: 320px;
+  padding: var(--space-4);
+  border: 1px solid var(--brand-100);
+  border-radius: var(--radius-lg);
+  background: var(--brand-50);
+}
+
+.chat-offer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.chat-offer-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-700);
+}
+
+.chat-offer-status {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--surface);
+  color: var(--ink-2);
+
+  &.is-accepted {
+    background: var(--success-bg);
+    color: var(--success);
+  }
+
+  &.is-rejected {
+    background: var(--danger-bg);
+    color: var(--danger);
+  }
+
+  &.is-pending {
+    background: var(--warn-bg);
+    color: #92400e;
+  }
+}
+
+.chat-offer-amount {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.chat-offer-note {
+  margin: var(--space-2) 0 0;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.chat-offer-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.chat-offer-accept,
+.chat-offer-reject {
+  flex: 1;
+  height: 40px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+}
+
+.chat-offer-accept {
+  border: 0;
+  background: var(--brand);
+  color: #fff;
+
+  &:hover {
+    background: var(--brand-600);
+  }
+}
+
+.chat-offer-reject {
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  color: var(--ink-2);
+
+  &:hover {
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+}
+
+.chat-v2-msg.is-me .chat-offer {
+  margin-left: auto;
+}

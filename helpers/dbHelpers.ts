@@ -202,6 +202,8 @@ export const toMessage = (doc: DocumentData): Message => ({
   senderId: doc.senderId,
   text: doc.text,
   isRead: doc.isRead ?? false,
+  type: doc.type ?? "text",
+  offerId: doc.offerId ?? null,
 });
 
 /**

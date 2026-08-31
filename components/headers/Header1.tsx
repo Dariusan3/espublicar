@@ -6,6 +6,8 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import NotificationBell from "@/components/common/NotificationBell";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 
 export default function Header1() {
   const { user, logout } = useAuth();
@@ -14,6 +16,7 @@ export default function Header1() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const cartCount = useSelector((state: RootState) => state.cart.itemCount);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -101,6 +104,26 @@ export default function Header1() {
 
           {/* Notifications (logged in) */}
           {user && <NotificationBell />}
+
+          {/* Cart */}
+          <Link
+            href="/shop-cart"
+            className="header-icon-btn header-cart"
+            aria-label={
+              cartCount > 0
+                ? `Carrito, ${cartCount} artículos`
+                : "Carrito, vacío"
+            }
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="20" r="1.4" />
+              <circle cx="18" cy="20" r="1.4" />
+              <path d="M2 3h2.2l2.3 12.1a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21 7H5.2" />
+            </svg>
+            {cartCount > 0 && (
+              <span className="header-cart-badge">{cartCount}</span>
+            )}
+          </Link>
 
           {/* Wishlist heart */}
           <Link href="/wishlist" className="header-icon-btn" aria-label="Favoritos">

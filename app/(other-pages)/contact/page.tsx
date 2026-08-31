@@ -4,6 +4,7 @@ import Link from "next/link";
 import Header1 from "@/components/headers/Header1";
 import Footer1 from "@/components/footers/Footer1";
 import { toast } from "react-toastify";
+import BackLink from "@/components/common/BackLink";
 
 export default function Page() {
   const [form, setForm] = useState({
@@ -39,11 +40,7 @@ export default function Page() {
       <Header1 />
       <section className="legal-v2">
         <div className="legal-v2-container" style={{ maxWidth: "1040px" }}>
-          <nav className="pd-v2-breadcrumb" aria-label="Navegación" style={{ marginBottom: "var(--space-6)" }}>
-            <Link href="/">Inicio</Link>
-            <span className="pd-v2-breadcrumb-sep">›</span>
-            <span>Contacto</span>
-          </nav>
+          <BackLink />
 
           <header className="legal-v2-header">
             <span className="legal-v2-eyebrow">¿Hablamos?</span>

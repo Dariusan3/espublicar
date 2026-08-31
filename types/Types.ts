@@ -217,6 +217,9 @@ export interface MessageDB {
   senderId: string;
   text: string;
   isRead: boolean;
+  /** "offer" messages render as an offer card and carry offerId. */
+  type?: "text" | "offer";
+  offerId?: string | null;
 }
 
 export interface Message extends MessageDB {

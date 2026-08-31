@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import MakeOfferModal from "@/components/modals/MakeOfferModal";
 import ReportModal from "@/components/modals/ReportModal";
 import Slider1 from "./sliders/Slider1";
+import BackLink from "@/components/common/BackLink";
 
 function timeAgo(dateStr?: string) {
   if (!dateStr) return "";
@@ -106,15 +107,7 @@ export default function Details1({ product }: { product: any }) {
     <section className="pd-v2">
       <div className="pd-v2-container">
         {/* Breadcrumb */}
-        <nav className="pd-v2-breadcrumb" aria-label="Navegación">
-          <Link href="/">Inicio</Link>
-          <span className="pd-v2-breadcrumb-sep">›</span>
-          <Link href={`/shop-default?category=${encodeURIComponent(product.category || "")}`}>
-            {product.category || "Categoría"}
-          </Link>
-          <span className="pd-v2-breadcrumb-sep">›</span>
-          <span>{product.title}</span>
-        </nav>
+        <BackLink />
 
         <div className="pd-v2-grid">
           {/* Left: Gallery */}

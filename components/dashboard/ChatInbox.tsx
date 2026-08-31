@@ -5,6 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 import useChat from "@/hooks/useChat";
 import useProducts from "@/hooks/useProducts";
 import useUser from "@/hooks/useUser";
+import useOffers from "@/hooks/useOffers";
+import { formatPrice } from "@/helpers/common";
 import { Conversation, Message, Product } from "@/types/Types";
 import { useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
@@ -37,6 +39,7 @@ function dayLabel(dateStr: string) {
 export default function ChatInbox() {
   const { user } = useAuth();
   const { getMyConversations, getMessages, sendMessage } = useChat();
+  const { getMyOffers, getOffersForSeller, respondToOffer } = useOffers();
   const { getProductById } = useProducts();
   const { getUserById } = useUser();
   const searchParams = useSearchParams();
@@ -50,6 +53,7 @@ export default function ChatInbox() {
   const [searchQuery, setSearchQuery] = useState("");
   const [productCache, setProductCache] = useState<Record<string, Product>>({});
   const [nameCache, setNameCache] = useState<Record<string, string>>({});
+  const [offerById, setOfferById] = useState<Record<string, any>>({});
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -113,6 +117,52 @@ export default function ChatInbox() {
     const interval = setInterval(load, 5000);
     return () => clearInterval(interval);
   }, [selected, getMessages]);
+
+  // Offers referenced by the thread, so a card can show the live amount and
+  // status instead of the sentence frozen at send time.
+  useEffect(() => {
+    if (!user) return;
+    const ids = messages
+      .filter((m) => m.type === "offer" && m.offerId)
+      .map((m) => m.offerId as string);
+    if (ids.length === 0) return;
+    if (ids.every((id) => offerById[id])) return;
+
+    const load = async () => {
+      const [mine, received] = await Promise.all([
+        getMyOffers(user.$id),
+        getOffersForSeller(user.$id),
+      ]);
+      const map: Record<string, any> = {};
+      [...(mine.data || []), ...(received.data || [])].forEach((offer: any) => {
+        map[offer.id] = offer;
+      });
+      setOfferById((prev) => ({ ...prev, ...map }));
+    };
+    load();
+  }, [messages, user, getMyOffers, getOffersForSeller, offerById]);
+
+  const handleOfferResponse = async (
+    offerId: string,
+    status: "accepted" | "rejected",
+  ) => {
+    const res = await respondToOffer(offerId, status);
+    if (!res.success) {
+      toast.error(res.message || "No se pudo responder a la oferta");
+      return;
+    }
+    setOfferById((prev) => ({ ...prev, [offerId]: res.data }));
+    toast.success(status === "accepted" ? "Oferta aceptada" : "Oferta rechazada");
+    if (selected && user) {
+      const note =
+        status === "accepted"
+          ? "He aceptado tu oferta."
+          : "He rechazado tu oferta.";
+      await sendMessage(selected.id, user.$id, note);
+      const res2 = await getMessages(selected.id);
+      if (res2.success) setMessages(res2.data);
+    }
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -290,18 +340,87 @@ export default function ChatInbox() {
                   </div>
                   {group.items.map((msg) => {
                     const isMe = msg.senderId === user.$id;
+                    const offer = msg.offerId ? offerById[msg.offerId] : null;
+                    const time = new Date(msg.createdAt).toLocaleTimeString(
+                      "es-ES",
+                      { hour: "2-digit", minute: "2-digit" },
+                    );
+
+                    if (msg.type === "offer") {
+                      const amount = offer?.amount;
+                      const status = offer?.status ?? "pending";
+                      const canRespond = !isMe && status === "pending";
+                      return (
+                        <div
+                          key={msg.id}
+                          className={`chat-v2-msg ${isMe ? "is-me" : ""}`}
+                        >
+                          <div className="chat-offer">
+                            <div className="chat-offer-head">
+                              <span className="chat-offer-label">
+                                {isMe ? "Tu oferta" : "Oferta recibida"}
+                              </span>
+                              <span
+                                className={`chat-offer-status is-${status}`}
+                              >
+                                {status === "accepted"
+                                  ? "Aceptada"
+                                  : status === "rejected"
+                                    ? "Rechazada"
+                                    : status === "countered"
+                                      ? "Contraofertada"
+                                      : "Pendiente"}
+                              </span>
+                            </div>
+                            <p className="chat-offer-amount">
+                              {amount !== undefined
+                                ? formatPrice(amount)
+                                : msg.text}
+                            </p>
+                            {offer?.message && (
+                              <p className="chat-offer-note">{offer.message}</p>
+                            )}
+                            {canRespond && (
+                              <div className="chat-offer-actions">
+                                <button
+                                  type="button"
+                                  className="chat-offer-accept"
+                                  onClick={() =>
+                                    handleOfferResponse(
+                                      msg.offerId as string,
+                                      "accepted",
+                                    )
+                                  }
+                                >
+                                  Aceptar
+                                </button>
+                                <button
+                                  type="button"
+                                  className="chat-offer-reject"
+                                  onClick={() =>
+                                    handleOfferResponse(
+                                      msg.offerId as string,
+                                      "rejected",
+                                    )
+                                  }
+                                >
+                                  Rechazar
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          <span className="chat-v2-msg-time">{time}</span>
+                        </div>
+                      );
+                    }
+
                     return (
                       <div
                         key={msg.id}
                         className={`chat-v2-msg ${isMe ? "is-me" : ""}`}
                       >
                         <div className="chat-v2-bubble">{msg.text}</div>
-                        <span className="chat-v2-msg-time">
-                          {new Date(msg.createdAt).toLocaleTimeString("es-ES", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </span>
+                        <span className="chat-v2-msg-time">{time}</span>
                       </div>
                     );
                   })}
