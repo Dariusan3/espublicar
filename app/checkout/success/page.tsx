@@ -5,18 +5,56 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Header1 from "@/components/headers/Header1";
 import Footer1 from "@/components/footers/Footer1";
 import useCart from "@/hooks/useCart";
+import { db, DB_ID, COLLECTIONS } from "@/lib/supabase";
 
 export default function CheckoutSuccessPage() {
   const router = useRouter();
   const params = useSearchParams();
   const orderId = params.get("order_id");
+  const sessionId = params.get("session_id");
   const { clearMyCart } = useCart();
   const [cleared, setCleared] = useState(false);
+  const [paid, setPaid] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (cleared) return;
     clearMyCart().finally(() => setCleared(true));
   }, [cleared, clearMyCart]);
+
+  // Stripe redirects back without telling the app anything trustworthy, so ask
+  // Stripe directly and only then mark the order paid. RLS keeps this write to
+  // the buyer's own order, which is why it happens here and not in the route.
+  useEffect(() => {
+    if (!sessionId || paid !== null) return;
+    let cancelled = false;
+
+    const confirm = async () => {
+      try {
+        const res = await fetch(
+          `/api/checkout/confirm?session_id=${encodeURIComponent(sessionId)}`,
+        );
+        const data = await res.json();
+        if (cancelled) return;
+        setPaid(!!data.paid);
+
+        const targetOrder = orderId || data.orderId;
+        if (data.paid && targetOrder) {
+          await db.updateDocument(DB_ID, COLLECTIONS.ORDERS, targetOrder, {
+            status: "processing",
+            paymentStatus: "paid",
+          });
+        }
+      } catch (error) {
+        console.error("Could not confirm payment:", error);
+        if (!cancelled) setPaid(false);
+      }
+    };
+
+    confirm();
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionId, orderId, paid]);
 
   return (
     <>
@@ -40,10 +78,13 @@ export default function CheckoutSuccessPage() {
             </svg>
           </div>
 
-          <h1 className="legal-v2-title">¡Pago recibido!</h1>
+          <h1 className="legal-v2-title">
+            {paid === false ? "Pago pendiente" : "¡Pago recibido!"}
+          </h1>
           <p className="legal-v2-lead" style={{ marginInline: "auto" }}>
-            Tu pedido ha sido confirmado. El vendedor preparará el envío en las
-            próximas 48 horas.
+            {paid === false
+              ? "Aún no hemos podido confirmar el cobro. Si el importe se ha cargado, tu pedido se actualizará en unos minutos."
+              : "Tu pedido ha sido confirmado. El vendedor preparará el envío en las próximas 48 horas."}
           </p>
 
           {orderId && (
