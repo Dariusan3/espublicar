@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { account, supabase } from '@/lib/supabase';
+import { account, supabase, clearSkewedSession } from '@/lib/supabase';
 
 /**
  * Normalized user shape exposed to the app. Mirrors the fields the UI reads
@@ -81,7 +81,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Check the session on mount and keep it in sync with Supabase auth events.
   useEffect(() => {
-    checkUser();
+    // A token minted ahead of real time makes every request fail with
+    // "JWT issued at future"; drop it before trying to restore the session.
+    clearSkewedSession().finally(checkUser);
     const { data: sub } = supabase.auth.onAuthStateChange(() => {
       checkUser();
     });
