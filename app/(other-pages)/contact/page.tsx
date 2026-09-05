@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import Header1 from "@/components/headers/Header1";
-import Footer1 from "@/components/footers/Footer1";
+import SiteHeader from "@/components/headers/SiteHeader";
+import SiteFooter from "@/components/footers/SiteFooter";
 import { toast } from "react-toastify";
 import BackLink from "@/components/common/BackLink";
 
@@ -37,7 +37,7 @@ export default function Page() {
 
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <section className="legal-v2">
         <div className="legal-v2-container" style={{ maxWidth: "1040px" }}>
           <BackLink />
@@ -151,7 +151,7 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

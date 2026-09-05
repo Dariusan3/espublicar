@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
-import Header1 from "@/components/headers/Header1";
-import Footer1 from "@/components/footers/Footer1";
+import SiteHeader from "@/components/headers/SiteHeader";
+import SiteFooter from "@/components/footers/SiteFooter";
 
 export default function AdminLayout({
   children,
@@ -11,7 +11,7 @@ export default function AdminLayout({
 }) {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <section className="flat-spacing-11">
         <div className="container">
           <div className="row">
@@ -24,7 +24,7 @@ export default function AdminLayout({
           </div>
         </div>
       </section>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

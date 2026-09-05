@@ -62,7 +62,7 @@ export default function Login() {
                 Has iniciado sesión como <strong>{user.email}</strong>
               </p>
               <a
-                href="/my-account"
+                href="/mi-cuenta"
                 className="tf-btn w-100 text-white mt-4"
                 data-bs-dismiss="modal"
               >

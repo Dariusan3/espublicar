@@ -18,7 +18,9 @@
     right: 0;
     height: calc(64px + env(safe-area-inset-bottom, 0));
     padding: 0 var(--space-2) env(safe-area-inset-bottom, 0);
-    @include glass($blur: 16px);
+    background: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
     border-top: 1px solid var(--line);
     z-index: 90;
     align-items: stretch;
@@ -97,7 +99,6 @@
 .mobile-menu-v2.offcanvas {
   width: 88vw;
   max-width: 360px;
-  @include glass($blur: 20px);
   background: var(--surface);
   border-left: 1px solid var(--line);
 }

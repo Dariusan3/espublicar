@@ -1,6 +1,6 @@
 import AddProduct from "@/components/dashboard/AddProduct";
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
+import SiteFooter from "@/components/footers/SiteFooter";
+import SiteHeader from "@/components/headers/SiteHeader";
 import React from "react";
 
 export const metadata = {
@@ -11,11 +11,11 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <main className="publicar-v2-page">
         <AddProduct />
       </main>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

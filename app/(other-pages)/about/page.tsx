@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import Header1 from "@/components/headers/Header1";
-import Footer1 from "@/components/footers/Footer1";
+import SiteHeader from "@/components/headers/SiteHeader";
+import SiteFooter from "@/components/footers/SiteFooter";
 import BackLink from "@/components/common/BackLink";
 
 export const metadata = {
@@ -13,7 +13,7 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <section className="legal-v2">
         <div className="legal-v2-container">
           <BackLink />
@@ -139,7 +139,7 @@ export default function Page() {
           </article>
         </div>
       </section>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

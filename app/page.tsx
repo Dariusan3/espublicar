@@ -1,10 +1,10 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
-import Hero from "@/components/homes/home-1/Hero";
-import Categories from "@/components/homes/home-1/Categories";
-import Products1 from "@/components/homes/home-1/Products1";
-import HowItWorks from "@/components/homes/home-1/HowItWorks";
-import Products3 from "@/components/homes/home-1/Products3";
+import SiteFooter from "@/components/footers/SiteFooter";
+import SiteHeader from "@/components/headers/SiteHeader";
+import Hero from "@/components/home/Hero";
+import Categories from "@/components/home/Categories";
+import NearbyListings from "@/components/home/NearbyListings";
+import HowItWorks from "@/components/home/HowItWorks";
+import LatestListings from "@/components/home/LatestListings";
 
 export const metadata = {
   title: "espublicar — Compra y vende de segunda mano",
@@ -14,13 +14,13 @@ export const metadata = {
 export default function Home() {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <Hero />
       <Categories />
-      <Products1 />
+      <NearbyListings />
       <HowItWorks />
-      <Products3 />
-      <Footer1 />
+      <LatestListings />
+      <SiteFooter />
     </>
   );
 }

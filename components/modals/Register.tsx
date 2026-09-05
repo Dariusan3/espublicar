@@ -91,7 +91,7 @@ export default function Register() {
       toast.success("¡Registro exitoso! Bienvenido a espublicar");
 
       setTimeout(() => {
-        window.location.href = "/my-account";
+        window.location.href = "/mi-cuenta";
       }, 1000);
     } catch (err: any) {
       setError("Error: " + err.message);

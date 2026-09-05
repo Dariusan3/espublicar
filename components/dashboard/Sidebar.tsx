@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
@@ -102,22 +103,23 @@ interface SidebarProps {
 export default function Sidebar({ counts = {} }: SidebarProps) {
   const { logout, user } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
 
   const initial = user?.name?.charAt(0).toUpperCase() || "U";
 
   const main = [
-    { name: "Resumen", href: "/my-account", Icon: IconHome },
-    { name: "Mis anuncios", href: "/my-account-listings", Icon: IconGrid, count: counts.listings },
-    { name: "Mensajes", href: "/my-account-messages", Icon: IconMessage, count: counts.messages, countBrand: true },
-    { name: "Compras", href: "/my-account-orders", Icon: IconBag, count: counts.orders },
-    { name: "Mis ofertas", href: "/my-account-offers", Icon: IconTag, count: counts.offers },
-    { name: "Favoritos", href: "/wishlist", Icon: IconHeart, count: counts.wishlist },
-    { name: "Notificaciones", href: "/my-account-notifications", Icon: IconBell, count: counts.notifications, countBrand: true },
+    { name: "Resumen", href: "/mi-cuenta", Icon: IconHome },
+    { name: "Mis anuncios", href: "/mi-cuenta/anuncios", Icon: IconGrid, count: counts.listings },
+    { name: "Mensajes", href: "/mi-cuenta/mensajes", Icon: IconMessage, count: counts.messages, countBrand: true },
+    { name: "Compras", href: "/mi-cuenta/pedidos", Icon: IconBag, count: counts.orders },
+    { name: "Mis ofertas", href: "/mi-cuenta/ofertas", Icon: IconTag, count: counts.offers },
+    { name: "Favoritos", href: "/mi-cuenta/favoritos", Icon: IconHeart, count: counts.wishlist },
+    { name: "Notificaciones", href: "/mi-cuenta/notificaciones", Icon: IconBell, count: counts.notifications, countBrand: true },
   ];
 
   const secondary = [
-    { name: "Direcciones", href: "/my-account-address", Icon: IconPin },
-    { name: "Configuración", href: "/my-account-edit", Icon: IconSettings },
+    { name: "Direcciones", href: "/mi-cuenta/direcciones", Icon: IconPin },
+    { name: "Configuración", href: "/mi-cuenta/ajustes", Icon: IconSettings },
   ];
 
   const renderItem = (item: any) => {
@@ -175,10 +177,14 @@ export default function Sidebar({ counts = {} }: SidebarProps) {
             className="account-nav-item account-nav-item-logout"
             onClick={async () => {
               const result = await logout();
-              if (result.success) {
-                toast.success("Sesión cerrada");
-                setTimeout(() => (window.location.href = "/"), 800);
+              if (!result.success) {
+                toast.error("No se pudo cerrar la sesión");
+                return;
               }
+              // Leave straight away: waiting here re-renders the account with
+              // no session behind it, which is the half-loaded screen users see.
+              toast.success("Sesión cerrada");
+              router.replace("/");
             }}
           >
             <span className="account-nav-icon">

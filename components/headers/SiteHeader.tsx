@@ -9,7 +9,7 @@ import NotificationBell from "@/components/common/NotificationBell";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 
-export default function Header1() {
+export default function SiteHeader() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -126,7 +126,7 @@ export default function Header1() {
           </Link>
 
           {/* Wishlist heart */}
-          <Link href="/wishlist" className="header-icon-btn" aria-label="Favoritos">
+          <Link href="/mi-cuenta/favoritos" className="header-icon-btn" aria-label="Favoritos">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
@@ -154,35 +154,35 @@ export default function Header1() {
                   </div>
                   <div className="header-avatar-menu-divider" />
                   <Link
-                    href="/my-account"
+                    href="/mi-cuenta"
                     className="header-avatar-menu-item"
                     onClick={() => setMenuOpen(false)}
                   >
                     <i className="icon-user"></i> Mi perfil
                   </Link>
                   <Link
-                    href="/my-account-listings"
+                    href="/mi-cuenta/anuncios"
                     className="header-avatar-menu-item"
                     onClick={() => setMenuOpen(false)}
                   >
                     <i className="icon-package"></i> Mis anuncios
                   </Link>
                   <Link
-                    href="/my-account-messages"
+                    href="/mi-cuenta/mensajes"
                     className="header-avatar-menu-item"
                     onClick={() => setMenuOpen(false)}
                   >
                     <i className="icon-message-circle"></i> Mensajes
                   </Link>
                   <Link
-                    href="/wishlist"
+                    href="/mi-cuenta/favoritos"
                     className="header-avatar-menu-item"
                     onClick={() => setMenuOpen(false)}
                   >
                     <i className="icon-heart"></i> Favoritos
                   </Link>
                   <Link
-                    href="/my-account-edit"
+                    href="/mi-cuenta/ajustes"
                     className="header-avatar-menu-item"
                     onClick={() => setMenuOpen(false)}
                   >
@@ -196,7 +196,7 @@ export default function Header1() {
                       const result = await logout();
                       if (result.success) {
                         toast.success("Sesión cerrada");
-                        setTimeout(() => (window.location.href = "/"), 800);
+                        router.replace("/");
                       }
                     }}
                   >

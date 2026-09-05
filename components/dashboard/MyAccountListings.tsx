@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import { EmptyState, SkeletonGrid } from "@/components/common/Skeleton";
 import { formatPrice } from "@/helpers/common";
+import { useConfirm } from "@/components/common/ConfirmDialog";
 
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&auto=format&fit=crop";
@@ -45,6 +46,7 @@ export default function MyAccountListings() {
   const { products, getMyProducts, isLoading, deleteProduct, updateProduct } =
     useProducts();
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const confirm = useConfirm();
 
   useEffect(() => {
     if (user) getMyProducts(user.$id);
@@ -64,9 +66,15 @@ export default function MyAccountListings() {
   }, []);
 
   const handleDelete = async (id: string | number, title: string) => {
-    if (!window.confirm(`¿Eliminar "${title}"? Esta acción es permanente.`)) {
-      return;
-    }
+    const ok = await confirm({
+      title: `¿Eliminar "${title}"?`,
+      description:
+        "El anuncio desaparece de la tienda y no se puede recuperar. Si solo quieres dejar de venderlo por ahora, púsalo en pausa.",
+      confirmLabel: "Eliminar anuncio",
+      cancelLabel: "Volver",
+      tone: "danger",
+    });
+    if (!ok) return;
     const result = await deleteProduct(id.toString());
     if (result.success) {
       toast.success("Anuncio eliminado");

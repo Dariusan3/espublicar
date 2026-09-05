@@ -29,7 +29,7 @@ interface ProductCardProps {
   showSeller?: boolean;
 }
 
-export default function ProductCard1({
+export default function ProductCard({
   product,
   showSeller = false,
 }: ProductCardProps) {

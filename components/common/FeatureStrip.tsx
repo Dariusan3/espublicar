@@ -4,7 +4,7 @@ import React from "react";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-export default function Features2({ fullWidth = false }) {
+export default function FeatureStrip({ fullWidth = false }) {
   return (
     <div className="tf-sp-2 pt-0">
       <div className={`container${fullWidth ? "-full" : ""}`}>

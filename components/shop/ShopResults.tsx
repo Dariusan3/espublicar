@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import FilterSidebar from "@/components/shop/FilterSidebar";
 import useProducts, { ProductFilters } from "@/hooks/useProducts";
-import ProductCards3 from "../productCards/ProductCards3";
+import ShopProductCard from "../productCards/ShopProductCard";
 import { useSearchParams } from "next/navigation";
 import { SkeletonGrid, EmptyState } from "@/components/common/Skeleton";
 
@@ -22,7 +22,7 @@ const FEATURE_LABELS: Partial<Record<keyof ProductFilters, string>> = {
   inStock: "Disponible",
 };
 
-export default function Products1() {
+export default function ShopResults() {
   const { searchProducts, products, totalCount, isLoading } = useProducts();
   const [filters, setFilters] = useState<ProductFilters>({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -244,7 +244,7 @@ export default function Products1() {
                     id="gridLayout"
                   >
                     {products.map((product, i) => (
-                      <ProductCards3
+                      <ShopProductCard
                         key={product.id || i}
                         product={product as any}
                       />

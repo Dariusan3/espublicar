@@ -90,7 +90,7 @@ export default function AddProduct() {
         setImagePreviews(imgs);
       } else {
         toast.error("No se pudo cargar el anuncio");
-        router.push("/my-account-listings");
+        router.push("/mi-cuenta/anuncios");
       }
       setLoadingProduct(false);
     };
@@ -264,7 +264,7 @@ export default function AddProduct() {
 
       if (result.success) {
         toast.success(isEditMode ? "¡Anuncio actualizado!" : "¡Anuncio publicado!");
-        router.push("/my-account-listings");
+        router.push("/mi-cuenta/anuncios");
       } else {
         toast.error(result.message || "Error al publicar");
       }

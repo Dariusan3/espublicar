@@ -6,6 +6,8 @@ import useProducts from "@/hooks/useProducts";
 import { Offer, Product } from "@/types/Types";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { formatPrice } from "@/helpers/common";
+import { EmptyState } from "@/components/common/Skeleton";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("es-ES", {
@@ -15,12 +17,12 @@ function formatDate(dateStr: string) {
   });
 }
 
-const statusLabels: Record<string, { label: string; class: string }> = {
-  pending: { label: "Pendiente", class: "bg-warning text-dark" },
-  accepted: { label: "Aceptada", class: "bg-success" },
-  rejected: { label: "Rechazada", class: "bg-danger" },
-  countered: { label: "Contraoferta", class: "bg-info" },
-  expired: { label: "Expirada", class: "bg-secondary" },
+const statusLabels: Record<string, { label: string; tone: string }> = {
+  pending: { label: "Pendiente", tone: "warn" },
+  accepted: { label: "Aceptada", tone: "success" },
+  rejected: { label: "Rechazada", tone: "danger" },
+  countered: { label: "Contraoferta", tone: "brand" },
+  expired: { label: "Expirada", tone: "neutral" },
 };
 
 export default function MyOffers() {
@@ -94,161 +96,176 @@ export default function MyOffers() {
   };
 
   const offers = tab === "sent" ? sentOffers : receivedOffers;
+  const sent = tab === "sent";
 
   return (
-    <div
-      className="p-4 rounded-4"
-      style={{
-        background: "rgba(255, 255, 255, 0.8)",
-        backdropFilter: "blur(15px)",
-        border: "1px solid rgba(255,255,255,0.4)",
-        boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.07)",
-      }}
-    >
-      <h4 className="fw-bold mb-4">
-        <i className="icon-tag me-2 text-primary"></i>
-        Mis Ofertas
-      </h4>
+    <div className="offers-v2">
+      <h4 className="orders-v2-heading">Mis ofertas</h4>
 
-      {/* Tabs */}
-      <ul className="nav nav-pills mb-4 gap-2">
-        <li className="nav-item">
-          <button
-            className={`nav-link rounded-pill ${tab === "received" ? "active" : ""}`}
-            onClick={() => setTab("received")}
-          >
-            Recibidas ({receivedOffers.length})
-          </button>
-        </li>
-        <li className="nav-item">
-          <button
-            className={`nav-link rounded-pill ${tab === "sent" ? "active" : ""}`}
-            onClick={() => setTab("sent")}
-          >
-            Enviadas ({sentOffers.length})
-          </button>
-        </li>
-      </ul>
+      <div className="offers-v2-tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={!sent}
+          className={`offers-v2-tab ${!sent ? "is-active" : ""}`}
+          onClick={() => setTab("received")}
+        >
+          Recibidas
+          <span className="offers-v2-tab-count">{receivedOffers.length}</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={sent}
+          className={`offers-v2-tab ${sent ? "is-active" : ""}`}
+          onClick={() => setTab("sent")}
+        >
+          Enviadas
+          <span className="offers-v2-tab-count">{sentOffers.length}</span>
+        </button>
+      </div>
 
       {loading && (
-        <div className="text-center py-4">
-          <div className="spinner-border text-primary spinner-border-sm"></div>
-        </div>
+        <ul className="orders-v2-list">
+          <li className="orders-v2-card is-loading" />
+        </ul>
       )}
 
       {!loading && offers.length === 0 && (
-        <div className="text-center py-5">
-          <i className="icon-tag fs-1 text-muted mb-3 d-block"></i>
-          <p className="text-muted">
-            {tab === "sent"
-              ? "No has enviado ninguna oferta aún."
-              : "No has recibido ofertas aún."}
-          </p>
-          <Link href="/shop-default" className="btn btn-primary rounded-pill">
-            Explorar productos
-          </Link>
-        </div>
+        <EmptyState
+          illustration="tag"
+          title={
+            sent
+              ? "Todavía no has hecho ninguna oferta"
+              : "Todavía no has recibido ofertas"
+          }
+          description={
+            sent
+              ? "En los anuncios negociables puedes proponer tu precio al vendedor."
+              : "Marca tus anuncios como negociables y los compradores podrán proponerte un precio."
+          }
+          action={
+            sent
+              ? { label: "Explorar la tienda →", href: "/shop-default" }
+              : { label: "Ver mis anuncios →", href: "/mi-cuenta/anuncios" }
+          }
+        />
       )}
 
-      {offers.length > 0 && (
-        <div className="d-flex flex-column gap-3">
+      {!loading && offers.length > 0 && (
+        <ul className="orders-v2-list">
           {offers.map((offer) => {
             const product = productCache[offer.productId];
             const status = statusLabels[offer.status] || statusLabels.pending;
+            const canRespond = !sent && offer.status === "pending";
+            // How far the offer sits below the asking price, which is the one
+            // number both sides are actually negotiating over.
+            const gap =
+              product && product.price > 0
+                ? Math.round((1 - offer.amount / product.price) * 100)
+                : null;
 
             return (
-              <div
-                key={offer.id}
-                className="d-flex align-items-start gap-3 p-3 rounded-3 border"
-              >
-                {/* Product info */}
-                <div className="flex-grow-1">
-                  <div className="d-flex align-items-center gap-2 mb-1">
+              <li key={offer.id} className="orders-v2-card">
+                <div className="orders-v2-card-main">
+                  <span className="orders-v2-thumb">
+                    {product?.imgSrc ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={product.imgSrc} alt="" />
+                    ) : (
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20.6 13.4 12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8z" />
+                        <circle cx="7.5" cy="7.5" r="1.2" />
+                      </svg>
+                    )}
+                  </span>
+
+                  <span className="orders-v2-info">
                     <Link
                       href={`/product/${offer.productId}`}
-                      className="fw-semibold text-dark text-decoration-none"
+                      className="orders-v2-title"
                     >
-                      {product?.title || "Producto"}
+                      {product?.title || "Anuncio"}
                     </Link>
-                    <span className={`badge ${status.class} rounded-pill`}>
+                    <span className="orders-v2-meta">
+                      {formatDate(offer.createdAt)}
+                      {product && (
+                        <>
+                          {" · "}Precio: {formatPrice(product.price)}
+                        </>
+                      )}
+                    </span>
+                    {offer.message && (
+                      <span className="offers-v2-message">
+                        &ldquo;{offer.message}&rdquo;
+                      </span>
+                    )}
+                  </span>
+
+                  <span className="orders-v2-right">
+                    <span className="offers-v2-amount">
+                      {formatPrice(offer.amount)}
+                      {gap !== null && gap > 0 && (
+                        <span className="offers-v2-gap">−{gap}%</span>
+                      )}
+                    </span>
+                    <span className={`orders-v2-chip is-${status.tone}`}>
                       {status.label}
                     </span>
-                  </div>
-
-                  <div className="d-flex gap-3 small text-muted mb-2">
-                    <span>
-                      Oferta:{" "}
-                      <strong className="text-success">
-                        €{offer.amount.toFixed(2)}
-                      </strong>
-                    </span>
-                    {product && (
-                      <span>
-                        Precio: €{product.price.toFixed(2)}
-                      </span>
-                    )}
                     {offer.counterAmount && (
-                      <span>
-                        Contraoferta:{" "}
-                        <strong className="text-info">
-                          €{offer.counterAmount.toFixed(2)}
-                        </strong>
+                      <span className="orders-v2-meta">
+                        Contraoferta: {formatPrice(offer.counterAmount)}
                       </span>
                     )}
-                    <span>{formatDate(offer.createdAt)}</span>
-                  </div>
-
-                  {offer.message && (
-                    <p className="small text-muted mb-2 fst-italic">
-                      &quot;{offer.message}&quot;
-                    </p>
-                  )}
-
-                  {/* Seller actions for received offers */}
-                  {tab === "received" && offer.status === "pending" && (
-                    <div className="d-flex gap-2 mt-2">
-                      <button
-                        className="btn btn-sm btn-success rounded-pill"
-                        onClick={() => handleRespond(offer.id, "accepted")}
-                      >
-                        Aceptar
-                      </button>
-                      <button
-                        className="btn btn-sm btn-danger rounded-pill"
-                        onClick={() => handleRespond(offer.id, "rejected")}
-                      >
-                        Rechazar
-                      </button>
-                      <div className="d-flex gap-1 align-items-center">
-                        <input
-                          type="number"
-                          className="form-control form-control-sm"
-                          placeholder="€ Contra"
-                          style={{ width: "100px" }}
-                          value={counterAmounts[offer.id] || ""}
-                          onChange={(e) =>
-                            setCounterAmounts((prev) => ({
-                              ...prev,
-                              [offer.id]: e.target.value,
-                            }))
-                          }
-                        />
-                        <button
-                          className="btn btn-sm btn-info rounded-pill text-white"
-                          onClick={() =>
-                            handleRespond(offer.id, "countered")
-                          }
-                        >
-                          Contraoferta
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  </span>
                 </div>
-              </div>
+
+                {canRespond && (
+                  <div className="orders-v2-actions offers-v2-respond">
+                    <button
+                      type="button"
+                      className="orders-v2-btn is-primary"
+                      onClick={() => handleRespond(offer.id, "accepted")}
+                    >
+                      Aceptar {formatPrice(offer.amount)}
+                    </button>
+                    <button
+                      type="button"
+                      className="orders-v2-btn is-ghost"
+                      onClick={() => handleRespond(offer.id, "rejected")}
+                    >
+                      Rechazar
+                    </button>
+                    <div className="offers-v2-counter">
+                      <input
+                        type="number"
+                        min={0}
+                        inputMode="numeric"
+                        placeholder="Tu precio"
+                        aria-label="Importe de la contraoferta"
+                        value={counterAmounts[offer.id] || ""}
+                        onChange={(e) =>
+                          setCounterAmounts((prev) => ({
+                            ...prev,
+                            [offer.id]: e.target.value,
+                          }))
+                        }
+                      />
+                      <span className="offers-v2-counter-unit">€</span>
+                      <button
+                        type="button"
+                        className="orders-v2-btn is-ghost"
+                        onClick={() => handleRespond(offer.id, "countered")}
+                      >
+                        Contraofertar
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
     </div>
   );

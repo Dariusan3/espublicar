@@ -129,7 +129,7 @@ export default function MyAccount() {
       ),
       value: metric(listingCount),
       label: "Anuncios activos",
-      href: "/my-account-listings",
+      href: "/mi-cuenta/anuncios",
     },
     {
       icon: (
@@ -139,7 +139,7 @@ export default function MyAccount() {
       ),
       value: metric(unreadCount),
       label: "Mensajes sin responder",
-      href: "/my-account-messages",
+      href: "/mi-cuenta/mensajes",
     },
     {
       icon: (
@@ -150,7 +150,7 @@ export default function MyAccount() {
       ),
       value: metric(salesTotal, (n) => eur.format(n)),
       label: "Ventas totales",
-      href: "/my-account-orders",
+      href: "/mi-cuenta/pedidos",
     },
     {
       icon: (
@@ -161,7 +161,7 @@ export default function MyAccount() {
       ),
       value: metric(orderCount),
       label: "Pedidos",
-      href: "/my-account-orders",
+      href: "/mi-cuenta/pedidos",
     },
   ];
 
@@ -210,7 +210,7 @@ export default function MyAccount() {
         <div className="dashboard-v2-activity-card">
           <header className="dashboard-v2-activity-head">
             <h2>Últimos mensajes</h2>
-            <Link href="/my-account-messages" className="link-more">
+            <Link href="/mi-cuenta/mensajes" className="link-more">
               Ver todos →
             </Link>
           </header>
@@ -220,7 +220,7 @@ export default function MyAccount() {
             <ul className="dashboard-v2-list">
               {conversations.map((c) => (
                 <li key={c.id}>
-                  <Link href="/my-account-messages" className="dashboard-v2-row">
+                  <Link href="/mi-cuenta/mensajes" className="dashboard-v2-row">
                     <span className="dashboard-v2-row-main">
                       {c.lastMessage || "Conversación iniciada"}
                     </span>
@@ -244,7 +244,7 @@ export default function MyAccount() {
         <div className="dashboard-v2-activity-card">
           <header className="dashboard-v2-activity-head">
             <h2>Últimas compras</h2>
-            <Link href="/my-account-orders" className="link-more">
+            <Link href="/mi-cuenta/pedidos" className="link-more">
               Ver todas →
             </Link>
           </header>
@@ -262,7 +262,7 @@ export default function MyAccount() {
                 };
                 return (
                   <li key={o.id}>
-                    <Link href="/my-account-orders" className="dashboard-v2-row">
+                    <Link href="/mi-cuenta/pedidos" className="dashboard-v2-row">
                       <span className="dashboard-v2-row-main">
                         {(first?.title || "Pedido") + extra}
                       </span>

@@ -15,12 +15,12 @@ const defaultImages = [
   { src: "/images/product/product-detail-4.jpg" },
 ];
 
-interface Slider1Props {
+interface ProductGalleryProps {
   firstIamge?: string;
   images?: string[];
 }
 
-export default function Slider1({ firstIamge, images }: Slider1Props) {
+export default function ProductGallery({ firstIamge, images }: ProductGalleryProps) {
   const [swiperThumb, setSwiperThumb] = useState<SwiperType | null>(null);
   const lightboxRef = useRef<PhotoSwipeLightbox | null>(null);
 

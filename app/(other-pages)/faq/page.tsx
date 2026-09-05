@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import Header1 from "@/components/headers/Header1";
-import Footer1 from "@/components/footers/Footer1";
+import SiteHeader from "@/components/headers/SiteHeader";
+import SiteFooter from "@/components/footers/SiteFooter";
 import BackLink from "@/components/common/BackLink";
 
 type FAQ = { q: string; a: React.ReactNode };
@@ -46,7 +46,7 @@ const FAQS: { category: string; items: FAQ[] }[] = [
         q: "¿Puedo editar un anuncio después de publicarlo?",
         a: (
           <p>
-            Sí, ve a <Link href="/my-account-listings">Mis anuncios</Link>,
+            Sí, ve a <Link href="/mi-cuenta/anuncios">Mis anuncios</Link>,
             selecciona el anuncio y pulsa &ldquo;Editar&rdquo;. Puedes cambiar
             precio, descripción, fotos o pausarlo.
           </p>
@@ -81,7 +81,7 @@ const FAQS: { category: string; items: FAQ[] }[] = [
         a: (
           <p>
             Tienes 48 horas desde la entrega para abrir una disputa desde{" "}
-            <Link href="/my-account-orders">Mis pedidos</Link>. Si procede,
+            <Link href="/mi-cuenta/pedidos">Mis pedidos</Link>. Si procede,
             te reembolsamos íntegramente el importe.
           </p>
         ),
@@ -139,7 +139,7 @@ const FAQS: { category: string; items: FAQ[] }[] = [
         q: "¿Cómo cambio mi contraseña?",
         a: (
           <p>
-            Ve a <Link href="/my-account-edit">Configuración</Link> y usa el
+            Ve a <Link href="/mi-cuenta/ajustes">Configuración</Link> y usa el
             formulario de cambio de contraseña. Si la has olvidado,{" "}
             <Link href="/forgot-password">recupérala aquí</Link>.
           </p>
@@ -180,7 +180,7 @@ export default function Page() {
 
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <section className="legal-v2">
         <div className="legal-v2-container">
           <BackLink />
@@ -237,7 +237,7 @@ export default function Page() {
           ))}
         </div>
       </section>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

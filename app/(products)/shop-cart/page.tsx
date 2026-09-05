@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
+import SiteFooter from "@/components/footers/SiteFooter";
+import SiteHeader from "@/components/headers/SiteHeader";
 import ShopCart from "@/components/shop-cart/ShopCart";
 import BackLink from "@/components/common/BackLink";
 import React from "react";
@@ -12,14 +12,14 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <div className="pd-v2" style={{ paddingBottom: 0 }}>
         <div className="pd-v2-container">
           <BackLink fallback="/shop-default" label="Seguir comprando" />
         </div>
       </div>
       <ShopCart />
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

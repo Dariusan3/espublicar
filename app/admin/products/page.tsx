@@ -5,6 +5,7 @@ import { Product } from "@/types/Types";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import Image from "next/image";
+import { useConfirm } from "@/components/common/ConfirmDialog";
 
 export default function AdminProductsPage() {
   const { getAllProducts, deleteProduct, loading } = useAdmin();
@@ -26,6 +27,8 @@ export default function AdminProductsPage() {
     }
   };
 
+  const confirm = useConfirm();
+
   useEffect(() => {
     loadProducts();
   }, [page]);
@@ -37,7 +40,14 @@ export default function AdminProductsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("¿Eliminar este producto?")) return;
+    const ok = await confirm({
+      title: "¿Eliminar este producto?",
+      description: "Se borra del catálogo y no se puede recuperar.",
+      confirmLabel: "Eliminar producto",
+      cancelLabel: "Volver",
+      tone: "danger",
+    });
+    if (!ok) return;
     const res = await deleteProduct(id);
     if (res.success) {
       toast.success("Producto eliminado");

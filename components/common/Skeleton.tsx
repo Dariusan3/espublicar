@@ -28,7 +28,8 @@ interface EmptyStateProps {
   illustration?: "search" | "heart" | "package" | "chat" | "tag" | "bell";
   title: string;
   description?: string;
-  action?: { label: string; href: string };
+  /** Either navigate somewhere or run an action in place. */
+  action?: { label: string; href?: string; onClick?: () => void };
 }
 
 function getIllustration(kind: EmptyStateProps["illustration"]) {
@@ -125,11 +126,16 @@ export function EmptyState({
       {description && (
         <p className="empty-state-description">{description}</p>
       )}
-      {action && (
-        <a href={action.href} className="btn-brand">
-          {action.label}
-        </a>
-      )}
+      {action &&
+        (action.href ? (
+          <a href={action.href} className="btn-brand">
+            {action.label}
+          </a>
+        ) : (
+          <button type="button" className="btn-brand" onClick={action.onClick}>
+            {action.label}
+          </button>
+        ))}
     </div>
   );
 }

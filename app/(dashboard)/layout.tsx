@@ -1,7 +1,8 @@
 import React from "react";
-import Header1 from "@/components/headers/Header1";
-import Footer1 from "@/components/footers/Footer1";
+import SiteHeader from "@/components/headers/SiteHeader";
+import SiteFooter from "@/components/footers/SiteFooter";
 import Sidebar from "@/components/dashboard/Sidebar";
+import RequireSession from "@/components/dashboard/RequireSession";
 
 export default function DashboardLayout({
   children,
@@ -10,18 +11,20 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <main className="dashboard-v2-layout">
         <div className="dashboard-v2-container">
           <div className="dashboard-v2-grid">
             <div className="dashboard-v2-sidebar-wrap">
               <Sidebar />
             </div>
-            <div className="dashboard-v2-content-wrap">{children}</div>
+            <div className="dashboard-v2-content-wrap">
+              <RequireSession>{children}</RequireSession>
+            </div>
           </div>
         </div>
       </main>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

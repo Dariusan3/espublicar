@@ -78,8 +78,8 @@ export default function MobileTabBar() {
         <IconPlus />
       </Link>
       <Link
-        href="/my-account-messages"
-        className={`mobile-tab ${isActive("/my-account-messages") ? "is-active" : ""}`}
+        href="/mi-cuenta/mensajes"
+        className={`mobile-tab ${isActive("/mi-cuenta/mensajes") ? "is-active" : ""}`}
       >
         <span className="mobile-tab-icon">
           <IconMessage />
@@ -87,10 +87,10 @@ export default function MobileTabBar() {
         <span>Chat</span>
       </Link>
       <Link
-        href="/my-account"
+        href="/mi-cuenta"
         className={`mobile-tab ${
-          pathname === "/my-account" ||
-          (pathname.startsWith("/my-account") &&
+          pathname === "/mi-cuenta" ||
+          (pathname.startsWith("/mi-cuenta") &&
             !pathname.includes("messages"))
             ? "is-active"
             : ""

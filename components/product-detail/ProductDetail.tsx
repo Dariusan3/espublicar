@@ -11,7 +11,7 @@ import { SellerProfile } from "@/hooks/useSeller";
 import { useRouter } from "next/navigation";
 import MakeOfferModal from "@/components/modals/MakeOfferModal";
 import ReportModal from "@/components/modals/ReportModal";
-import Slider1 from "./sliders/Slider1";
+import ProductGallery from "./ProductGallery";
 import BackLink from "@/components/common/BackLink";
 
 function timeAgo(dateStr?: string) {
@@ -32,7 +32,7 @@ function formatPrice(p: number) {
   return Math.round(p).toString();
 }
 
-export default function Details1({ product }: { product: any }) {
+export default function ProductDetail({ product }: { product: any }) {
   const { user } = useAuth();
   const { startConversation } = useChat();
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -63,7 +63,7 @@ export default function Details1({ product }: { product: any }) {
     }
     const result = await startConversation(user.$id, product.userId, productIdStr);
     if (result.success) {
-      router.push(`/my-account-messages?conversationId=${result.data.id}`);
+      router.push(`/mi-cuenta/mensajes?conversationId=${result.data.id}`);
     } else {
       toast.error("Error al iniciar la conversación");
     }
@@ -112,7 +112,7 @@ export default function Details1({ product }: { product: any }) {
         <div className="pd-v2-grid">
           {/* Left: Gallery */}
           <div className="pd-v2-gallery">
-            <Slider1
+            <ProductGallery
               firstIamge={product.imgSrc}
               images={images.length > 0 ? images : undefined}
             />
@@ -207,7 +207,7 @@ export default function Details1({ product }: { product: any }) {
             {isOwner && (
               <div className="pd-v2-owner-note">
                 Este es tu anuncio.{" "}
-                <Link href="/my-account-listings">Gestionarlo</Link>
+                <Link href="/mi-cuenta/anuncios">Gestionarlo</Link>
               </div>
             )}
 

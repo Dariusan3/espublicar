@@ -2,8 +2,8 @@
 import React from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import Header1 from "@/components/headers/Header1";
-import Footer1 from "@/components/footers/Footer1";
+import SiteHeader from "@/components/headers/SiteHeader";
+import SiteFooter from "@/components/footers/SiteFooter";
 
 export default function CheckoutCancelPage() {
   const params = useSearchParams();
@@ -11,7 +11,7 @@ export default function CheckoutCancelPage() {
 
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <section className="legal-v2">
         <div className="legal-v2-container" style={{ maxWidth: 640, textAlign: "center" }}>
           <div
@@ -56,7 +56,7 @@ export default function CheckoutCancelPage() {
           </div>
         </div>
       </section>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

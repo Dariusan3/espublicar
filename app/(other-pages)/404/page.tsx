@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
+import SiteFooter from "@/components/footers/SiteFooter";
+import SiteHeader from "@/components/headers/SiteHeader";
 import React from "react";
 import Link from "next/link";
 export const metadata = {
@@ -9,7 +9,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <>
         <div className="tf-sp-1 pb-0">
           <div className="container">
@@ -48,7 +48,7 @@ export default function page() {
           </div>
         </section>
       </>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

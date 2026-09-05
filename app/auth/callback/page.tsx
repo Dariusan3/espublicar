@@ -43,7 +43,7 @@ export default function AuthCallbackPage() {
         }
 
         toast.success("¡Sesión iniciada!");
-        router.replace("/my-account");
+        router.replace("/mi-cuenta");
       } catch (error: any) {
         console.error("OAuth callback error:", error);
         toast.error("Error al iniciar sesión. Inténtalo de nuevo.");

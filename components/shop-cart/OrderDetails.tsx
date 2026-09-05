@@ -5,7 +5,40 @@ import { useSearchParams } from "next/navigation";
 import useOrders from "@/hooks/useOrders";
 import { Order } from "@/types/Types";
 import { parseOrderItems } from "@/helpers/dbHelpers";
-import { formatCurrency } from "@/helpers/common";
+import { formatPrice } from "@/helpers/common";
+
+const PAYMENT_LABELS: Record<string, string> = {
+  card: "Tarjeta",
+  bizum: "Bizum",
+  paypal: "PayPal",
+};
+
+const STATUS: Record<string, { label: string; tone: string }> = {
+  pending: { label: "Pendiente", tone: "warn" },
+  processing: { label: "En preparación", tone: "brand" },
+  shipped: { label: "Enviado", tone: "brand" },
+  "on the way": { label: "En camino", tone: "brand" },
+  delivered: { label: "Entregado", tone: "success" },
+  cancelled: { label: "Cancelado", tone: "danger" },
+};
+
+/** The stages a buyer actually waits through, in order. */
+const STAGES = [
+  { key: "placed", label: "Pedido realizado" },
+  { key: "paid", label: "Pago confirmado" },
+  { key: "shipped", label: "Enviado" },
+  { key: "delivered", label: "Entregado" },
+];
+
+/** How far along the stages this order is: -1 means it never started. */
+function stageIndex(order: Order) {
+  const status = order.status?.toLowerCase();
+  if (status === "cancelled") return -1;
+  if (status === "delivered") return 3;
+  if (status === "shipped" || status === "on the way") return 2;
+  if (order.paymentStatus === "paid" || status === "processing") return 1;
+  return 0;
+}
 
 export default function OrderDetails() {
   const searchParams = useSearchParams();
@@ -15,230 +48,212 @@ export default function OrderDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (orderId) {
-      getOrderById(orderId).then((res) => {
-        if (res.success) {
-          setOrder(res.data);
-        }
-        setLoading(false);
-      });
-    } else {
+    if (!orderId) {
       setLoading(false);
+      return;
     }
+    getOrderById(orderId).then((res) => {
+      if (res.success) setOrder(res.data);
+      setLoading(false);
+    });
   }, [orderId, getOrderById]);
 
   if (loading) {
     return (
-      <div className="container py-5 text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
+      <section className="order-v2">
+        <div className="order-v2-container">
+          <div className="order-v2-card is-loading" />
         </div>
-      </div>
+      </section>
     );
   }
 
   if (!order) {
     return (
-      <div className="container py-5 text-center">
-        <h4 className="fw-bold">Pedido no encontrado</h4>
-        <p className="text-muted">
-          No pudimos encontrar los detalles de este pedido.
-        </p>
-        <Link
-          href="/product-grid"
-          className="btn btn-primary rounded-pill px-4"
-        >
-          Volver a la tienda
-        </Link>
-      </div>
+      <section className="order-v2">
+        <div className="order-v2-container order-v2-missing">
+          <h1 className="order-v2-title">No encontramos ese pedido</h1>
+          <p className="order-v2-lead">
+            Puede que el enlace esté incompleto o que el pedido sea de otra
+            cuenta.
+          </p>
+          <Link href="/mi-cuenta/pedidos" className="orders-v2-btn is-primary">
+            Ver mis pedidos
+          </Link>
+        </div>
+      </section>
     );
   }
 
   const items =
     typeof order.items === "string"
       ? parseOrderItems(order.items)
-      : order.items || [];
-  const shippingAddress =
+      : (order.items as any) || [];
+  const address =
     typeof order.shippingAddress === "string"
       ? JSON.parse(order.shippingAddress)
       : order.shippingAddress;
 
+  const itemsSubtotal = items.reduce(
+    (sum: number, item: any) => sum + (item.price || 0) * (item.quantity || 1),
+    0,
+  );
+  // Fees and shipping are not stored separately, so show the difference as one
+  // honest line instead of inventing a breakdown.
+  const extras = Math.max(0, order.totalAmount - itemsSubtotal);
+  const current = stageIndex(order);
+  const cancelled = order.status?.toLowerCase() === "cancelled";
+  const { label: statusLabel, tone } = STATUS[order.status?.toLowerCase()] || {
+    label: order.status,
+    tone: "neutral",
+  };
+  const paid = order.paymentStatus === "paid";
+
   return (
-    <section className="tf-sp-2">
-      <div className="container">
-        <div className="checkout-status tf-sp-2 pt-0">
-          <div className="checkout-wrap">
-            <span className="checkout-bar end" />
-            <div className="step-payment">
-              <span className="icon">
-                <i className="icon-shop-cart-1" />
-              </span>
-              <Link href={`/shop-cart`} className="link-secondary body-text-3">
-                Carrito
-              </Link>
-            </div>
-            <div className="step-payment">
-              <span className="icon">
-                <i className="icon-shop-cart-2" />
-              </span>
-              <Link href={`/checkout`} className="link-secondary body-text-3">
-                Envío y Pago
-              </Link>
-            </div>
-            <div className="step-payment">
-              <span className="icon">
-                <i className="icon-shop-cart-3" />
-              </span>
-              <span className="text-secondary body-text-3">Confirmación</span>
-            </div>
+    <section className="order-v2">
+      <div className="order-v2-container">
+        <header className="order-v2-head">
+          <div>
+            <p className="order-v2-eyebrow">Pedido #{order.id.slice(0, 8)}</p>
+            <h1 className="order-v2-title">
+              {paid ? "Pago confirmado" : "Pedido registrado"}
+            </h1>
+            <p className="order-v2-lead">
+              Realizado el{" "}
+              {new Date(order.createdAt).toLocaleDateString("es-ES", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+              .{" "}
+              {paid
+                ? "Retenemos el importe hasta que confirmes que has recibido el artículo."
+                : "En cuanto se confirme el cobro, avisaremos al vendedor."}
+            </p>
           </div>
-        </div>
-        <div className="tf-order-detail">
-          <div className="order-notice">
-            <span className="icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={30}
-                height={30}
-                fill="#ffffff"
-                viewBox="0 0 256 256"
-              >
-                <path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-11.55,39.29c-4.79,5-9.75,10.17-12.38,16.52-2.52,6.1-2.63,13.07-2.73,19.82-.1,7-.21,14.33-3.32,17.43s-10.39,3.22-17.43,3.32c-6.75.1-13.72.21-19.82,2.73-6.35,2.63-11.52,7.59-16.52,12.38S132,224,128,224s-9.15-4.92-14.11-9.69-10.17-9.75-16.52-12.38c-6.1-2.52-13.07-2.63-19.82-2.73-7-.1-14.33-.21-17.43-3.32s-3.22-10.39-3.32-17.43c-.1-6.75-.21-13.72-2.73-19.82-2.63-6.35-7.59-11.52-12.38-16.52S32,132,32,128s4.92-9.15,9.69-14.11,9.75-10.17,12.38-16.52c2.52-6.1,2.63-13.07,2.73-19.82.1-7,.21-14.33,3.32-17.43S70.51,56.9,77.55,56.8c6.75-.1,13.72-.21,19.82-2.73,6.35-2.63,11.52-7.59,16.52-12.38S124,32,128,32s9.15,4.92,14.11,9.69,10.17,9.75,16.52,12.38c6.1,2.52,13.07,2.63,19.82,2.73,7,.1,14.33.21,17.43,3.32s3.22,10.39,3.32,17.43c.1,6.75.21,13.72,2.73,19.82,2.63,6.35,7.59,11.52,12.38,16.52S224,124,224,128,219.08,137.15,214.31,142.11ZM173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34Z" />
-              </svg>
+          <div className="order-v2-head-right">
+            <span className={`orders-v2-chip is-${tone}`}>{statusLabel}</span>
+            <span className="order-v2-amount">
+              {formatPrice(order.totalAmount)}
             </span>
-            <p>Gracias. Tu pedido ha sido recibido.</p>
           </div>
-          <ul className="order-overview-list">
-            <li>
-              Número de pedido: <strong>{order.id.substring(0, 8)}</strong>
-            </li>
-            <li>
-              Fecha:{" "}
-              <strong>
-                {new Date(order.createdAt).toLocaleDateString("es-ES")}
-              </strong>
-            </li>
-            <li>
-              Total: <strong>{formatCurrency(order.totalAmount)}</strong>
-            </li>
-            <li>
-              Método de pago:{" "}
-              <strong>
-                {order.paymentMethod === "card"
-                  ? "Tarjeta de Crédito/Débito"
-                  : "Pago contra reembolso"}
-              </strong>
-            </li>
-          </ul>
-          <div className="order-detail-wrap">
-            <h5 className="fw-bold">Detalles del pedido</h5>
-            <table className="tf-table-order-detail">
-              <thead>
-                <tr>
-                  <td>
-                    <h6 className="fw-semibold">Producto</h6>
-                  </td>
-                  <td>
-                    <h6 className="fw-semibold">Total</h6>
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item: any, index: number) => (
-                  <tr key={index} className="tf-order-item">
-                    <td className="tf-order-item_product">
-                      <Link
-                        href={`/product/${item.productId}`}
-                        className="link fw-normal"
-                      >
-                        {item.title}
-                        <span className="text-black"> ×{item.quantity}</span>
-                      </Link>
-                    </td>
-                    <td>
-                      <span className="fw-medium">
-                        {formatCurrency(item.price * item.quantity)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th>
-                    <span>Subtotal:</span>
-                  </th>
-                  <td>
-                    <span>{formatCurrency(order.totalAmount)}</span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <span>Envío:</span>
-                  </th>
-                  <td>
-                    <span>Gratis</span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <span>Método de pago:</span>
-                  </th>
-                  <td>
-                    <span>
-                      {order.paymentMethod === "card"
-                        ? "Tarjeta de Crédito/Débito"
-                        : "Pago contra reembolso"}
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th>
-                    <p className="fw-semibold product-title text-uppercase">
-                      Total:
-                    </p>
-                  </th>
-                  <td>
-                    <span className="fw-semibold">
-                      {formatCurrency(order.totalAmount)}
-                    </span>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+        </header>
+
+        {cancelled ? (
+          <div className="order-v2-cancelled">
+            Este pedido se canceló. Si ya habías pagado, el importe se devuelve
+            a tu método de pago.
           </div>
-          <div className="row gap-30 gap-sm-0">
-            <div className="col-sm-6 col-12">
-              <div className="order-detail-wrap">
-                <h5 className="fw-bold">Dirección de Facturación</h5>
-                <div className="billing-info">
-                  <p>
-                    {shippingAddress?.firstName} {shippingAddress?.lastName}
-                  </p>
-                  <p>{shippingAddress?.address}</p>
-                  <p>
-                    {shippingAddress?.city}, {shippingAddress?.state}{" "}
-                    {shippingAddress?.zipCode}
-                  </p>
-                  <p>{shippingAddress?.country}</p>
-                </div>
+        ) : (
+          <ol className="order-v2-track" aria-label="Estado del pedido">
+            {STAGES.map((stage, i) => (
+              <li
+                key={stage.key}
+                className={`order-v2-step ${
+                  i < current ? "is-done" : i === current ? "is-current" : ""
+                }`}
+              >
+                <span className="order-v2-dot" aria-hidden="true" />
+                <span className="order-v2-step-label">{stage.label}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+
+        <div className="order-v2-grid">
+          <div className="order-v2-card">
+            <h2 className="order-v2-card-title">Artículos</h2>
+            <ul className="order-v2-items">
+              {items.map((item: any, index: number) => (
+                <li key={index} className="order-v2-item">
+                  {item.imgSrc ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={item.imgSrc} alt="" className="order-v2-item-img" />
+                  ) : (
+                    <span className="order-v2-item-img is-empty" />
+                  )}
+                  <span className="order-v2-item-body">
+                    <Link
+                      href={`/product/${item.productId}`}
+                      className="order-v2-item-title"
+                    >
+                      {item.title}
+                    </Link>
+                    <span className="order-v2-item-meta">
+                      {item.quantity} × {formatPrice(item.price)}
+                    </span>
+                  </span>
+                  <span className="order-v2-item-total">
+                    {formatPrice(item.price * item.quantity)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <dl className="order-v2-summary">
+              <div>
+                <dt>Artículos</dt>
+                <dd>{formatPrice(itemsSubtotal)}</dd>
               </div>
+              {extras > 0 && (
+                <div>
+                  <dt>Comisión y envío</dt>
+                  <dd>{formatPrice(extras)}</dd>
+                </div>
+              )}
+              <div className="order-v2-summary-total">
+                <dt>Total</dt>
+                <dd>{formatPrice(order.totalAmount)}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="order-v2-side">
+            <div className="order-v2-card">
+              <h2 className="order-v2-card-title">Pago</h2>
+              <p className="order-v2-line">
+                {PAYMENT_LABELS[order.paymentMethod || ""] ||
+                  order.paymentMethod ||
+                  "Sin especificar"}
+              </p>
+              <span className={`orders-v2-chip is-${paid ? "success" : "warn"}`}>
+                {paid ? "Pagado" : "Pendiente de cobro"}
+              </span>
             </div>
-            <div className="col-sm-6 col-12">
-              <div className="order-detail-wrap">
-                <h5 className="fw-bold">Dirección de Envío</h5>
-                <div className="billing-info">
-                  <p>
-                    {shippingAddress?.firstName} {shippingAddress?.lastName}
-                  </p>
-                  <p>{shippingAddress?.address}</p>
-                  <p>
-                    {shippingAddress?.city}, {shippingAddress?.state}{" "}
-                    {shippingAddress?.zipCode}
-                  </p>
-                  <p>{shippingAddress?.country}</p>
-                </div>
-              </div>
+
+            <div className="order-v2-card">
+              <h2 className="order-v2-card-title">Envío</h2>
+              {address ? (
+                <address className="order-v2-address">
+                  <span>
+                    {address.firstName} {address.lastName}
+                  </span>
+                  <span>{address.address}</span>
+                  <span>
+                    {address.zipCode} {address.city}
+                    {address.state ? `, ${address.state}` : ""}
+                  </span>
+                  <span>{address.country}</span>
+                </address>
+              ) : (
+                <p className="order-v2-line">Recogida en mano</p>
+              )}
+              {order.trackingNumber && (
+                <p className="order-v2-line">
+                  Seguimiento: <strong>{order.trackingNumber}</strong>
+                </p>
+              )}
+            </div>
+
+            <div className="order-v2-card order-v2-help">
+              <h2 className="order-v2-card-title">¿Algo no va bien?</h2>
+              <p className="order-v2-line">
+                Escribe al vendedor desde tus mensajes. Si el artículo no llega,
+                recuperas tu dinero.
+              </p>
+              <Link href="/mi-cuenta/mensajes" className="orders-v2-btn is-ghost">
+                Abrir mensajes
+              </Link>
             </div>
           </div>
         </div>

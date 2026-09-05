@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import useWishlist from "@/hooks/useWishlist";
 import useProducts from "@/hooks/useProducts";
-import ProductCard1 from "@/components/productCards/ProductCard1";
+import ProductCard from "@/components/productCards/ProductCard";
 import { Product } from "@/types/Types";
 import { toast } from "react-toastify";
 import { SkeletonGrid, EmptyState } from "@/components/common/Skeleton";
+import { useConfirm } from "@/components/common/ConfirmDialog";
 
 export default function Wishlist() {
   const { user } = useAuth();
@@ -16,6 +17,7 @@ export default function Wishlist() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const confirm = useConfirm();
   const [isClearing, setIsClearing] = useState(false);
 
   useEffect(() => {
@@ -55,7 +57,14 @@ export default function Wishlist() {
   }, [wishlist.items, getProductById]);
 
   const handleClearAll = async () => {
-    if (!window.confirm("¿Eliminar todos tus favoritos?")) return;
+    const ok = await confirm({
+      title: "¿Vaciar tus favoritos?",
+      description: "Se quitan todos los artículos guardados. Podrás volver a añadirlos.",
+      confirmLabel: "Vaciar favoritos",
+      cancelLabel: "Volver",
+      tone: "danger",
+    });
+    if (!ok) return;
     setIsClearing(true);
     const res = await clearMyWishlist();
     if (res.success) {
@@ -126,7 +135,7 @@ export default function Wishlist() {
         ) : (
           <div className="tf-grid-product">
             {products.map((product) => (
-              <ProductCard1 key={String(product.id)} product={product} />
+              <ProductCard key={String(product.id)} product={product} />
             ))}
           </div>
         )}

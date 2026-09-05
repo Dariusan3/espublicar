@@ -1560,8 +1560,20 @@ header {
               backdrop-filter var(--dur-base) var(--ease-std);
 
   &.is-scrolled {
-    @include glass($blur: 12px);
+    // A bar, not a floating card: the glass mixin adds a border on every side
+    // plus a shadow, which reads as a panel sitting on top of the page while
+    // content scrolls visibly through it.
+    background: rgba(255, 255, 255, 0.88);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
     border-bottom-color: var(--line);
+  }
+
+  // Without backdrop-filter the translucent bar just leaks the page behind it.
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    &.is-scrolled {
+      background: var(--surface);
+    }
   }
 
   .header-v2-inner {

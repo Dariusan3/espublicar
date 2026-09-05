@@ -1,6 +1,9 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { account, supabase, clearSkewedSession } from '@/lib/supabase';
+import { useDispatch } from 'react-redux';
+import { clearCart } from '@/store/slices/cartSlice';
+import { clearWishlist } from '@/store/slices/wishlistSlice';
 
 /**
  * Normalized user shape exposed to the app. Mirrors the fields the UI reads
@@ -67,6 +70,7 @@ export const useAuth = () => {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   const checkUser = async () => {
     try {
@@ -160,6 +164,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await account.deleteSession('current');
       setUser(null);
+      // Cart and wishlist are persisted to localStorage, so without this the
+      // next person to use this browser inherits the previous user's items.
+      dispatch(clearCart());
+      dispatch(clearWishlist());
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message };

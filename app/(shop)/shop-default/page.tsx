@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import Header1 from "@/components/headers/Header1";
-import Footer1 from "@/components/footers/Footer1";
-import Products1 from "@/components/products/Products1";
+import SiteHeader from "@/components/headers/SiteHeader";
+import SiteFooter from "@/components/footers/SiteFooter";
+import ShopResults from "@/components/shop/ShopResults";
 import BackLink from "@/components/common/BackLink";
 
 export const metadata = {
@@ -13,14 +13,14 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <div className="pd-v2" style={{ paddingBottom: 0 }}>
         <div className="pd-v2-container">
           <BackLink />
         </div>
       </div>
-      <Products1 />
-      <Footer1 />
+      <ShopResults />
+      <SiteFooter />
     </>
   );
 }

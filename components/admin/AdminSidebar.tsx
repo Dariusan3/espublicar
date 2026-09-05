@@ -4,9 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { logout } = useAuth();
 
   const menuItems = [
@@ -45,7 +47,7 @@ export default function AdminSidebar() {
               e.preventDefault();
               await logout();
               toast.success("Sesión cerrada");
-              window.location.href = "/";
+              router.replace("/");
             }}
             className="my-account-nav-item border-0 bg-transparent w-100 text-start text-danger"
           >

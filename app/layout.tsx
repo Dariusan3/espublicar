@@ -19,6 +19,7 @@ import MobileTabBar from "@/components/common/MobileTabBar";
 import ReduxProvider from "@/store/ReduxProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ConfirmProvider } from "@/components/common/ConfirmDialog";
 
 export default function RootLayout({
   children,
@@ -162,6 +163,7 @@ export default function RootLayout({
         <div id="wrapper">
           <ReduxProvider>
             <AuthProvider>
+              <ConfirmProvider>
               <Context>
                 {children}
                 <MobileTabBar />
@@ -175,6 +177,7 @@ export default function RootLayout({
                 <Search />
                 <AddParallax />
               </Context>
+              </ConfirmProvider>
             </AuthProvider>
           </ReduxProvider>
           <ToastContainer

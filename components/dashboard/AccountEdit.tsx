@@ -1,7 +1,10 @@
 "use client";
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
-import PhoneVerification from "./PhoneVerification";
+// Phone verification is hidden until an SMS provider is configured in Supabase
+// (Authentication > Providers > Phone). Re-enable by restoring this import and
+// the section below; the component already handles the whole flow.
+// import PhoneVerification from "./PhoneVerification";
 
 export default function AccountEdit() {
   const { user } = useAuth();
@@ -51,12 +54,14 @@ export default function AccountEdit() {
         </div>
       </section>
 
+      {/* Verificación de teléfono — oculta mientras no haya proveedor de SMS.
       <section className="dashboard-v2-activity-card">
         <header className="dashboard-v2-activity-head">
           <h2>Verificación de teléfono</h2>
         </header>
         <PhoneVerification />
       </section>
+      */}
     </div>
   );
 }

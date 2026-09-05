@@ -38,7 +38,7 @@ const PRIMARY_TILES = [
     brand: true,
   },
   {
-    href: "/my-account-messages",
+    href: "/mi-cuenta/mensajes",
     label: "Mensajes",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -47,7 +47,7 @@ const PRIMARY_TILES = [
     ),
   },
   {
-    href: "/wishlist",
+    href: "/mi-cuenta/favoritos",
     label: "Favoritos",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -56,7 +56,7 @@ const PRIMARY_TILES = [
     ),
   },
   {
-    href: "/my-account-listings",
+    href: "/mi-cuenta/anuncios",
     label: "Mis anuncios",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -134,7 +134,7 @@ export default function MobileMenu() {
         {/* User block */}
         {user ? (
           <Link
-            href="/my-account"
+            href="/mi-cuenta"
             className="mobile-menu-v2-user"
             onClick={closeMenu}
           >
@@ -239,7 +239,7 @@ export default function MobileMenu() {
               if (result.success) {
                 closeMenu();
                 toast.success("Sesión cerrada");
-                setTimeout(() => (window.location.href = "/"), 800);
+                router.replace("/");
               }
             }}
           >

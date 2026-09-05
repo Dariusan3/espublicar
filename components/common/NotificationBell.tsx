@@ -27,15 +27,15 @@ const typeIcons: Record<string, string> = {
 function getNotificationLink(n: Notification): string {
   switch (n.referenceType) {
     case "conversation":
-      return `/my-account-messages?conversationId=${n.referenceId}`;
+      return `/mi-cuenta/mensajes?conversationId=${n.referenceId}`;
     case "order":
-      return "/my-account-orders";
+      return "/mi-cuenta/pedidos";
     case "offer":
-      return "/my-account-offers";
+      return "/mi-cuenta/ofertas";
     case "product":
       return `/product/${n.referenceId}`;
     default:
-      return "/my-account-notifications";
+      return "/mi-cuenta/notificaciones";
   }
 }
 
@@ -215,7 +215,7 @@ export default function NotificationBell() {
 
           <div className="p-2 text-center border-top">
             <Link
-              href="/my-account-notifications"
+              href="/mi-cuenta/notificaciones"
               className="btn btn-link btn-sm text-decoration-none"
               onClick={() => setIsOpen(false)}
             >

@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import useProducts from "@/hooks/useProducts";
 import { Product } from "@/types/Types";
-import Header1 from "@/components/headers/Header1";
-import Footer1 from "@/components/footers/Footer1";
+import SiteHeader from "@/components/headers/SiteHeader";
+import SiteFooter from "@/components/footers/SiteFooter";
 import { toast } from "react-toastify";
 
 const ENDPOINT = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -83,11 +83,11 @@ export default function DebugImagesPage() {
   if (!user) {
     return (
       <>
-        <Header1 />
+        <SiteHeader />
         <section style={{ padding: "120px 20px", textAlign: "center" }}>
           <h2>Inicia sesión para ver el diagnóstico</h2>
         </section>
-        <Footer1 />
+        <SiteFooter />
       </>
     );
   }
@@ -99,7 +99,7 @@ export default function DebugImagesPage() {
 
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <section style={{ background: "var(--surface-2)", padding: "40px 0", minHeight: "calc(100vh - 200px)" }}>
         <div
           style={{
@@ -366,7 +366,7 @@ export default function DebugImagesPage() {
           </div>
         </div>
       </section>
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

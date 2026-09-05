@@ -1,44 +1,25 @@
-import Features2 from "@/components/common/Features2";
-import RecentProducts from "@/components/common/RecentProducts";
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
-
+import SiteFooter from "@/components/footers/SiteFooter";
+import SiteHeader from "@/components/headers/SiteHeader";
 import OrderDetails from "@/components/shop-cart/OrderDetails";
-import Link from "next/link";
+import BackLink from "@/components/common/BackLink";
 import React from "react";
 
 export const metadata = {
-  title: "Detalles del Pedido || Onsus - Multipurpose React Nextjs eCommerce",
-  description: "Onsus - Multipurpose React Nextjs eCommerce",
+  title: "Detalle del pedido | espublicar",
+  description: "Estado, artículos y envío de tu pedido.",
 };
-export default function page() {
+
+export default function Page() {
   return (
     <>
-      <Header1 />
-      <div className="tf-sp-3 pb-0">
-        <div className="container">
-          <ul className="breakcrumbs">
-            <li>
-              <Link href={`/`} className="body-small link">
-                {" "}
-                Inicio{" "}
-              </Link>
-            </li>
-            <li className="d-flex align-items-center">
-              <i className="icon icon-arrow-right" />
-            </li>
-            <li>
-              <span className="body-small"> Detalle del Pedido</span>
-            </li>
-          </ul>
+      <SiteHeader />
+      <div className="pd-v2" style={{ paddingBottom: 0 }}>
+        <div className="pd-v2-container">
+          <BackLink fallback="/mi-cuenta/pedidos" label="Mis pedidos" />
         </div>
       </div>
-
       <OrderDetails />
-
-      <RecentProducts />
-      <Features2 />
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

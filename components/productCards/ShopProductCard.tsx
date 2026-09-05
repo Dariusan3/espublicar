@@ -9,7 +9,7 @@ import AddToQuickview from "../common/AddToQuickview";
 import { Product, ProductDB } from "@/types/Types";
 import { formatPrice } from "@/helpers/common";
 
-export default function ProductCards3({ product }: { product: Product }) {
+export default function ShopProductCard({ product }: { product: Product }) {
   const {
     addToWishlist,
     isAddedtoWishlist,

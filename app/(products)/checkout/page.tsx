@@ -1,5 +1,5 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
+import SiteFooter from "@/components/footers/SiteFooter";
+import SiteHeader from "@/components/headers/SiteHeader";
 import Checkout from "@/components/shop-cart/Checkout";
 import React from "react";
 
@@ -11,9 +11,9 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <Checkout />
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }

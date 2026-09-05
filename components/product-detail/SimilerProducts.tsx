@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import ProductCard1 from "@/components/productCards/ProductCard1";
+import ProductCard from "@/components/productCards/ProductCard";
 import useProducts from "@/hooks/useProducts";
 import { Product } from "@/types/Types";
 
@@ -58,7 +58,7 @@ export default function SimilerProducts({
         ) : (
           <div className="tf-grid-product">
             {items.map((product) => (
-              <ProductCard1 key={String(product.id)} product={product} />
+              <ProductCard key={String(product.id)} product={product} />
             ))}
           </div>
         )}

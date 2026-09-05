@@ -1,7 +1,7 @@
-import Features2 from "@/components/common/Features2";
+import FeatureStrip from "@/components/common/FeatureStrip";
 import RecentProducts from "@/components/common/RecentProducts";
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
+import SiteFooter from "@/components/footers/SiteFooter";
+import SiteHeader from "@/components/headers/SiteHeader";
 import OrderTraking from "@/components/shop-cart/OrderTraking";
 import Link from "next/link";
 import React from "react";
@@ -13,7 +13,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header1 />
+      <SiteHeader />
       <div className="tf-sp-3 pb-0">
         <div className="container">
           <ul className="breakcrumbs">
@@ -36,8 +36,8 @@ export default function page() {
       <OrderTraking />
 
       <RecentProducts />
-      <Features2 />
-      <Footer1 />
+      <FeatureStrip />
+      <SiteFooter />
     </>
   );
 }

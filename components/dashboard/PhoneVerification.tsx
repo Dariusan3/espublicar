@@ -1,5 +1,14 @@
 "use client";
-import React, { useState } from "react";
+
+/**
+ * SMS phone verification — NOT RENDERED right now.
+ *
+ * Supabase reports `external.phone: false`, i.e. no SMS provider is configured,
+ * so every send would fail. The section is commented out in AccountEdit rather
+ * than deleted: configure a provider (Authentication > Providers > Phone) and
+ * put the section back, no changes needed here.
+ */
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
@@ -13,6 +22,21 @@ export default function PhoneVerification() {
     user?.phoneVerification ? "done" : user?.phone ? "verify" : "set",
   );
   const [loading, setLoading] = useState(false);
+  // null while unknown: Supabase decides whether SMS is available at all.
+  const [smsEnabled, setSmsEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key) {
+      setSmsEnabled(false);
+      return;
+    }
+    fetch(`${url}/auth/v1/settings`, { headers: { apikey: key } })
+      .then((res) => res.json())
+      .then((data) => setSmsEnabled(Boolean(data?.external?.phone)))
+      .catch(() => setSmsEnabled(false));
+  }, []);
 
   const handleSetPhone = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +106,28 @@ export default function PhoneVerification() {
     );
   }
 
+  if (smsEnabled === false) {
+    return (
+      <div className="phone-verify-card">
+        <div className="phone-verify-head">
+          <div className="phone-verify-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+              <line x1="12" y1="18" x2="12.01" y2="18" />
+            </svg>
+          </div>
+          <div>
+            <p className="phone-verify-title">Verificación por SMS no disponible</p>
+            <p className="phone-verify-sub">
+              Todavía no enviamos mensajes. Cuando esté activa, podrás verificar
+              tu número aquí y mostrarlo como sello de confianza en tus anuncios.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="phone-verify-card">
       <div className="phone-verify-head">
@@ -105,6 +151,8 @@ export default function PhoneVerification() {
             <label className="publicar-v2-label">Teléfono</label>
             <input
               type="tel"
+              name="phone"
+              autoComplete="tel"
               className="input-field"
               placeholder="+34 600 000 000"
               value={phone}
@@ -118,6 +166,8 @@ export default function PhoneVerification() {
             </label>
             <input
               type="password"
+              name="current-password"
+              autoComplete="current-password"
               className="input-field"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -140,6 +190,8 @@ export default function PhoneVerification() {
             <input
               type="text"
               inputMode="numeric"
+              name="one-time-code"
+              autoComplete="one-time-code"
               className="input-field"
               placeholder="123456"
               value={secret}

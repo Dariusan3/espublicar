@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
-import Details1 from "@/components/product-detail/Details1";
+import SiteFooter from "@/components/footers/SiteFooter";
+import SiteHeader from "@/components/headers/SiteHeader";
+import ProductDetail from "@/components/product-detail/ProductDetail";
 import Description from "@/components/product-detail/Description";
 import SimilerProducts from "@/components/product-detail/SimilerProducts";
 import useProducts from "@/hooks/useProducts";
@@ -29,7 +29,7 @@ export default function ProductDetailPage() {
 
   return (
     <>
-      <Header1 />
+      <SiteHeader />
 
       {loading && (
         <div className="section-products-loading" style={{ padding: "120px 0" }}>
@@ -55,7 +55,7 @@ export default function ProductDetailPage() {
 
       {product && (
         <>
-          <Details1 product={product} />
+          <ProductDetail product={product} />
           <Description product={product} />
           <SimilerProducts
             sellerId={product.userId}
@@ -64,7 +64,7 @@ export default function ProductDetailPage() {
         </>
       )}
 
-      <Footer1 />
+      <SiteFooter />
     </>
   );
 }
