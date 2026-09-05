@@ -14,7 +14,7 @@ const STEPS = [
   },
   {
     num: "3",
-    title: "Paga seguro con Bizum",
+    title: "Paga seguro con tarjeta",
     caption:
       "Dinero retenido hasta confirmar que llegó bien. Reembolso garantizado.",
   },

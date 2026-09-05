@@ -71,8 +71,8 @@ const FAQS: { category: string; items: FAQ[] }[] = [
         q: "¿Qué métodos de pago aceptáis?",
         a: (
           <p>
-            Aceptamos <strong>Bizum</strong>, tarjeta de crédito/débito
-            (Visa, Mastercard) y PayPal.
+            Aceptamos <strong>tarjeta de crédito y débito</strong> (Visa,
+            Mastercard), con el pago procesado por Stripe.
           </p>
         ),
       },

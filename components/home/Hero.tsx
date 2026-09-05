@@ -76,7 +76,7 @@ export default function Hero() {
             <span className="hero-v2-eyebrow">Marketplace de segunda mano</span>
             <h1 className="hero-v2-headline">Vende y compra cerca de ti.</h1>
             <p className="hero-v2-sub">
-              Publica gratis en un minuto y paga seguro con Bizum o tarjeta.
+              Publica gratis en un minuto y paga con tarjeta, protegido de principio a fin.
             </p>
 
             <form className="hero-v2-search" onSubmit={handleSubmit}>
@@ -111,7 +111,7 @@ export default function Hero() {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
-                Pago seguro con Bizum
+                Pago seguro con tarjeta
               </span>
               <span className="hero-v2-trust-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

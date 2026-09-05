@@ -396,7 +396,12 @@ export default function Checkout() {
                 </div>
               )}
 
-              {/* Bizum */}
+              {/* Bizum y PayPal siguen aquí en comentario: Stripe los rechaza
+                  hasta que se activen en Settings > Payment methods (Bizum pide
+                  además una cuenta de empresa española). Al reactivarlos, la
+                  ruta /api/checkout ya los envía en payment_method_types.
+
+              {/* Bizum * /}
               <button
                 type="button"
                 className={`delivery-option payment-option ${payment === "bizum" ? "is-selected" : ""}`}
@@ -414,7 +419,7 @@ export default function Checkout() {
                 </span>
               </button>
 
-              {/* PayPal */}
+              {/* PayPal * /}
               <button
                 type="button"
                 className={`delivery-option payment-option ${payment === "paypal" ? "is-selected" : ""}`}
@@ -430,6 +435,7 @@ export default function Checkout() {
                   <span className="delivery-title">PayPal</span>
                 </span>
               </button>
+              */}
             </div>
           </div>
 
