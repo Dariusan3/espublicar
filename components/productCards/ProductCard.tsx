@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import useWishlist from "@/hooks/useWishlist";
+import useAuthGate from "@/hooks/useAuthGate";
 import { formatPrice } from "@/helpers/common";
 
 const FALLBACK_IMG =
@@ -34,6 +35,7 @@ export default function ProductCard({
   showSeller = false,
 }: ProductCardProps) {
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { requireAuth } = useAuthGate();
   const productIdStr = String(product.id);
   const inWishlist = isInWishlist(productIdStr);
 
@@ -47,6 +49,7 @@ export default function ProductCard({
   const handleWishlist = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!requireAuth("Inicia sesión para guardar favoritos")) return;
     await toggleWishlist(productIdStr);
   };
 

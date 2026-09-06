@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import NotificationBell from "@/components/common/NotificationBell";
+import useAuthGate from "@/hooks/useAuthGate";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 
@@ -17,6 +18,12 @@ export default function SiteHeader() {
   const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const cartCount = useSelector((state: RootState) => state.cart.itemCount);
+  const { requireAuth } = useAuthGate();
+
+  /** Let signed-out visitors log in instead of landing on an empty page. */
+  const gate = (message: string) => (e: React.MouseEvent) => {
+    if (!requireAuth(message)) e.preventDefault();
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,7 +102,11 @@ export default function SiteHeader() {
           </button>
 
           {/* Publicar button */}
-          <Link href="/add-product" className="btn-brand btn-sm header-publicar">
+          <Link
+            href="/add-product"
+            className="btn-brand btn-sm header-publicar"
+            onClick={gate("Inicia sesión para publicar un anuncio")}
+          >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 5v14M5 12h14" />
             </svg>
@@ -109,6 +120,7 @@ export default function SiteHeader() {
           <Link
             href="/shop-cart"
             className="header-icon-btn header-cart"
+            onClick={gate("Inicia sesión para ver tu carrito")}
             aria-label={
               cartCount > 0
                 ? `Carrito, ${cartCount} artículos`
@@ -126,7 +138,12 @@ export default function SiteHeader() {
           </Link>
 
           {/* Wishlist heart */}
-          <Link href="/mi-cuenta/favoritos" className="header-icon-btn" aria-label="Favoritos">
+          <Link
+            href="/mi-cuenta/favoritos"
+            className="header-icon-btn"
+            aria-label="Favoritos"
+            onClick={gate("Inicia sesión para ver tus favoritos")}
+          >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
