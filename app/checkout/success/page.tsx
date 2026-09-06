@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import SiteHeader from "@/components/headers/SiteHeader";
 import SiteFooter from "@/components/footers/SiteFooter";
 import useCart from "@/hooks/useCart";
-import { db, DB_ID, COLLECTIONS } from "@/lib/supabase";
 
 export default function CheckoutSuccessPage() {
   const router = useRouter();
@@ -21,9 +20,8 @@ export default function CheckoutSuccessPage() {
     clearMyCart().finally(() => setCleared(true));
   }, [cleared, clearMyCart]);
 
-  // Stripe redirects back without telling the app anything trustworthy, so ask
-  // Stripe directly and only then mark the order paid. RLS keeps this write to
-  // the buyer's own order, which is why it happens here and not in the route.
+  // Ask the server whether Stripe took the money. The order itself is settled
+  // there: a page that can mark its own order paid is a page anyone can lie to.
   useEffect(() => {
     if (!sessionId || paid !== null) return;
     let cancelled = false;
@@ -37,13 +35,6 @@ export default function CheckoutSuccessPage() {
         if (cancelled) return;
         setPaid(!!data.paid);
 
-        const targetOrder = orderId || data.orderId;
-        if (data.paid && targetOrder) {
-          await db.updateDocument(DB_ID, COLLECTIONS.ORDERS, targetOrder, {
-            status: "processing",
-            paymentStatus: "paid",
-          });
-        }
       } catch (error) {
         console.error("Could not confirm payment:", error);
         if (!cancelled) setPaid(false);

@@ -21,7 +21,7 @@ const useSeller = () => {
       setLoading(true);
       try {
         const [userRes, productsRes] = await Promise.all([
-          db.getDocument(DB_ID, COLLECTIONS.USERS, sellerId),
+          db.getDocument(DB_ID, COLLECTIONS.PUBLIC_PROFILES, sellerId),
           db.listDocuments(DB_ID, COLLECTIONS.PRODUCTS, [
             Query.equal("userId", sellerId),
             Query.orderDesc("$createdAt"),

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import useOrders from "@/hooks/useOrders";
+import { useAuth } from "@/context/AuthContext";
 import { Order } from "@/types/Types";
 import { formatPrice } from "@/helpers/common";
 import { EmptyState } from "@/components/common/Skeleton";
@@ -40,6 +41,7 @@ function parseItems(items: unknown): any[] {
 }
 
 export default function AccountOrders() {
+  const { user } = useAuth();
   const { getMyOrders, updateOrderStatus } = useOrders();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,8 +56,15 @@ export default function AccountOrders() {
   };
 
   useEffect(() => {
+    // Asking for orders without a session only produces "Auth session missing!"
+    // in the console; the signed-out state below is what should show instead.
+    if (!user) {
+      setOrders([]);
+      setIsLoading(false);
+      return;
+    }
     fetchOrders();
-  }, [getMyOrders]);
+  }, [user, getMyOrders]);
 
   const handleCancelOrder = async (orderId: string) => {
     const ok = await confirm({
@@ -77,6 +86,19 @@ export default function AccountOrders() {
       toast.error("No se pudo cancelar el pedido");
     }
   };
+
+  if (!user) {
+    return (
+      <div className="my-account-content account-dashboard">
+        <h4 className="orders-v2-heading">Mis pedidos</h4>
+        <EmptyState
+          illustration="package"
+          title="Inicia sesión para ver tus pedidos"
+          description="Aquí aparecerán tus compras, con su estado y el seguimiento del envío."
+        />
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

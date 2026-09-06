@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { createClient } from "@supabase/supabase-js";
 
 const stripeKey = process.env.STRIPE_SECRET_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const confirmSecret = process.env.ORDER_CONFIRM_SECRET;
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 /**
- * Ask Stripe whether a Checkout session was actually paid.
+ * Confirms a payment with Stripe and settles the order.
  *
- * The browser cannot be trusted to report its own payment, and there is no
- * webhook yet, so the client calls this after being redirected back and then
- * writes the order status itself (RLS only lets the buyer touch their order).
+ * The browser used to do the write itself, which meant anyone could mark their
+ * own order paid from the console. Now the order is only ever settled here,
+ * after Stripe says the session was paid, using a secret the client never has.
  */
 export async function GET(req: NextRequest) {
   if (!stripeKey) {
@@ -26,11 +33,30 @@ export async function GET(req: NextRequest) {
   try {
     const stripe = new (Stripe as any)(stripeKey);
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const paid = session.payment_status === "paid";
+    const orderId = session.metadata?.orderId || null;
+
+    let settled = false;
+    if (paid && orderId && supabaseUrl && anonKey && confirmSecret) {
+      const supabase = createClient(supabaseUrl, anonKey, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      });
+      const { data, error } = await supabase.rpc("confirm_order_payment", {
+        p_order_id: orderId,
+        p_secret: confirmSecret,
+      });
+      if (error) {
+        console.error("Could not settle the order:", error.message);
+      } else {
+        settled = Boolean(data);
+      }
+    }
 
     return NextResponse.json({
-      paid: session.payment_status === "paid",
+      paid,
+      settled,
       paymentStatus: session.payment_status,
-      orderId: session.metadata?.orderId || null,
+      orderId,
       amountTotal:
         typeof session.amount_total === "number"
           ? session.amount_total / 100

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
 import useChat from "@/hooks/useChat";
 import useWishlist from "@/hooks/useWishlist";
+import useCart from "@/hooks/useCart";
 import useSeller from "@/hooks/useSeller";
 import { SellerProfile } from "@/hooks/useSeller";
 import { useRouter } from "next/navigation";
@@ -13,6 +14,7 @@ import MakeOfferModal from "@/components/modals/MakeOfferModal";
 import ReportModal from "@/components/modals/ReportModal";
 import ProductGallery from "./ProductGallery";
 import BackLink from "@/components/common/BackLink";
+import { formatPrice } from "@/helpers/common";
 
 function timeAgo(dateStr?: string) {
   if (!dateStr) return "";
@@ -27,17 +29,37 @@ function timeAgo(dateStr?: string) {
   return `hace ${Math.floor(days / 30)} mes`;
 }
 
-function formatPrice(p: number) {
-  if (p < 100) return p.toFixed(2);
-  return Math.round(p).toString();
-}
-
 export default function ProductDetail({ product }: { product: any }) {
   const { user } = useAuth();
   const { startConversation } = useChat();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { getSellerProfile } = useSeller();
   const router = useRouter();
+  const { addCartItem } = useCart();
+  const [isBuying, setIsBuying] = useState(false);
+  const isSold = product.status === "sold";
+
+  /** Put the item in the cart, telling the visitor what to do if not signed in. */
+  const addToCartOrPrompt = async () => {
+    if (!user) {
+      toast.error("Inicia sesión para comprar");
+      return false;
+    }
+    const res = await addCartItem(String(product.id), 1);
+    return res.success;
+  };
+
+  const handleAddToCart = async () => {
+    setIsBuying(true);
+    if (await addToCartOrPrompt()) toast.success("Añadido al carrito");
+    setIsBuying(false);
+  };
+
+  const handleBuyNow = async () => {
+    setIsBuying(true);
+    if (await addToCartOrPrompt()) router.push("/checkout");
+    setIsBuying(false);
+  };
   const [showOfferModal, setShowOfferModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [seller, setSeller] = useState<SellerProfile | null>(null);
@@ -150,11 +172,11 @@ export default function ProductDetail({ product }: { product: any }) {
 
             {/* Price */}
             <div className="pd-v2-price num">
-              <span className="pd-v2-price-now">{formatPrice(product.price)} €</span>
+              <span className="pd-v2-price-now">{formatPrice(product.price)}</span>
               {product.oldprice && product.oldprice > product.price && (
                 <>
                   <span className="pd-v2-price-was">
-                    {formatPrice(product.oldprice)} €
+                    {formatPrice(product.oldprice)}
                   </span>
                   <span className="chip chip-success">−{discount} %</span>
                 </>
@@ -186,6 +208,31 @@ export default function ProductDetail({ product }: { product: any }) {
                 <button
                   type="button"
                   className="btn-brand btn-lg btn-block"
+                  onClick={handleBuyNow}
+                  disabled={isBuying || isSold}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="9" cy="20" r="1.4" />
+                    <circle cx="18" cy="20" r="1.4" />
+                    <path d="M2 3h2.2l2.3 12.1a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21 7H5.2" />
+                  </svg>
+                  {isSold
+                    ? "Ya vendido"
+                    : isBuying
+                      ? "Preparando…"
+                      : `Comprar por ${formatPrice(product.price)}`}
+                </button>
+                <button
+                  type="button"
+                  className="btn-ghost btn-lg btn-block"
+                  onClick={handleAddToCart}
+                  disabled={isBuying || isSold}
+                >
+                  Añadir al carrito
+                </button>
+                <button
+                  type="button"
+                  className="btn-ghost btn-lg btn-block"
                   onClick={handleContactSeller}
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

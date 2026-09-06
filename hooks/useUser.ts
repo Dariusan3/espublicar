@@ -1,6 +1,13 @@
 "use client";
 import { useCallback } from "react";
-import { account, db, DB_ID, USERS_COLLECTION_ID, id } from "../lib/supabase";
+import {
+  account,
+  db,
+  DB_ID,
+  USERS_COLLECTION_ID,
+  PUBLIC_PROFILES_COLLECTION_ID,
+  id,
+} from "../lib/supabase";
 import { UserDB, HookResponse } from "../types/Types";
 import { useAppDispatch } from "store/store";
 import {
@@ -50,9 +57,10 @@ const useUser = () => {
   const getUserById = useCallback(
     async (userId: string): Promise<HookResponse> => {
       try {
+        // Another person's profile: only what the public view exposes.
         const response = await db.getDocument(
           DB_ID,
-          USERS_COLLECTION_ID,
+          PUBLIC_PROFILES_COLLECTION_ID,
           userId,
         );
         return { success: true, message: "Success!", data: toUser(response) };

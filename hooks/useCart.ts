@@ -171,7 +171,18 @@ const useCart = () => {
 
   const clearMyCart = useCallback(async (): Promise<HookResponse> => {
     try {
-      const { account } = await import("@/lib/supabase");
+      const { account, supabase } = await import("@/lib/supabase");
+
+      // Signed out there is nothing stored to delete, and asking anyway throws
+      // "Auth session missing!" on pages that clear the cart on arrival.
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) {
+        dispatch(clearCartAction());
+        return { success: true, message: "Cart cleared", data: null };
+      }
+
       const currentUser = await account.get();
 
       const response = await db.listDocuments(

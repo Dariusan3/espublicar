@@ -99,6 +99,9 @@ export default function MyAccount() {
       const ords = orderRes.data;
       setOrders(ords.slice(0, 4));
       setOrderCount(ords.length);
+      // getMyOrders() returns the orders this account *placed*, so this is
+      // money spent, not earned. Sales would need the orders of buyers who
+      // bought from us, which RLS deliberately keeps out of reach here.
       setSalesTotal(ords.reduce((s: number, o: any) => s + (o.totalAmount || 0), 0));
     } else {
       setOrders([]);
@@ -149,7 +152,7 @@ export default function MyAccount() {
         </svg>
       ),
       value: metric(salesTotal, (n) => eur.format(n)),
-      label: "Ventas totales",
+      label: "Total gastado",
       href: "/mi-cuenta/pedidos",
     },
     {
@@ -160,7 +163,7 @@ export default function MyAccount() {
         </svg>
       ),
       value: metric(orderCount),
-      label: "Pedidos",
+      label: "Compras",
       href: "/mi-cuenta/pedidos",
     },
   ];

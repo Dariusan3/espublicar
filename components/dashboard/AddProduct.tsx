@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import useProducts from "@/hooks/useProducts";
 import { toast } from "react-toastify";
+import { EmptyState } from "@/components/common/Skeleton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { uploadProductImage, getProductImageUrl } from "@/lib/storage";
 import Image from "next/image";
@@ -37,7 +38,13 @@ const DELIVERY_OPTIONS = [
 ];
 
 export default function AddProduct() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+
+  /** Opens the login modal that lives in the root layout. */
+  const openLogin = () => {
+    const trigger = document.querySelector<HTMLElement>('[data-bs-target="#log"], a[href="#log"]');
+    trigger?.click();
+  };
   const { addProduct, updateProduct, getProductById } = useProducts();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -280,6 +287,23 @@ export default function AddProduct() {
       <div className="publicar-v2" style={{ textAlign: "center", padding: "80px 0" }}>
         <div className="spinner-border text-primary" role="status" />
         <p className="text-ink-3 mt-3">Cargando anuncio…</p>
+      </div>
+    );
+  }
+
+  // Ask for the session up front. Filling twelve fields and a dozen photos only
+  // to be told to sign in at the end loses all of that work.
+  if (!authLoading && !user) {
+    return (
+      <div className="publicar-v2">
+        <div className="publicar-v2-container">
+          <EmptyState
+            illustration="tag"
+            title="Inicia sesión para publicar tu anuncio"
+            description="Necesitamos saber quién vende para que los compradores puedan escribirte y confiar en el anuncio."
+            action={{ label: "Iniciar sesión", onClick: openLogin }}
+          />
+        </div>
       </div>
     );
   }
