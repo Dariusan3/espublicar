@@ -12,7 +12,6 @@ import Register from "@/components/modals/Register";
 import ScrollTop from "@/components/common/ScrollTop";
 import Quickview from "@/components/modals/Quickview";
 import MobileMenu from "@/components/modals/MobileMenu";
-import Toolbar from "@/components/modals/Toolbar";
 import Search from "@/components/modals/Search";
 import AddParallax from "@/utlis/AddParallax";
 import MobileTabBar from "@/components/common/MobileTabBar";
@@ -173,7 +172,6 @@ export default function RootLayout({
                 <Quickview />
                 <MobileMenu />
                 <ScrollTop />
-                <Toolbar />
                 <Search />
                 <AddParallax />
               </Context>

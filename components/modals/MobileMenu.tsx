@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import useAuthGate from "@/hooks/useAuthGate";
 
 const PRIMARY_TILES = [
   {
@@ -36,10 +37,12 @@ const PRIMARY_TILES = [
       </svg>
     ),
     brand: true,
+    requiresAuth: true,
   },
   {
     href: "/mi-cuenta/mensajes",
     label: "Mensajes",
+    requiresAuth: true,
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -49,6 +52,7 @@ const PRIMARY_TILES = [
   {
     href: "/mi-cuenta/favoritos",
     label: "Favoritos",
+    requiresAuth: true,
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -58,6 +62,7 @@ const PRIMARY_TILES = [
   {
     href: "/mi-cuenta/anuncios",
     label: "Mis anuncios",
+    requiresAuth: true,
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7" />
@@ -80,6 +85,7 @@ const CATEGORIES = [
 
 export default function MobileMenu() {
   const { user, logout } = useAuth();
+  const { requireAuth } = useAuthGate();
   const router = useRouter();
   const [search, setSearch] = useState("");
 
@@ -186,7 +192,20 @@ export default function MobileMenu() {
               key={tile.href}
               href={tile.href}
               className={`mobile-menu-v2-tile ${tile.brand ? "is-brand" : ""}`}
-              onClick={closeMenu}
+              onClick={(e) => {
+                // Stop at the tap, not after the page loads: same rule as the
+                // desktop header, so a signed-out visitor gets the login
+                // prompt directly instead of an empty account page. The
+                // offcanvas closes first so the login modal is not stacked
+                // on top of it.
+                if (tile.requiresAuth && !user) {
+                  e.preventDefault();
+                  closeMenu();
+                  requireAuth();
+                  return;
+                }
+                closeMenu();
+              }}
             >
               <span className="mobile-menu-v2-tile-icon">{tile.icon}</span>
               <span className="mobile-menu-v2-tile-label">{tile.label}</span>

@@ -12,6 +12,7 @@ espublicar is a C2C second-hand marketplace built with Next.js 15, React 19, and
 | Offers / Price Negotiation | [offers-negotiation.md](offers-negotiation.md) | Done |
 | Notifications | [notifications.md](notifications.md) | Done |
 | Admin Panel | [admin-panel.md](admin-panel.md) | Done |
+| Infraestructura (dominio, Vercel, Stripe) | [infra.md](infra.md) | Done |
 
 ## Architecture
 
