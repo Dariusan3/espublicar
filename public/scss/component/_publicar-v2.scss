@@ -351,7 +351,10 @@
 // --- Sticky footer -----------------------------------------------------------
 .publicar-v2-sticky-footer {
   position: fixed;
-  bottom: 0;
+  // Sits above the tab bar when it's mounted (signed in) — see --tabbar-h
+  // in _mobile-v2.scss. 0px outside that breakpoint (--tabbar-h is unset
+  // there), so this stays flush to the edge on desktop as before.
+  bottom: var(--tabbar-h, 0px);
   left: 0;
   right: 0;
   z-index: 50;
@@ -363,7 +366,8 @@
   border-top: 1px solid var(--line);
 
   @media (max-width: 575px) {
-    padding: var(--space-3) var(--space-4);
+    padding: var(--space-3) var(--space-4)
+      calc(var(--space-3) + env(safe-area-inset-bottom, 0));
 
     .btn-ghost {
       display: none; // hide "Guardar borrador" on small screens

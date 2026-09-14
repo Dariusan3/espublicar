@@ -7,6 +7,21 @@
 // ---------------------------------------------------------------------------
 // Mobile tab bar (fixed bottom, only <768px)
 // ---------------------------------------------------------------------------
+// One source of truth for "is the tab bar actually on screen": it only
+// mounts when signed in (see MobileTabBar.tsx), so anything that reserves
+// space for it or sits above it must react to its real presence, not just
+// to viewport width. Signed out, this stays 0 — no dead gap at the bottom
+// of the page, no other fixed bar hiding behind a tab bar that isn't there.
+body {
+  --tabbar-h: 0px;
+}
+
+@media (max-width: 767px) {
+  body:has(.mobile-tabbar) {
+    --tabbar-h: calc(64px + env(safe-area-inset-bottom, 0));
+  }
+}
+
 .mobile-tabbar {
   display: none;
 
@@ -16,7 +31,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: calc(64px + env(safe-area-inset-bottom, 0));
+    height: var(--tabbar-h);
     padding: 0 var(--space-2) env(safe-area-inset-bottom, 0);
     background: rgba(255, 255, 255, 0.92);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
@@ -86,11 +101,10 @@
   }
 }
 
-// Push page content above the fixed bar on mobile so it's not occluded
-@media (max-width: 767px) {
-  body {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0));
-  }
+// Push page content above the fixed bar on mobile so it's not occluded —
+// and above nothing when the bar isn't mounted (signed out).
+body {
+  padding-bottom: var(--tabbar-h);
 }
 
 // ---------------------------------------------------------------------------
