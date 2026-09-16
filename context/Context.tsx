@@ -10,8 +10,6 @@ export interface ContextType {
   setCartProducts: React.Dispatch<React.SetStateAction<any[]>>;
   wishList: (string | number)[];
   setWishList: React.Dispatch<React.SetStateAction<(string | number)[]>>;
-  compareItem: (string | number)[];
-  setCompareItem: React.Dispatch<React.SetStateAction<(string | number)[]>>;
   quickViewItem: any;
   setQuickViewItem: React.Dispatch<React.SetStateAction<any>>;
   quickAddItem: number;
@@ -27,10 +25,7 @@ export interface ContextType {
   updateQuantity: (id: string | number, qty: number) => void;
   addToWishlist: (id: string | number) => void;
   removeFromWishlist: (id: string | number) => void;
-  addToCompareItem: (id: string | number) => void;
-  removeFromCompareItem: (id: string | number) => void;
   isAddedtoWishlist: (id: string | number) => boolean;
-  isAddedtoCompareItem: (id: string | number) => boolean;
 }
 
 const dataContext = React.createContext<ContextType | undefined>(undefined);
@@ -46,9 +41,6 @@ export const useContextElement = () => {
 export default function Context({ children }: { children: ReactNode }) {
   const [cartProducts, setCartProducts] = useState<any[]>([]);
   const [wishList, setWishList] = useState<(string | number)[]>([1, 2, 3]);
-  const [compareItem, setCompareItem] = useState<(string | number)[]>([
-    1, 2, 3, 4,
-  ]);
   // Starts empty on purpose: seeding it with a demo product made the hidden
   // quickview modal request placeholder images that no longer ship.
   const [quickViewItem, setQuickViewItem] = useState<any>(null);
@@ -110,24 +102,8 @@ export default function Context({ children }: { children: ReactNode }) {
       setWishList((pre) => [...pre.filter((elm) => elm != id)]);
     }
   };
-  const addToCompareItem = (id: string | number) => {
-    if (!compareItem.includes(id)) {
-      setCompareItem((pre) => [...pre, id]);
-    }
-  };
-  const removeFromCompareItem = (id: string | number) => {
-    if (compareItem.includes(id)) {
-      setCompareItem((pre) => [...pre.filter((elm) => elm != id)]);
-    }
-  };
   const isAddedtoWishlist = (id: string | number) => {
     if (wishList.includes(id)) {
-      return true;
-    }
-    return false;
-  };
-  const isAddedtoCompareItem = (id: string | number) => {
-    if (compareItem.includes(id)) {
       return true;
     }
     return false;
@@ -167,11 +143,6 @@ export default function Context({ children }: { children: ReactNode }) {
     setQuickViewItem,
     quickAddItem,
     setQuickAddItem,
-    addToCompareItem,
-    isAddedtoCompareItem,
-    removeFromCompareItem,
-    compareItem,
-    setCompareItem,
     updateQuantity,
     setWishList,
     setTotalPrice,

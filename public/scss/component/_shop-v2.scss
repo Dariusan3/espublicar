@@ -631,6 +631,12 @@
   gap: var(--space-2);
   min-height: 40px;
   padding: 0 14px 0 10px;
+  // The pages that render this immediately above their content share one
+  // container with no gap of their own — this used to be the breadcrumb's
+  // own margin-bottom before BackLink replaced it, and got lost in that
+  // swap. Centralized here instead of on every page that uses BackLink, so
+  // nothing after it can be flush against it again.
+  margin-bottom: var(--space-6);
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   background: var(--surface);
