@@ -15,6 +15,8 @@ export interface UserDB {
   city?: string;
   country?: string;
   postalCode?: string;
+  /** "free" unless the Pro subscription webhook set it. Read-only from the client. */
+  plan?: "free" | "pro";
 }
 export interface User extends UserDB {
   id: string;

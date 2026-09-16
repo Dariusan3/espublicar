@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import useOffers from "@/hooks/useOffers";
 import useProducts from "@/hooks/useProducts";
+import useUser from "@/hooks/useUser";
 import { Offer, Product } from "@/types/Types";
 import { toast } from "react-toastify";
 import Link from "next/link";
@@ -30,11 +31,13 @@ export default function MyOffers() {
   const { getMyOffers, getOffersForSeller, respondToOffer, loading } =
     useOffers();
   const { getProductById } = useProducts();
+  const { getUserById } = useUser();
 
   const [tab, setTab] = useState<"sent" | "received">("received");
   const [sentOffers, setSentOffers] = useState<Offer[]>([]);
   const [receivedOffers, setReceivedOffers] = useState<Offer[]>([]);
   const [productCache, setProductCache] = useState<Record<string, Product>>({});
+  const [buyerPlans, setBuyerPlans] = useState<Record<string, "free" | "pro">>({});
   const [counterAmounts, setCounterAmounts] = useState<Record<string, string>>(
     {},
   );
@@ -70,6 +73,31 @@ export default function MyOffers() {
       }),
     );
     setProductCache((prev) => ({ ...prev, ...newCache }));
+
+    // Who among the buyers on received offers is Pro, so the list can be
+    // reordered and badged. Reads the public view — no email/phone exposed.
+    const uniqueBuyerIds = [...new Set(received.map((o: Offer) => o.buyerId))] as string[];
+    const planEntries = await Promise.all(
+      uniqueBuyerIds.map(async (bid) => {
+        const res = await getUserById(bid);
+        return [bid, res.success ? res.data?.plan || "free" : "free"] as const;
+      }),
+    );
+    const plans = Object.fromEntries(planEntries) as Record<string, "free" | "pro">;
+    setBuyerPlans(plans);
+
+    // Pro buyers surface first in what the seller reviews — the whole point
+    // of the perk is to be seen before the crowd, so this has to change the
+    // order, not just the styling.
+    if (Object.values(plans).some((p) => p === "pro")) {
+      setReceivedOffers(
+        [...received].sort((a: Offer, b: Offer) => {
+          const aPro = plans[a.buyerId] === "pro" ? 1 : 0;
+          const bPro = plans[b.buyerId] === "pro" ? 1 : 0;
+          return bPro - aPro;
+        }),
+      );
+    }
   };
 
   const handleRespond = async (
@@ -181,12 +209,17 @@ export default function MyOffers() {
                   </span>
 
                   <span className="orders-v2-info">
-                    <Link
-                      href={`/product/${offer.productId}`}
-                      className="orders-v2-title"
-                    >
-                      {product?.title || "Anuncio"}
-                    </Link>
+                    <span className="offers-v2-title-row">
+                      <Link
+                        href={`/product/${offer.productId}`}
+                        className="orders-v2-title"
+                      >
+                        {product?.title || "Anuncio"}
+                      </Link>
+                      {!sent && buyerPlans[offer.buyerId] === "pro" && (
+                        <span className="pro-chip">Pro</span>
+                      )}
+                    </span>
                     <span className="orders-v2-meta">
                       {formatDate(offer.createdAt)}
                       {product && (

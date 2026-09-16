@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useCart from "@/hooks/useCart";
 import useOrders, { OrderItem, ShippingAddress } from "@/hooks/useOrders";
+import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
 
 type Delivery = "shipping" | "pickup";
@@ -23,6 +24,8 @@ export default function Checkout() {
   const router = useRouter();
   const { cart, clearMyCart } = useCart();
   const { createOrder } = useOrders();
+  const { user } = useAuth();
+  const isPro = user?.plan === "pro";
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [delivery, setDelivery] = useState<Delivery>("shipping");
@@ -47,7 +50,10 @@ export default function Checkout() {
   const mainItem = items[0];
   const itemsSubtotal = cart.totalAmount;
   const serviceFee = itemsSubtotal * SERVICE_FEE_RATE;
-  const shippingCost = delivery === "shipping" ? SHIPPING_FEE : 0;
+  // Pro perk: shipping is free when the seller offers it. Pickup was
+  // already free for everyone — this only ever changes the "shipping"
+  // branch.
+  const shippingCost = delivery === "shipping" && !isPro ? SHIPPING_FEE : 0;
   const totalPrice = itemsSubtotal + serviceFee + shippingCost;
 
   const isShippingValid =
@@ -210,11 +216,13 @@ export default function Checkout() {
                 <span className="delivery-info">
                   <span className="delivery-title">Envío con espublicar</span>
                   <span className="delivery-sub">
-                    Llega en 2–3 días con seguimiento
+                    {isPro
+                      ? "Llega en 2–3 días con seguimiento · gratis con Pro"
+                      : "Llega en 2–3 días con seguimiento"}
                   </span>
                 </span>
                 <span className="delivery-cost num">
-                  {formatPrice(SHIPPING_FEE)} €
+                  {isPro ? "Gratis" : `${formatPrice(SHIPPING_FEE)} €`}
                 </span>
               </button>
               <button

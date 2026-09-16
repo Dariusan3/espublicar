@@ -72,6 +72,8 @@ Vercel  ── build, hosting, funciones de servidor, certificado TLS
 | `ORDER_CONFIRM_SECRET` | Secreto compartido con la función Postgres `confirm_order_payment` — sin él, ningún pago se puede marcar pagado | generado una vez, guardado también en la tabla `app_secrets` de Supabase |
 | `SUPABASE_SERVICE_ROLE_KEY` | **Vacía a propósito.** El webhook de Stripe confirma pagos a través de `ORDER_CONFIRM_SECRET`, no con la service role | Supabase → Project Settings → API → `service_role`, solo si algún día se prefiere esa vía |
 | `STRIPE_WEBHOOK_SECRET` | **Todavía NO está en Vercel.** Solo existe una versión de prueba local (`whsec_…` de `stripe listen`), que no sirve en producción | ver sección Stripe abajo |
+| `STRIPE_PRO_PRICE_ID` | Precio recurrente del plan Pro (2,99 €/mes) | creado una vez vía Stripe CLI, ver sección Pro |
+| `PLAN_CONFIRM_SECRET` | Secreto de `set_user_plan`, mismo rol que `ORDER_CONFIRM_SECRET` pero para el plan | generado por la propia base de datos en la migración `pro_plan` |
 
 Variables **NEXT_PUBLIC_APPWRITE_\*** (`BUCKET_ID`, `ENDPOINT`,
 `PROJECT_ID`, `DATABASE_ID`) siguen en Vercel desde antes de la migración a
@@ -101,6 +103,65 @@ borrar cuando se quiera; no rompen nada estando.
 - Cuenta admin: el `role = 'admin'` está puesto manualmente en la fila de
   `dariusosadici@gmail.com` en la tabla `user`. Para dar acceso de admin a
   otra cuenta, hay que actualizar esa columna a mano (no hay UI para esto).
+
+## Plan de compradores: espublicar Pro
+
+- Suscripción recurrente real (Stripe, modo test), **2,99 €/mes**, no un
+  flag decorativo. Producto `prod_VG8aC9Cu6MdllL`, precio
+  `price_1UFcJT9GaZBKOiTySRwTMe9A` (variable `STRIPE_PRO_PRICE_ID`).
+- Perks en vivo, ya funcionando:
+  1. **Envío gratis** cuando el vendedor ofrece envío — cambia una línea en
+     `Checkout.tsx` (`shippingCost`), no toca el 3 % de comisión.
+  2. **Oferta destacada** — en `Mis ofertas → Recibidas`, las ofertas de un
+     comprador Pro se ordenan primero y llevan una insignia "Pro". Lee el
+     plan del comprador desde `public_profiles` (no expone email/teléfono).
+- Marcado como "Próximamente" en la página `/pro`, no construido:
+  **alertas de búsquedas guardadas**. Es el único perk que pide una tabla
+  nueva (`saved_searches`) y un motor de coincidencia — no existía nada de
+  eso y no se ha fingido que funciona.
+- Se decidió explícitamente NO ofrecer "ventana de protección extendida":
+  no existe ningún mecanismo real de disputa/reembolso en el código (solo
+  texto de marketing — "Reembolso garantizado" en Hero/HowItWorks/Checkout
+  no está respaldado por ninguna lógica). Prometer una ventana *más larga*
+  de algo que no existe habría sido la misma mentira que ya se corrigió con
+  `trackingNumber` (ver debajo), así que se dejó fuera del plan v1.
+
+### Seguridad del plan
+Mismo patrón que la confirmación de pago: el cliente puede leer su propio
+`plan`, pero solo puede cambiarlo la función `set_user_plan(...)`, protegida
+por el secreto `PLAN_CONFIRM_SECRET` (tabla `app_secrets`, fila
+`plan_confirm`) y un trigger (`user_guard_plan_state`) que rechaza cualquier
+edición de `plan`/`stripeCustomerId`/`stripeSubscriptionId` que no venga de
+esa función o de la service role. Nadie puede dar de alta su propia cuenta
+Pro editando su fila.
+
+### Rutas de servidor
+- `app/api/pro/checkout/route.ts` — crea la sesión de Stripe en
+  `mode: "subscription"`. El `userId` viaja en `subscription_data.metadata`,
+  así que llega en todos los eventos futuros de esa suscripción (renovación,
+  cancelación) sin necesitar una búsqueda por customer.
+- `app/api/pro/portal/route.ts` — abre el Billing Portal de Stripe para
+  cancelar/gestionar. Deliberadamente no hay lógica de cancelación propia:
+  la gestiona Stripe, así el estado nunca se desincroniza de lo que
+  realmente se cobró.
+- `app/api/stripe/webhook/route.ts` — el mismo endpoint que confirma pedidos
+  ahora también escucha `customer.subscription.created/updated/deleted` y
+  llama a `set_user_plan`.
+
+### ⚠️ Pendiente para producción, además de lo ya anotado en la lista de
+más abajo: cuando se cree el endpoint de webhook real en Stripe (paso ya
+listado), hay que seleccionar **también**
+`customer.subscription.created`, `customer.subscription.updated` y
+`customer.subscription.deleted` — no solo los dos eventos de
+`checkout.session`. Sin ellos, suscribirse cobra pero nunca activa el plan.
+
+### Nota técnica: `current_period_end` cambió de sitio
+En la versión de API en uso (`2026-08-26.dahlia`, `billing_mode: flexible`),
+la fecha de renovación ya no vive en `subscription.current_period_end`
+(queda `undefined`) sino en `subscription.items.data[0].current_period_end`.
+El webhook ya lee de ahí con fallback al campo viejo — solo se documenta
+aquí porque es fácil volver a caer en el mismo bug si se toca ese código
+sin saberlo.
 
 ## Pagos: Stripe
 
@@ -138,8 +199,15 @@ borrar cuando se quiera; no rompen nada estando.
 - [ ] Conectar `Dariusan3/espublicar` al proyecto de Vercel (deploy
       automático en cada push a `main`).
 - [ ] Añadir `STRIPE_WEBHOOK_SECRET` de producción y crear el endpoint en
-      Stripe (test mode).
-- [ ] Copiar las variables de Supabase/Stripe al entorno **Preview** de
+      Stripe (test mode), con **los cinco eventos**: `checkout.session.completed`,
+      `checkout.session.async_payment_succeeded`,
+      `customer.subscription.created`, `customer.subscription.updated`,
+      `customer.subscription.deleted` — los tres últimos son los que
+      activan/cancelan el plan Pro.
+- [ ] Copiar las variables de Supabase/Stripe/Pro al entorno **Preview** de
       Vercel, para cuando existan deploys de rama/PR.
+- [ ] Construir el perk que falta: alertas de búsquedas guardadas (tabla
+      `saved_searches` + motor de coincidencia sobre `notifications`). Está
+      anunciado como "Próximamente" en `/pro`, no como disponible.
 - [ ] Borrar las variables `NEXT_PUBLIC_APPWRITE_*` (opcional, no rompen
       nada estando).

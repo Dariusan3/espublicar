@@ -18,6 +18,10 @@ export interface AuthUser {
   emailVerification: boolean;
   phoneVerification: boolean;
   prefs: Record<string, any>;
+  /** "free" unless the Pro subscription webhook has flipped it. */
+  plan?: "free" | "pro";
+  planRenewsAt?: string | null;
+  stripeCustomerId?: string | null;
   [key: string]: any;
 }
 
@@ -45,15 +49,28 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
  * it on their `user` profile row. Fall back to that so the UI never shows the
  * generic "Usuario" placeholder for a user who does have a name.
  */
+/**
+ * Merges in profile-table fields Supabase Auth doesn't carry: `name` (only
+ * when auth metadata didn't already have one) and the Pro plan, which can
+ * change mid-session (another tab just subscribed) so it's always re-read,
+ * not cached behind the same "only if missing" guard as name.
+ */
 async function withProfileName(session: AuthUser): Promise<AuthUser> {
-  if (!session || session.name) return session;
+  if (!session) return session;
   try {
     const { data } = await supabase
       .from("user")
-      .select("name")
+      .select("name, plan, planRenewsAt, stripeCustomerId")
       .eq("id", session.$id)
       .maybeSingle();
-    return data?.name ? { ...session, name: data.name } : session;
+    if (!data) return session;
+    return {
+      ...session,
+      name: session.name || data.name || "",
+      plan: data.plan || "free",
+      planRenewsAt: data.planRenewsAt || null,
+      stripeCustomerId: data.stripeCustomerId || null,
+    };
   } catch {
     return session;
   }

@@ -117,6 +117,7 @@ export const toUser = (doc: DocumentData): User => ({
   city: doc.city,
   country: doc.country,
   postalCode: doc.postalCode,
+  plan: doc.plan,
 });
 
 /**
